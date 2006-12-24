@@ -3,10 +3,10 @@
 <assemblyIdentity
     version="0.8.2.0"
 	processorArchitecture="X86"
-	name="np2"
+	name="np21"
 	type="win32"
 />
-<description>ねこープロジェクトII</description>
+<description>ねこープロジェクト21</description>
 <dependency>
     <dependentAssembly>
         <assemblyIdentity
