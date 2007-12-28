@@ -1,6 +1,6 @@
 //Microsoft Developer Studio generated resource script.
 //
-#include "resource.h"
+#include "..\..\resource.h"
 
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
@@ -843,7 +843,7 @@ END
 
 1 TEXTINCLUDE DISCARDABLE 
 BEGIN
-    "resource.h\0"
+    "..\\..\\resource.h\0"
 END
 
 2 TEXTINCLUDE DISCARDABLE 
@@ -1252,24 +1252,24 @@ END
 // Bitmap
 //
 
-NP2BMP                  BITMAP  DISCARDABLE     "resources\\nekop2.bmp"
-NP2TOOL                 BITMAP  DISCARDABLE     "resources\\np2tool.bmp"
+NP2BMP                  BITMAP  DISCARDABLE     "..\\nekop2.bmp"
+NP2TOOL                 BITMAP  DISCARDABLE     "..\\np2tool.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Icon
 //
 
-IDI_ICON1               ICON    DISCARDABLE     "resources\\np2.ico"
-IDI_ICON2               ICON    DISCARDABLE     "resources\\np2debug.ico"
+IDI_ICON1               ICON    DISCARDABLE     "..\\np2.ico"
+IDI_ICON2               ICON    DISCARDABLE     "..\\np2debug.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // EXTROM
 //
 
-SEEKWAV                 EXTROM  DISCARDABLE     "resources\\fddseek.wav"
-SEEK1WAV                EXTROM  DISCARDABLE     "resources\\fddseek1.wav"
+SEEKWAV                 EXTROM  DISCARDABLE     "..\\fddseek.wav"
+SEEK1WAV                EXTROM  DISCARDABLE     "..\\fddseek1.wav"
 
 /////////////////////////////////////////////////////////////////////////////
 //
