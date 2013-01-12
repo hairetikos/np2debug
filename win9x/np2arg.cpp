@@ -4,14 +4,14 @@
 #include	"dosio.h"
 
 												// ver0.26 np2arg.cpp append
-// �R�}���h���C���̉��
+// コマンドラインの解析
 
-// OS�ˑ��������Ȃ̂Ł@�؂蕪���܂��B
+// OS依存しそうなので　切り分けます。
 
 
 #define	MAXARG		32
-#define	ARG_BASE	1				// win32��lpszCmdLine�̏ꍇ
-									// ���s�t�@�C��������
+#define	ARG_BASE	1				// win32のlpszCmdLineの場合
+									// 実行ファイル名無し
 
 	NP2ARG_T	np2arg = {{NULL, NULL, NULL, NULL},
 							NULL, FALSE};

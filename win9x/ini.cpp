@@ -492,7 +492,7 @@ static const PFTBL iniitem[] = {
 	PFEXT("FDDRIVE3", PFRO_BITMAP,		&np2cfg.fddequip,		2),
 	PFEXT("FDDRIVE4", PFRO_BITMAP,		&np2cfg.fddequip,		3),
 
-	// OSàÀë∂ÅH
+	// OS‰æùÂ≠òÔºü
 	PFVAL("keyboard", PFRO_KB,			&np2oscfg.KEYBOARD),
 	PFVAL("F12_COPY", PFTYPE_UINT8,		&np2oscfg.F12COPY),
 	PFVAL("Joystick", PFTYPE_BOOL,		&np2oscfg.JOYPAD1),

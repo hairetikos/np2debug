@@ -18,7 +18,7 @@ void __msgbox(const char *title, const char *msg) {
 }
 
 
-// WinAPIだと Win95でバグあるの
+// WinAPI縺縺ｨ Win95縺ｧ繝舌げ縺ゅｋ縺ｮ
 int _loadstringresource(HINSTANCE hInstance, UINT uID,
 										LPTSTR lpszBuffer, int nBufferMax)
 {
@@ -93,7 +93,7 @@ int _loadstringresource(HINSTANCE hInstance, UINT uID,
 	return(nLength);
 }
 
-// WinAPIだと Win95でバグあるの
+// WinAPI縺縺ｨ Win95縺ｧ繝舌げ縺ゅｋ縺ｮ
 LPTSTR _lockstringresource(HINSTANCE hInstance, LPCTSTR lpcszString)
 {
 	LPTSTR	lpszRet;

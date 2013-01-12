@@ -337,7 +337,7 @@ BOOL hostdrvs_newrealpath(HDRVPATH *hdp, char *dospath) {
 			}
 		}
 		*p = '\0';
-		// ‚±‚±‚Å SJIS->OEMƒR[ƒh‚É–¢•ÏŠ·I
+		// ã“ã“ã§ SJIS->OEMã‚³ãƒ¼ãƒ‰ã«æœªå¤‰æ›ï¼
 #if defined(OSLANG_EUC) || defined(OSLANG_UTF8) || defined(OSLANG_UCS2)
 		oemtext_sjistooem(oemname, NELEMENTS(oemname), dosname, (UINT)-1);
 		file_catname(path, oemname, NELEMENTS(path));

@@ -98,7 +98,7 @@ i2mro_ext		cmp		r1, #USE_HIMEM
 				bcs		i2mro_himem
 				movs	r1, r1, lsl #(32 - 15)
 				bne		i2mrw_ext
-				stmdb	sp!, {r4 - r7, r9, lr}		; �����`�F�b�N����悤�Ɂc
+				stmdb	sp!, {r4 - r7, r9, lr}		; ここチェックするように…
 				ldr		r4, i2mro_memfnrd8
 				mov		r9, r3
 					and		r1, r0, #(&1f << 15)
@@ -217,7 +217,7 @@ i2mwo_ext		cmp		r2, #USE_HIMEM
 				movs	r2, r2, lsl #(32 - 15)
 				bne		i2mww_ext
 
-				stmdb	sp!, {r4 - r7, r9, lr}		; �����`�F�b�N����悤�Ɂc
+				stmdb	sp!, {r4 - r7, r9, lr}		; ここチェックするように…
 				ldr		r4, i2mwo_memfnwr8
 				mov		r9, r3
 					and		r12, r0, #(&1f << 15)
@@ -309,7 +309,7 @@ i2amro_ext		cmp		r1, #USE_HIMEM
 				movs	r1, r1, lsl #(32 - 15)
 				bne		i2amrw_ext
 				ldr		r3, i2amro_memfnrdb
-				stmdb	sp!, {r5 - r6, lr}			; �����`�F�b�N����悤�Ɂc
+				stmdb	sp!, {r5 - r6, lr}			; ここチェックするように…
 				and		r1, r0, #(&1f << 15)
 				ldr		r2, [r3, r1 lsr #(15 - 2)]
 				add		r5, r0, #1
@@ -401,7 +401,7 @@ i2amwo_ext		cmp		r2, #USE_HIMEM
 				add		r2, r0, #1
 				ldr		r12, [r12, r3 lsr #(15 - 2)]
 				mov		r3, r1, lsr #8
-				stmdb	sp!, {r2 - r3, lr}			; �����`�F�b�N����悤�Ɂc
+				stmdb	sp!, {r2 - r3, lr}			; ここチェックするように…
 				mov		lr, pc
 				mov		pc, r12
 				ldr		r12, i2amwo_memfnwrb

@@ -81,7 +81,7 @@ static BOOL searchsubmenu(HMENU hMenu, HMENU hmenuTarget,
 }
 #endif	// 0
 
-// ‚±‚ê‚Á‚ÄAPI‚ ‚é‚Ì‚©H
+// ã“ã‚Œã£ã¦APIã‚ã‚‹ã®ã‹ï¼Ÿ
 int menu_addmenu(HMENU hMenu, int nPos, HMENU hmenuAdd, BOOL bSeparator)
 {
 	int				nCount;

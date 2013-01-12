@@ -209,7 +209,7 @@ WINLOCEX np2_winlocexallwin(HWND base) {
 			list[i] = NULL;
 		}
 	}
-	if (base != g_hWndMain) {		// hWndMain‚Ì‚İ‘S‘ÌˆÚ“®
+	if (base != g_hWndMain) {		// hWndMainã®ã¿å…¨ä½“ç§»å‹•
 		base = NULL;
 	}
 	return(winlocex_create(base, list, cnt));
@@ -1726,7 +1726,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 
 	np2opening = 0;
 
-	// ‚ê‚¶‚¤‚Ş
+	// ã‚Œã˜ã†ã‚€
 #if defined(SUPPORT_RESUME)
 	if (np2oscfg.resume) {
 		int		id;
@@ -1754,7 +1754,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 	}
 #endif
 
-//	ƒŠƒZƒbƒg‚µ‚Ä‚©‚çc ƒRƒ}ƒ“ƒhƒ‰ƒCƒ“‚ÌƒfƒBƒXƒN‘}“üB
+//	ãƒªã‚»ãƒƒãƒˆã—ã¦ã‹ã‚‰â€¦ ã‚³ãƒãƒ³ãƒ‰ãƒ©ã‚¤ãƒ³ã®ãƒ‡ã‚£ã‚¹ã‚¯æŒ¿å…¥ã€‚
 	for (i=0; i<4; i++) {
 		if (np2arg.disk[i]) {
 			diskdrv_readyfdd((REG8)i, np2arg.disk[i], 0);

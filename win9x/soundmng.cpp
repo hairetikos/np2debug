@@ -75,7 +75,7 @@ static	void				(PARTSCALL *fnmix)(SINT16 *dst,
 
 static BRESULT dsoundcreate(HWND hWnd)
 {
-	// DirectSound‚Ì‰Šú‰»
+	// DirectSoundã®åˆæœŸåŒ–
 	if (FAILED(DirectSoundCreate(0, &pDSound, 0))) {
 		goto dscre_err;
 	}
@@ -114,7 +114,7 @@ UINT soundmng_create(UINT rate, UINT ms) {
 		ms = 1000;
 	}
 
-	// ƒL[ƒ{[ƒh•\¦‚ÌƒfƒBƒŒƒCİ’è
+	// ã‚­ãƒ¼ãƒœãƒ¼ãƒ‰è¡¨ç¤ºã®ãƒ‡ã‚£ãƒ¬ã‚¤è¨­å®š
 //	keydispr_delayinit((UINT8)((ms * 10 + 563) / 564));
 
 	samples = (rate * ms) / 2000;

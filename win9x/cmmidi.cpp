@@ -510,7 +510,7 @@ static UINT midiwrite(COMMNG self, UINT8 data) {
 					break;
 			}
 		}
-		else {						// Key-on�݂̂ȋC�������񂾂��ǖY�ꂽ�c
+		else {						// Key-onのみな気がしたんだけど忘れた…
 			// running status
 			midi->buffer[0] = midi->midilast;
 			midi->mpos = 1;
@@ -587,7 +587,7 @@ static UINT midiwrite(COMMNG self, UINT8 data) {
 				midi->midictrl = MIDICTRL_READY;
 				return(midi->mpos);
 			}
-			else if (midi->mpos >= MIDI_BUFFER) {		// ���[�΁[�ӂ�[
+			else if (midi->mpos >= MIDI_BUFFER) {		// おーばーふろー
 				midi->midictrl = MIDICTRL_READY;
 			}
 			break;
@@ -595,7 +595,7 @@ static UINT midiwrite(COMMNG self, UINT8 data) {
 		case MIDICTRL_TIMECODE:
 			if (midi->mpos >= 2) {
 				if ((data == 0x7e) || (data == 0x7f)) {
-					// exclusive�Ɠ����ł������c
+					// exclusiveと同じでいい筈…
 					midi->midictrl = MIDICTRL_EXCLUSIVE;
 				}
 				else {

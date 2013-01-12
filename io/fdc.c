@@ -1,5 +1,5 @@
 //
-// FDC ƒÊPD765A
+// FDC Î¼PD765A
 //
 
 
@@ -119,7 +119,7 @@ void fdcsend_success7(void) {
 }
 
 #if 0
-// FDC‚Ìƒ^ƒCƒ€ƒAƒEƒg			‚Ü‚Ÿ–{“–‚Í‚±‚ñ‚È‚ñ‚¶‚áƒ_ƒ‚¾‚¯‚Çc	ver0.29
+// FDCã®ã‚¿ã‚¤ãƒ ã‚¢ã‚¦ãƒˆ			ã¾ãæœ¬å½“ã¯ã“ã‚“ãªã‚“ã˜ã‚ƒãƒ€ãƒ¡ã ã‘ã©â€¦	ver0.29
 void fdctimeoutproc(NEVENTITEM item) {
 
 	if (item->flag & NEVENT_SETEVENT) {
@@ -775,7 +775,7 @@ static REG8 IOINPCALL fdc_i94(UINT port) {
 		return(0x40);
 	}
 	else {					// CC
-		return(0x70);		// ready‚ğ—§‚Ä‚é‚é‚é
+		return(0x70);		// readyã‚’ç«‹ã¦ã‚‹ã‚‹ã‚‹
 	}
 }
 

@@ -11,7 +11,7 @@ static	TCHAR	*curfilep = curpath;
 void dosio_init(void) { }
 void dosio_term(void) { }
 
-											// �t�@�C������
+											// ファイル操作
 FILEH DOSIOCALL file_open(const TCHAR *path) {
 
 	FILEH	ret;
@@ -142,7 +142,7 @@ short DOSIOCALL file_dircreate(const TCHAR *path) {
 }
 
 
-											// �J�����g�t�@�C������
+											// カレントファイル操作
 void DOSIOCALL file_setcd(const TCHAR *exepath) {
 
 	file_cpyname(curpath, exepath, NELEMENTS(curpath));
@@ -313,11 +313,11 @@ void DOSIOCALL file_cutseparator(TCHAR *path) {
 	int		pos;
 
 	pos = lstrlen(path) - 1;
-	if ((pos > 0) &&							// 2�����ȏ�Ł[
-		(path[pos] == '\\') &&					// �P�c�� \ �Ł[
-		(!milstr_kanji2nd(path, pos)) &&		// ������2�o�C�g�ڂ���Ȃ��ā[
-		((pos != 1) || (path[0] != '\\')) &&	// '\\' �ł͂Ȃ��ā[
-		((pos != 2) || (path[1] != ':'))) {		// '?:\' �ł͂Ȃ�������
+	if ((pos > 0) &&							// 2文字以上でー
+		(path[pos] == '\\') &&					// ケツが \ でー
+		(!milstr_kanji2nd(path, pos)) &&		// 漢字の2バイト目ぢゃなくてー
+		((pos != 1) || (path[0] != '\\')) &&	// '\\' ではなくてー
+		((pos != 2) || (path[1] != ':'))) {		// '?:\' ではなかったら
 		path[pos] = '\0';
 	}
 }

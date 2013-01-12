@@ -8,7 +8,7 @@ typedef struct {
 	int			fontwidth;
 	int			fontheight;
 
-// Ç†Ç∆ÇÕägí£Å`
+// „ÅÇ„Å®„ÅØÊã°ÂºµÔΩû
 	HDC			hdcimage;
 	HBITMAP		hBitmap;
 	UINT8		*image;
@@ -20,8 +20,8 @@ typedef struct {
 } _FNTMNG, *FNTMNG;
 
 
-static const TCHAR deffontface[] = _T("ÇlÇr ÉSÉVÉbÉN");
-static const TCHAR deffontface2[] = _T("ÇlÇr ÇoÉSÉVÉbÉN");
+static const TCHAR deffontface[] = _T("Ôº≠Ôº≥ „Ç¥„Ç∑„ÉÉ„ÇØ");
+static const TCHAR deffontface2[] = _T("Ôº≠Ôº≥ Ôº∞„Ç¥„Ç∑„ÉÉ„ÇØ");
 
 
 void *fontmng_create(int size, UINT type, const TCHAR *fontface) {

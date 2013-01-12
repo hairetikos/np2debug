@@ -376,7 +376,7 @@ int dlgs_getcbcur(HWND hWnd, UINT uID, int nDefault)
 }
 
 
-// ---- MIDIƒfƒoƒCƒX‚ÌƒŠƒXƒg
+// ---- MIDIãƒ‡ãƒã‚¤ã‚¹ã®ãƒªã‚¹ãƒˆ
 
 static void insertnc(HWND hWnd, int nPos)
 {

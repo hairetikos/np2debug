@@ -874,7 +874,7 @@ static LRESULT CALLBACK twproc(HWND hWnd, UINT uMsg, WPARAM wp, LPARAM lp)
 			}
 			break;
 
-		case WM_KEYDOWN:						// TAB‚ð‰Ÿ‚µ‚½Žž‚É•œ‹A
+		case WM_KEYDOWN:						// TABã‚’æŠ¼ã—ãŸæ™‚ã«å¾©å¸°
 			if ((short)wp == VK_TAB) {
 				idc = (UINT)GetWindowLongPtr(hWnd, GTWLP_FOCUS);
 				if (idc < IDC_MAXITEMS) {

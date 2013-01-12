@@ -19,9 +19,9 @@ static const OEMCHAR cr[] = OEMTEXT("\\n");
 // ---- np2info extend
 
 static const OEMCHAR str_jwinclr[] =
-					OEMTEXT("256F\0ƒnƒCƒJƒ‰[\0ƒtƒ‹ƒJƒ‰[\0ƒgƒDƒ‹[ƒJƒ‰[");
+					OEMTEXT("256è‰²\0ãƒã‚¤ã‚«ãƒ©ãƒ¼\0ãƒ•ãƒ«ã‚«ãƒ©ãƒ¼\0ãƒˆã‚¥ãƒ«ãƒ¼ã‚«ãƒ©ãƒ¼");
 static const OEMCHAR str_jwinmode[] =
-					OEMTEXT(" (‘‹ƒ‚[ƒh)\0 (ƒtƒ‹ƒXƒNƒŠ[ƒ“)");
+					OEMTEXT(" (çª“ãƒ¢ãƒ¼ãƒ‰)\0 (ãƒ•ãƒ«ã‚¹ã‚¯ãƒªãƒ¼ãƒ³)");
 
 
 static void info_progtitle(OEMCHAR *str, int maxlen, const NP2INFOEX *ex) {
@@ -35,35 +35,35 @@ const OEMCHAR	*p;
 
 	switch(usesound) {
 		case 0x01:
-			p = OEMTEXT("14ƒ{[ƒh");
+			p = OEMTEXT("14ãƒœãƒ¼ãƒ‰");
 			break;
 
 		case 0x02:
-			p = OEMTEXT("26‰¹Œ¹");
+			p = OEMTEXT("26éŸ³æº");
 			break;
 
 		case 0x04:
-			p = OEMTEXT("86‰¹Œ¹");
+			p = OEMTEXT("86éŸ³æº");
 			break;
 
 		case 0x06:
-			p = OEMTEXT("‚Q–‡h‚µ");
+			p = OEMTEXT("ï¼’æšåˆºã—");
 			break;
 
 		case 0x08:
-			p = OEMTEXT("118‰¹Œ¹");
+			p = OEMTEXT("118éŸ³æº");
 			break;
 
 		case 0x14:
-			p = OEMTEXT("86‰¹Œ¹(‚¿‚Ñ‚¨‚Æ•t)");
+			p = OEMTEXT("86éŸ³æº(ã¡ã³ãŠã¨ä»˜)");
 			break;
 
 		case 0x20:
-			p = OEMTEXT("ƒXƒs[ƒNƒ{[ƒh");
+			p = OEMTEXT("ã‚¹ãƒ”ãƒ¼ã‚¯ãƒœãƒ¼ãƒ‰");
 			break;
 
 		case 0x40:
-			p = OEMTEXT("ƒXƒp[ƒNƒ{[ƒh");
+			p = OEMTEXT("ã‚¹ãƒ‘ãƒ¼ã‚¯ãƒœãƒ¼ãƒ‰");
 			break;
 
 		case 0x80:
@@ -71,7 +71,7 @@ const OEMCHAR	*p;
 			break;
 
 		default:
-			p = OEMTEXT("‚È‚µ");
+			p = OEMTEXT("ãªã—");
 			break;
 	}
 	milstr_ncpy(str, p, maxlen);
@@ -96,12 +96,12 @@ static void info_jbios(OEMCHAR *str, int maxlen, const NP2INFOEX *ex) {
 	}
 	if (soundrom.name[0]) {
 		if (str[0]) {
-			milstr_ncat(str, OEMTEXT("‚Æ"), maxlen);
+			milstr_ncat(str, OEMTEXT("ã¨"), maxlen);
 		}
 		milstr_ncat(str, soundrom.name, maxlen);
 	}
 	if (str[0] == '\0') {
-		milstr_ncat(str, OEMTEXT("‚È‚µ"), maxlen);
+		milstr_ncat(str, OEMTEXT("ãªã—"), maxlen);
 	}
 }
 
@@ -113,18 +113,18 @@ const OEMCHAR	*p;
 	UINT		i;
 
 	if (!(usesound & 0x6c)) {
-		p = OEMTEXT("•s—v‚â‚Å");
+		p = OEMTEXT("ä¸è¦ã‚„ã§");
 	}
 	else {
 		exist = rhythm_getcaps();
 		if (exist == 0) {
-			p = OEMTEXT("—pˆÓ‚³‚ê‚Ä‚È‚¢‚ñ‚©c");
+			p = OEMTEXT("ç”¨æ„ã•ã‚Œã¦ãªã„ã‚“ã‹â€¦");
 		}
 		else if (exist == 0x3f) {
-			p = OEMTEXT("‘S•”‚ ‚é‚Å");
+			p = OEMTEXT("å…¨éƒ¨ã‚ã‚‹ã§");
 		}
 		else {
-			milstr_ncpy(jrhythmstr, OEMTEXT("BSCHTR‚â"), NELEMENTS(jrhythmstr));
+			milstr_ncpy(jrhythmstr, OEMTEXT("BSCHTRã‚„"), NELEMENTS(jrhythmstr));
 			for (i=0; i<6; i++) {
 				if (!(exist & (1 << i))) {
 					jrhythmstr[i] = '_';
@@ -422,25 +422,25 @@ void sstpmsg_reset(void) {
 	str[0] = '\0';
 	update = sys_updates;
 	if (update & SYS_UPDATECLOCK) {
-		milstr_ncat(str, OEMTEXT("‚b‚o‚tƒNƒƒbƒN‚ğ %CLOCK%‚É"), NELEMENTS(str));
+		milstr_ncat(str, OEMTEXT("ï¼£ï¼°ï¼µã‚¯ãƒ­ãƒƒã‚¯ã‚’ %CLOCK%ã«"), NELEMENTS(str));
 	}
 	if (update & SYS_UPDATEMEMORY) {
 		if (str[0]) {
 			milstr_ncat(str, cr, NELEMENTS(str));
 		}
-		milstr_ncat(str, OEMTEXT("ƒƒ‚ƒŠ‚ğ %MEM3%‚É"), NELEMENTS(str));
+		milstr_ncat(str, OEMTEXT("ãƒ¡ãƒ¢ãƒªã‚’ %MEM3%ã«"), NELEMENTS(str));
 	}
 	if (update & SYS_UPDATESBOARD) {
 		if (str[0]) {
 			milstr_ncat(str, cr, NELEMENTS(str));
 		}
-		milstr_ncat(str, OEMTEXT("‰¹Œ¹‚ğ %JSND%‚É"), NELEMENTS(str));
+		milstr_ncat(str, OEMTEXT("éŸ³æºã‚’ %JSND%ã«"), NELEMENTS(str));
 	}
 	if (update & (SYS_UPDATERATE | SYS_UPDATESBUF | SYS_UPDATEMIDI |
 					SYS_UPDATEHDD | SYS_UPDATESERIAL1)) {
 		BOOL hit = FALSE;
 		if (str[0]) {
-			milstr_ncat(str, OEMTEXT("\\n‚ ‚Æc\\w5"), NELEMENTS(str));
+			milstr_ncat(str, OEMTEXT("\\nã‚ã¨â€¦\\w5"), NELEMENTS(str));
 		}
 		if (update & SYS_UPDATEMIDI) {
 			hit = TRUE;
@@ -451,27 +451,27 @@ void sstpmsg_reset(void) {
 				milstr_ncat(str, str_space, NELEMENTS(str));
 			}
 			hit = TRUE;
-			milstr_ncat(str, OEMTEXT("ƒTƒEƒ“ƒhİ’è"), NELEMENTS(str));
+			milstr_ncat(str, OEMTEXT("ã‚µã‚¦ãƒ³ãƒ‰è¨­å®š"), NELEMENTS(str));
 		}
 		if (update & SYS_UPDATEHDD) {
 			if (hit) {
 				milstr_ncat(str, str_space, NELEMENTS(str));
 			}
 			hit = TRUE;
-			milstr_ncat(str, OEMTEXT("ƒn[ƒhƒfƒBƒXƒN"), NELEMENTS(str));
+			milstr_ncat(str, OEMTEXT("ãƒãƒ¼ãƒ‰ãƒ‡ã‚£ã‚¹ã‚¯"), NELEMENTS(str));
 		}
 		if (update & SYS_UPDATESERIAL1) {
 			if (hit) {
 				milstr_ncat(str, str_space, NELEMENTS(str));
 			}
 			hit = TRUE;
-			milstr_ncat(str, OEMTEXT("ƒVƒŠƒAƒ‹"), NELEMENTS(str));
+			milstr_ncat(str, OEMTEXT("ã‚·ãƒªã‚¢ãƒ«"), NELEMENTS(str));
 		}
-		milstr_ncat(str, OEMTEXT("‚Ìİ’è‚ğ"), NELEMENTS(str));
+		milstr_ncat(str, OEMTEXT("ã®è¨­å®šã‚’"), NELEMENTS(str));
 	}
 	if (str[0]) {
 		OEMCHAR out[1024];
-		milstr_ncat(str, OEMTEXT("•ÏX‚µ‚Ü‚µ‚½B"), NELEMENTS(str));
+		milstr_ncat(str, OEMTEXT("å¤‰æ›´ã—ã¾ã—ãŸã€‚"), NELEMENTS(str));
 		np2info(out, str, NELEMENTS(out), &sstpex);
 		sstp_send(out, NULL);
 	}
@@ -579,7 +579,7 @@ static void e_sstpreset(HWND hWnd, char *buf) {
 
 	p = get_code(buf, &ret);
 	if (ret == 200) {
-		if (!memcmp(p, "‚¢‚¢", 4)) {
+		if (!memcmp(p, "ã„ã„", 4)) {
 			SendMessage(hWnd, WM_NP2CMD, 0, NP2CMD_RESET);
 		}
 	}
@@ -600,7 +600,7 @@ static void e_sstpexit(HWND hWnd, char *buf) {
 
 	p = get_code(buf, &ret);
 	if (ret == 200) {
-		if (!memcmp(p, "‚¢‚¢", 4)) {
+		if (!memcmp(p, "ã„ã„", 4)) {
 			SendMessage(hWnd, WM_NP2CMD, 0, NP2CMD_EXIT);
 		}
 	}
@@ -615,7 +615,7 @@ BOOL sstpconfirm_exit(void) {
 }
 
 
-// ------------------------------------------------------------ ’P”­B
+// ------------------------------------------------------------ å˜ç™ºã€‚
 
 BOOL sstpmsg_running(void) {
 

@@ -369,7 +369,7 @@ static const PFTBL iniitem[] = {
 	PFVAL("calendar", PFTYPE_BOOL,		&np2cfg.calendar),
 	PFVAL("USE144FD", PFTYPE_BOOL,		&np2cfg.usefd144),
 
-	// OSàÀë∂Å`
+	// OS‰æùÂ≠òÔΩû
 	PFVAL("s_NOWAIT", PFTYPE_BOOL,		&np2oscfg.NOWAIT),
 	PFVAL("SkpFrame", PFTYPE_UINT8,		&np2oscfg.DRAW_SKIP),
 	PFVAL("F12_bind", PFTYPE_UINT8,		&np2oscfg.F12KEY),

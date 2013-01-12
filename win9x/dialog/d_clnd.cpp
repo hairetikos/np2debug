@@ -90,7 +90,7 @@ LRESULT CALLBACK ClndDialogProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	switch (msg) {
 		case WM_INITDIALOG:
-			// ŠÔ‚ğƒZƒbƒgB
+			// æ™‚é–“ã‚’ã‚»ãƒƒãƒˆã€‚
 			calendar_getvir(cbuf);
 			set_cal2dlg(hWnd, cbuf);
 			if (np2cfg.calendar) {

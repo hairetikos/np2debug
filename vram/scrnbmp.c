@@ -54,7 +54,7 @@ static void screenmix3(PALNUM *dest, const UINT8 *src1, const UINT8 *src2) {
 	int		x, y;
 
 	for (y=0; y<(SURFACE_HEIGHT/2); y++) {
-		// dest == src1, dest == src2 ‚Ì‚ª‚ ‚é‚Ì‚Åc
+		// dest == src1, dest == src2 ã®æ™‚ãŒã‚ã‚‹ã®ã§â€¦
 		for (x=0; x<SURFACE_WIDTH; x++) {
 			c = (src1[x + SURFACE_WIDTH]) >> 4;
 			if (!c) {
@@ -156,7 +156,7 @@ SCRNBMP scrnbmp(void) {
 	}
 	(*mix)(scrn, p, q);
 
-	// ƒpƒŒƒbƒgÅ“K‰»
+	// ãƒ‘ãƒ¬ãƒƒãƒˆæœ€é©åŒ–
 	s = scrn;
 	pals = 0;
 	ZeroMemory(pal, sizeof(pal));

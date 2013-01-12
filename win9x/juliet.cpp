@@ -56,8 +56,8 @@ static	_ROMEO		romeo = {NULL};
 
 
 
-// pciFindPciDevice�g���ƁAOS�N����ꔭ�ڂɌ������Ȃ����Ƃ������̂ŁA
-// ���O�Ō�������i��삳������j
+// pciFindPciDevice使うと、OS起動後一発目に見つけられないことが多いので、
+// 自前で検索する（矢野さん方式）
 
 #define PCIBUSDEVFUNC(b, d, f)	(((b) << 8) | ((d) << 3) | (f))
 #define	DEVVEND(v, d)			((ULONG)((v) | ((d) << 16)))
@@ -145,7 +145,7 @@ void juliet_deinitialize(void) {
 }
 
 
-// ---- YMF288��
+// ---- YMF288部
 
 static void YMF288A(UINT8 addr, UINT8 data) {
 

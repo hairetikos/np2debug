@@ -55,10 +55,10 @@ typedef struct {
 extern "C" {
 #endif
 
-											// DOSIO:ŠÖ”‚Ì€”õ
+											// DOSIO:é–¢æ•°ã®æº–å‚™
 void dosio_init(void);
 void dosio_term(void);
-											// ƒtƒ@ƒCƒ‹‘€ì
+											// ãƒ•ã‚¡ã‚¤ãƒ«æ“ä½œ
 FILEH DOSIOCALL file_open(const TCHAR *path);
 FILEH DOSIOCALL file_open_rb(const TCHAR *path);
 FILEH DOSIOCALL file_create(const TCHAR *path);
@@ -72,7 +72,7 @@ short DOSIOCALL file_delete(const TCHAR *path);
 short DOSIOCALL file_attr(const TCHAR *path);
 short DOSIOCALL file_dircreate(const TCHAR *path);
 
-											// ƒJƒŒƒ“ƒgƒtƒ@ƒCƒ‹‘€ì
+											// ã‚«ãƒ¬ãƒ³ãƒˆãƒ•ã‚¡ã‚¤ãƒ«æ“ä½œ
 void DOSIOCALL file_setcd(const TCHAR *exepath);
 TCHAR * DOSIOCALL file_getcd(const TCHAR *path);
 FILEH DOSIOCALL file_open_c(const TCHAR *path);

@@ -95,7 +95,7 @@ static void mpucreate(HWND hWnd)
 	SetDlgItemCheck(hWnd, IDC_MPU98DEFE, np2oscfg.mpu.def_en);
 	SetDlgItemText(hWnd, IDC_MPU98DEFF, np2oscfg.mpu.def);
 
-	// SS_OWNERDRAW‚É‚·‚é‚Æ IDE‚Å•s“s‡‚ªo‚é‚Ì‚Åc
+	// SS_OWNERDRAWã«ã™ã‚‹ã¨ IDEã§ä¸éƒ½åˆãŒå‡ºã‚‹ã®ã§â€¦
 	sub = GetDlgItem(hWnd, IDC_MPUDIP);
 	SetWindowLong(sub, GWL_STYLE, SS_OWNERDRAW +
 							(GetWindowLong(sub, GWL_STYLE) & (~SS_TYPEMASK)));

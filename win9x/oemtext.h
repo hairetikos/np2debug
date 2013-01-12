@@ -28,7 +28,7 @@ UINT oemtext_utf8tochar(char *dst, UINT dcnt, const char *src, UINT scnt);
 #endif
 
 
-// ---- Windows—p TCHAR-OEMCHAR•ÏŠ·
+// ---- Windowsç”¨ TCHAR-OEMCHARå¤‰æ›
 
 #undef OEMCHAR_SAME_TCHAR
 

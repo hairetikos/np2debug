@@ -1199,7 +1199,7 @@ UINT codecnv_sjis2utf(UINT16 *dst, UINT dcnt, const char *src, UINT scnt) {
 		if (stringmode) {
 			*dst = '\0';
 		}
-#if 1	// ˆê‰ŒİŠ·‚Ìˆ×‚É NULL‚Â‚¯‚é
+#if 1	// ä¸€å¿œäº’æ›ã®ç‚ºã« NULLã¤ã‘ã‚‹
 		else if (dcnt) {
 			*dst = '\0';
 		}

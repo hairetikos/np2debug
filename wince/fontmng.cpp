@@ -19,7 +19,7 @@ typedef struct {
 	int			fontheight;
 	int			fontalign;
 
-// ‚ ‚Æ‚ÍŠg’£`
+// ã‚ã¨ã¯æ‹¡å¼µï½ž
 	HDC			hdcimage;
 	HBITMAP		hBitmap;
 	UINT8		*image;
@@ -37,8 +37,8 @@ typedef struct {
 } _FNTMNG, *FNTMNG;
 
 
-static const TCHAR deffontface[] = _T("‚l‚r ƒSƒVƒbƒN");
-static const TCHAR deffontface2[] = _T("‚l‚r ‚oƒSƒVƒbƒN");
+static const TCHAR deffontface[] = _T("ï¼­ï¼³ ã‚´ã‚·ãƒƒã‚¯");
+static const TCHAR deffontface2[] = _T("ï¼­ï¼³ ï¼°ã‚´ã‚·ãƒƒã‚¯");
 
 #if !defined(_WIN32_WCE)
 #define	TEXTALPHABASE	(FDAT_DEPTH * 0x60 / 256)
@@ -217,7 +217,7 @@ static void getlength1(FNTMNG fhdl, FNTDAT fdat,
 			fdat->pitch = fntsize.cx >> 1;
 		}
 		else {
-#if !defined(WIN32_PLATFORM_PSPC)	// PocketPC‚Ì‚Ý–ß‚è’l‚ª•Ï‚ç‚µ‚¢H
+#if !defined(WIN32_PLATFORM_PSPC)	// PocketPCã®ã¿æˆ»ã‚Šå€¤ãŒå¤‰ã‚‰ã—ã„ï¼Ÿ
 			fdat->width = min(fntsize.cx, fhdl->bmpwidth);
 #else
 			fdat->width = min(fntsize.cx + 1, fhdl->bmpwidth);
@@ -245,7 +245,7 @@ static void getlength1(FNTMNG fhdl, FNTDAT fdat,
 static void fontmng_getchar(FNTMNG fhdl, FNTDAT fdat,
 											const TCHAR *string, int length) {
 
-#if 1	// sig3‚Í ƒoƒO‚ ‚é‚ç‚·[
+#if 1	// sig3ã¯ ãƒã‚°ã‚ã‚‹ã‚‰ã™ãƒ¼
 	ZeroMemory(fhdl->image, fhdl->bmpalign * fhdl->bmpheight);
 #else
 	FillRect(fhdl->hdcimage, &fhdl->rect,

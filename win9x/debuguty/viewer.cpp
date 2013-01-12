@@ -7,7 +7,7 @@
 
 
 static	const TCHAR		np2viewclass[] = _T("NP2-ViewWindow");
-		const TCHAR		np2viewfont[] = _T("‚l‚r ƒSƒVƒbƒN");
+		const TCHAR		np2viewfont[] = _T("ï¼­ï¼³ ã‚´ã‚·ãƒƒã‚¯");
 		NP2VIEW_T		np2view[NP2VIEW_MAX];
 
 
