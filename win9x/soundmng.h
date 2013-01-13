@@ -6,6 +6,14 @@ enum {
 	SOUND_MAXPCM
 };
 
+enum {
+	SNDPROC_MASTER		= 0,
+	SNDPROC_MAIN,
+	SNDPROC_TOOL,
+	SNDPROC_SUBWIND
+};
+
+
 
 #ifdef __cplusplus
 extern "C" {
@@ -22,10 +30,8 @@ void soundmng_setreverse(BOOL reverse);
 BRESULT soundmng_pcmplay(UINT num, BOOL loop);
 void soundmng_pcmstop(UINT num);
 
-#ifdef __cplusplus
-}
-#endif
-
+void soundmng_enable(UINT proc);
+void soundmng_disable(UINT proc);
 
 // ---- for windows
 
@@ -35,13 +41,6 @@ void soundmng_deinitialize(void);
 void soundmng_pcmload(UINT num, const OEMCHAR *filename, UINT type);
 void soundmng_pcmvolume(UINT num, int volume);
 
-enum {
-	SNDPROC_MASTER		= 0,
-	SNDPROC_MAIN,
-	SNDPROC_TOOL,
-	SNDPROC_SUBWIND
-};
-
-void soundmng_enable(UINT proc);
-void soundmng_disable(UINT proc);
-
+#ifdef __cplusplus
+}
+#endif

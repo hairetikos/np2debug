@@ -5,13 +5,12 @@ extern "C" {
 
 REG8 joymng_getstat(void);
 
-#ifdef __cplusplus
-}
-#endif
-
-
 // ----
 
 void joymng_initialize(void);
 void joymng_sync(void);
+
+#ifdef __cplusplus
+}
+#endif
 

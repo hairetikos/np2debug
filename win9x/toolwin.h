@@ -24,6 +24,10 @@ typedef struct {
 
 extern	NP2TOOL		np2tool;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 BOOL toolwin_initapp(HINSTANCE hInstance);
 void toolwin_create(HINSTANCE hInstance);
 void toolwin_destroy(void);
@@ -31,16 +35,13 @@ HWND toolwin_gethwnd(void);
 
 void toolwin_setfdd(UINT8 drv, const OEMCHAR *name);
 
-#ifdef __cplusplus
-extern "C" {
-#endif
 void toolwin_fddaccess(UINT8 drv);
 void toolwin_hddaccess(UINT8 drv);
-#ifdef __cplusplus
-}
-#endif
 void toolwin_draw(UINT8 frame);
 
 void toolwin_readini(void);
 void toolwin_writeini(void);
 
+#ifdef __cplusplus
+}
+#endif
