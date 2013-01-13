@@ -87,7 +87,7 @@ maketbl_4:		mov		[esi], eax
 ; ALL_DRAWFLAG = dl [esp+20]
 
 			align	16
-			global	@makegrph@8
+			global	$@makegrph@8
 
 @makegrph@8:	pushad
 				mov		edi, _np2_vram

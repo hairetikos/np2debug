@@ -114,8 +114,8 @@ SINTABLE	equ		(_opncfg + opncfg_t.sintable)
 ENVTABLE	equ		(_opncfg + opncfg_t.envtable)
 
 
-	global	@opngen_getpcm@12
-	global	@opngen_getpcmvr@12
+	global	$@opngen_getpcm@12
+	global	$@opngen_getpcmvr@12
 
 %macro	op_out		0
 				add		eax, [edi + slot_t.freq_cnt]

@@ -1,15 +1,15 @@
 
 section .text
 
-	global	@rand_setseed@4
-	global	@rand_get@0
-	global	@AdjustAfterMultiply@4
-	global	@AdjustBeforeDivision@4
-	global	@sjis2jis@4
-	global	@jis2sjis@4
-	global	@satuation_s16@12
-	global	@satuation_s16x@12
-	global	@satuation_s16mmx@12
+	global	$@rand_setseed@4
+	global	$@rand_get@0
+	global	$@AdjustAfterMultiply@4
+	global	$@AdjustBeforeDivision@4
+	global	$@sjis2jis@4
+	global	$@jis2sjis@4
+	global	$@satuation_s16@12
+	global	$@satuation_s16x@12
+	global	$@satuation_s16mmx@12
 
 				align	16
 @rand_get@0:	mov		eax, dword [_randseed]
