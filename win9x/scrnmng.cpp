@@ -27,11 +27,6 @@
 #include "dclock.h"
 #endif
 
-#if !defined(__GNUC__)
-#pragma comment(lib, "ddraw.lib")
-#pragma comment(lib, "dxguid.lib")
-#endif	// !defined(__GNUC__)
-
 extern WINLOCEX np2_winlocexallwin(HWND base);
 
 

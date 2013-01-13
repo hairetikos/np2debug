@@ -11,10 +11,6 @@
 #include "joymng.h"
 #include "menu.h"
 
-#if !defined(__GNUC__)
-#pragma comment(lib, "winmm.lib")
-#endif	// !defined(__GNUC__)
-
 enum {
 	JOY_LEFT_BIT	= 0x04,
 	JOY_RIGHT_BIT	= 0x08,

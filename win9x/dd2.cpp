@@ -10,11 +10,6 @@
 #include <ddraw.h>
 #include "dd2.h"
 
-#if !defined(__GNUC__)
-#pragma comment(lib, "ddraw.lib")
-#pragma comment(lib, "dxguid.lib")
-#endif	// !defined(__GNUC__)
-
 typedef struct {
 	HWND					hwnd;
 	LPDIRECTDRAW			ddraw1;

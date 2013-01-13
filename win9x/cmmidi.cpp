@@ -21,10 +21,6 @@
 #endif
 #include "keydisp.h"
 
-#if !defined(__GNUC__)
-#pragma comment(lib, "winmm.lib")
-#endif	// !defined(__GNUC__)
-
 #if defined(VERMOUTH_LIB)
 extern	MIDIMOD	vermouth_module;
 #endif

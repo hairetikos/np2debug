@@ -16,10 +16,6 @@
 #include "oemtext.h"
 #endif
 
-#if !defined(__GNUC__)
-#pragma comment(lib, "wsock32.lib")
-#endif	// !defined(__GNUC__)
-
 static	HWND		sstphwnd = NULL;
 static	int			sstp_stat = SSTP_READY;
 static	SOCKET		hSocket = INVALID_SOCKET;

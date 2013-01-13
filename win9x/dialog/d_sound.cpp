@@ -27,10 +27,6 @@
 #include "s98.h"
 #include "dipswbmp.h"
 
-#if !defined(__GNUC__)
-#pragma comment(lib, "comctl32.lib")
-#endif	// !defined(__GNUC__)
-
 static const CBPARAM cpIO26[] =
 {
 	{MAKEINTRESOURCE(IDS_0088),		0x00},

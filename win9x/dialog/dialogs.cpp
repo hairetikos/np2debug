@@ -19,10 +19,6 @@
 #include "mt32snd.h"
 #endif
 
-#if !defined(__GNUC__)
-#pragma comment(lib, "winmm.lib")
-#endif	// !defined(__GNUC__)
-
 // ---- enable
 
 void dlgs_enablebyautocheck(HWND hWnd, UINT uID, UINT uCheckID)

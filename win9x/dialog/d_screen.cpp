@@ -23,10 +23,6 @@
 #include "scrndraw.h"
 #include "palettes.h"
 
-#if !defined(__GNUC__)
-#pragma comment(lib, "comctl32.lib")
-#endif	// !defined(__GNUC__)
-
 static LRESULT CALLBACK Scropt1DlgProc(HWND hWnd, UINT msg,
 													WPARAM wp, LPARAM lp) {
 	TCHAR	work[32];

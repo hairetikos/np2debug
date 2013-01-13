@@ -22,10 +22,6 @@
 #include "pc9861k.h"
 #include "dipswbmp.h"
 
-#if !defined(__GNUC__)
-#pragma comment(lib, "comctl32.lib")
-#endif	// !defined(__GNUC__)
-
 static const CBPARAM cpPort[] =
 {
 	{MAKEINTRESOURCE(IDS_NONCONNECT),	COMPORT_NONE},
