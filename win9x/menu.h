@@ -1,11 +1,9 @@
 
-void sysmenu_initialize(void);
-void sysmenu_settoolwin(UINT8 value);
-void sysmenu_setkeydisp(UINT8 value);
-void sysmenu_setwinsnap(UINT8 value);
-void sysmenu_setbackground(UINT8 value);
-void sysmenu_setbgsound(UINT8 value);
-void sysmenu_setscrnmul(UINT8 value);
+void xmenu_setkeydisp(UINT8 value);
+void xmenu_setwinsnap(UINT8 value);
+void xmenu_setbackground(UINT8 value);
+void xmenu_setbgsound(UINT8 value);
+void xmenu_setscrnmul(UINT8 value);
 
 #define	MFCHECK(a) ((a) ? MF_CHECKED : MF_UNCHECKED)
 
@@ -33,6 +31,7 @@ void xmenu_setjastsound(UINT8 value);
 void xmenu_setmotorflg(UINT8 value);
 void xmenu_setextmem(UINT8 value);
 void xmenu_setmouse(UINT8 value);
+void xmenu_settoolwin(UINT8 value);
 void xmenu_sets98logging(UINT8 value);
 void xmenu_setwaverec(UINT8 value);
 void xmenu_setshortcut(UINT8 value);

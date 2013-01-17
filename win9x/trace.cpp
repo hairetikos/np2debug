@@ -20,7 +20,7 @@
 #define	VIEW_BUFFERSIZE	4096
 #define	VIEW_FGCOLOR	0x000000
 #define	VIEW_BGCOLOR	0xffffff
-#define	VIEW_TEXT		"ＭＳ ゴシック"
+#define	VIEW_TEXT		"MS Gothic"
 #define	VIEW_SIZE		12
 
 typedef struct
@@ -37,7 +37,7 @@ typedef struct {
 	int		height;
 } TRACECFG;
 
-extern	HINSTANCE	g_hInstance;
+extern "C"	HINSTANCE	g_hInstance;
 
 static const TCHAR ProgTitle[] = _T("console");
 static const TCHAR ClassName[] = _T("TRACE-console");
@@ -157,7 +157,7 @@ static LRESULT onCreate(HWND hWnd)
 	SendMessage(s_hView, EM_SETLIMITTEXT, (WPARAM)VIEW_BUFFERSIZE, 0);
 
 	s_hfView = CreateFont(VIEW_SIZE, 0, 0, 0, 0, 0, 0, 0, 
-					SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 					DEFAULT_QUALITY, FIXED_PITCH, viewfont);
 	if (s_hfView)
 	{

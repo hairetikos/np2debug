@@ -1057,7 +1057,7 @@ void scrnmng_sizing(UINT side, RECT *rect) {
 
 void scrnmng_exitsizing(void) {
 
-	sysmenu_setscrnmul(scrnsizing.mul);
+	xmenu_setscrnmul(scrnsizing.mul);
 	scrnmng_setmultiple(scrnsizing.mul);
 	InvalidateRect(g_hWndMain, NULL, TRUE);		// ugh
 }

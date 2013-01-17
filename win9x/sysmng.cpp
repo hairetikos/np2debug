@@ -6,14 +6,12 @@
 #include	"cpucore.h"
 #include	"pccore.h"
 #include	"fddfile.h"
+#include	"break.h"
 
 	UINT	sys_updates;
 
 
 // ----
-
-static	OEMCHAR	title[512];
-static	OEMCHAR	clock[64];
 
 static struct {
 	UINT32	tick;
@@ -49,18 +47,18 @@ BOOL sysmng_workclockrenewal(void) {
 void sysmng_updatecaption(UINT8 flag) {
 
 	OEMCHAR	work[512];
+	static OEMCHAR	title[512];
+	static OEMCHAR	clock[64];
 
 	if (flag & 1) {
 		title[0] = '\0';
 		if (fdd_diskready(0)) {
 			milstr_ncat(title, OEMTEXT("  FDD1:"), NELEMENTS(title));
-			milstr_ncat(title, file_getname(fdd_diskname(0)),
-															NELEMENTS(title));
+			milstr_ncat(title, file_getname(fdd_diskname(0)), NELEMENTS(title));
 		}
 		if (fdd_diskready(1)) {
 			milstr_ncat(title, OEMTEXT("  FDD2:"), NELEMENTS(title));
-			milstr_ncat(title, file_getname(fdd_diskname(1)),
-															NELEMENTS(title));
+			milstr_ncat(title, file_getname(fdd_diskname(1)), NELEMENTS(title));
 		}
 	}
 	if (flag & 2) {
@@ -92,6 +90,10 @@ void sysmng_updatecaption(UINT8 flag) {
 	milstr_ncpy(work, np2oscfg.titles, NELEMENTS(work));
 	milstr_ncat(work, title, NELEMENTS(work));
 	milstr_ncat(work, clock, NELEMENTS(work));
+	if(np2stopemulate)
+	{
+		milstr_ncat(work, OEMTEXT(" (paused)"), NELEMENTS(work));
+	}
 #if defined(OSLANG_UTF8)
 	TCHAR tchr[512];
 	oemtotchar(tchr, NELEMENTS(tchr), work, -1);
@@ -100,4 +102,3 @@ void sysmng_updatecaption(UINT8 flag) {
 	SetWindowText(g_hWndMain, work);
 #endif
 }
-

@@ -47,6 +47,7 @@
 #include	"timing.h"
 #include	"keystat.h"
 #include	"debugsub.h"
+#include	"break.h"
 
 
 const OEMCHAR np2version[] = OEMTEXT(NP2VER_CORE);
@@ -267,6 +268,7 @@ void pccore_init(void) {
 #if defined(SUPPORT_HOSTDRV)
 	hostdrv_initialize();
 #endif
+	np2break_create();
 }
 
 void pccore_term(void) {
@@ -293,6 +295,7 @@ void pccore_term(void) {
 	sxsi_alltrash();
 
 	CPU_DEINITIALIZE();
+	np2break_destroy();
 }
 
 
@@ -424,6 +427,7 @@ void pccore_reset(void) {
 
 	timing_reset();
 	soundmng_play();
+	np2break_reset();
 
 #if 0 && defined(SUPPORT_IDEIO)	// Test!
 	sxsi_devopen(0x02, OEMTEXT("e:\\pn\\pn.iso"));
@@ -602,8 +606,6 @@ void screenvsync(NEVENTITEM item) {
 
 // ---------------------------------------------------------------------------
 
-// #define SINGLESTEPONLY
-
 #if defined(TRACE)
 static int resetcnt = 0;
 static int execcnt = 0;
@@ -642,7 +644,8 @@ void pccore_exec(BOOL draw) {
 			CPU_RESETREQ = 0;
 			CPU_SHUT();
 		}
-#if !defined(SINGLESTEPONLY)
+if(!np2singlestep)
+{
 		if (CPU_REMCLOCK > 0) {
 			if (!(CPU_TYPE & CPUTYPE_V30)) {
 				CPU_EXEC();
@@ -650,13 +653,20 @@ void pccore_exec(BOOL draw) {
 			else {
 				CPU_EXECV30();
 			}
+			if(np2break_is_set(CPU_CS, CPU_EIP))	{
+				np2singlestep = 1;
+				np2active_set(0);
+				break;
+			}
 		}
-#else
-		while(CPU_REMCLOCK > 0) {
-			CPU_STEPEXEC();
-		}
-#endif
 		nevent_progress();
+}
+else
+{
+		CPU_STEPEXEC();
+		nevent_progress();
+		break;
+}
 	}
 	artic_callback();
 	mpu98ii_callback();

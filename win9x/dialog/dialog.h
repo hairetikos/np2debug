@@ -1,8 +1,9 @@
-
+// All dialog procedures
 LRESULT CALLBACK CfgDialogProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 LRESULT CALLBACK AboutDialogProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 LRESULT CALLBACK MidiDialogProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 LRESULT CALLBACK ClndDialogProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
+LRESULT CALLBACK AddrDialogProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);
 
 void dialog_scropt(HWND hWnd);
 void dialog_sndopt(HWND hWnd);

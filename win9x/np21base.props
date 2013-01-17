@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <IncludePath>$(WindowsSdkDir)include;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
+    <IntDir>..\obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <OutDir>..\bin\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>..\win9x;..\win9x\dialog;..\win9x\debuguty;..\;..\common;..\codecnv;..\i386c;..\i386c\ia32;..\i386c\ia32\instructions;..\i386c\ia32\instructions\fpu;..\mem;..\io;..\cbus;..\bios;..\lio;..\vram;..\sound;..\sound\vermouth;..\sound\getsnd;..\fdd;..\font;..\generic;..\trap;..\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4819;4996</DisableSpecificWarnings>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;SUPPORT_PC9821;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ddraw.lib;dxguid.lib;dsound.lib;winmm.lib;comctl32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <Manifest>
+      <AdditionalManifestFiles>..\win9x\np21.manifest.xml %(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
+    <ResourceCompile>
+      <SuppressStartupBanner>false</SuppressStartupBanner>
+      <PreprocessorDefinitions>SUPPORT_PC9821;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

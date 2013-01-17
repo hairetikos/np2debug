@@ -81,11 +81,11 @@ const UINT8	*p;
 	UINT	reg;
 	UINT16	mask;
 
-	hfont = CreateFont(16, 0, 0, 0, 0, 0, 0, 0, 
-					SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+	hfont = CreateFont(np2viewfontheight, 0, 0, 0, 0, 0, 0, 0, 
+					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 					DEFAULT_QUALITY, FIXED_PITCH, np2viewfont);
-	SetTextColor(hdc, 0xffffff);
-	SetBkColor(hdc, 0x400000);
+	SetTextColor(hdc, color_text);
+	SetBkColor(hdc, color_back);
 	hfont = (HFONT)SelectObject(hdc, hfont);
 
 	if (view->lock) {
@@ -105,10 +105,9 @@ const UINT8	*p;
 	}
 
 	pos = view->pos;
-	for (y=0; (y<rc->bottom) && (pos<NELEMENTS(fmsndtbl)); y+=16, pos++) {
+	for (y=0; (y<rc->bottom) && (pos<NELEMENTS(fmsndtbl)); y+=np2viewfontheight, pos++) {
 		if (fmsndtbl[pos].str) {
-			TextOut(hdc, 0, y, fmsndtbl[pos].str,
-												lstrlen(fmsndtbl[pos].str));
+			TextOut(hdc, 0, y, fmsndtbl[pos].str, lstrlen(fmsndtbl[pos].str));
 		}
 		else {
 			reg = fmsndtbl[pos].reg;
@@ -162,7 +161,7 @@ LRESULT CALLBACK viewsnd_proc(NP2VIEW_T *view,
 			break;
 
 		case WM_PAINT:
-			viewcmn_paint(view, 0x400000, viewsnd_paint);
+			viewcmn_paint(view, color_back, viewsnd_paint);
 			break;
 
 	}

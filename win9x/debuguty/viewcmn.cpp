@@ -199,9 +199,9 @@ void viewcmn_setvscroll(HWND hWnd, NP2VIEW_T *view) {
 	view->si.cbSize = sizeof(SCROLLINFO);
 	view->si.fMask = SIF_ALL;
 	view->si.nMin = 0;
+	view->si.nPage = view->step / view->mul;
 	view->si.nMax = ((view->maxline + view->mul - 1) / view->mul) - 1;
 	view->si.nPos = view->pos / view->mul;
-	view->si.nPage = view->step / view->mul;
 	SetScrollInfo(hWnd, SB_VERT, &(view->si), TRUE);
 }
 

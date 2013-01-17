@@ -178,62 +178,27 @@ void menu_addmenubar(HMENU popup, HMENU menubar)
 
 // ----
 
-void sysmenu_initialize(void)
-{
-	HMENU	hMenu;
-	UINT	uPos;
-
-	hMenu = GetSystemMenu(g_hWndMain, FALSE);
-	uPos = 0;
-
-#if defined(SUPPORT_KEYDISP)
-	uPos += menu_addmenures(hMenu, uPos, IDR_SYSKEYDISP, FALSE);
-#endif
-#if defined(SUPPORT_SOFTKBD)
-	uPos += menu_addmenures(hMenu, uPos, IDR_SYSSOFTKBD, FALSE);
-#endif
-
-	uPos += menu_addmenures(hMenu, uPos, IDR_SYS, FALSE);
-	if (np2oscfg.I286SAVE)
-	{
-#if defined(CPUCORE_IA32) && defined(SUPPORT_MEMDBG32)
-		uPos += menu_addmenures(hMenu, uPos, IDR_SYSDEBUG32, FALSE);
-#endif
-		uPos += menu_addmenures(hMenu, uPos, IDR_SYSDEBUG, FALSE);
-	}
-}
-
-void sysmenu_settoolwin(UINT8 value) {
-
-	value &= 1;
-	np2oscfg.toolwin = value;
-	CheckMenuItem(GetSystemMenu(g_hWndMain, FALSE),
-											IDM_TOOLWIN, MFCHECK(value));
-}
-
-void sysmenu_setkeydisp(UINT8 value) {
+void xmenu_setkeydisp(UINT8 value) {
 
 	value &= 1;
 	np2oscfg.keydisp = value;
-	CheckMenuItem(GetSystemMenu(g_hWndMain, FALSE),
-											IDM_KEYDISP, MFCHECK(value));
+	CheckMenuItem(GetMenu(g_hWndMain), IDM_KEYDISP, MFCHECK(value));
 }
 
-void sysmenu_setwinsnap(UINT8 value) {
+void xmenu_setwinsnap(UINT8 value) {
 
 	value &= 1;
 	np2oscfg.WINSNAP = value;
-	CheckMenuItem(GetSystemMenu(g_hWndMain, FALSE),
-											IDM_SNAPENABLE, MFCHECK(value));
+	CheckMenuItem(GetMenu(g_hWndMain), IDM_SNAPENABLE, MFCHECK(value));
 }
 
-void sysmenu_setbackground(UINT8 value) {
+void xmenu_setbackground(UINT8 value) {
 
 	HMENU	hmenu;
 
 	np2oscfg.background &= 2;
 	np2oscfg.background |= (value & 1);
-	hmenu = GetSystemMenu(g_hWndMain, FALSE);
+	hmenu =GetMenu(g_hWndMain);
 	if (value & 1) {
 		CheckMenuItem(hmenu, IDM_BACKGROUND, MF_UNCHECKED);
 		EnableMenuItem(hmenu, IDM_BGSOUND, MF_GRAYED);
@@ -244,20 +209,19 @@ void sysmenu_setbackground(UINT8 value) {
 	}
 }
 
-void sysmenu_setbgsound(UINT8 value) {
+void xmenu_setbgsound(UINT8 value) {
 
 	np2oscfg.background &= 1;
 	np2oscfg.background |= (value & 2);
-	CheckMenuItem(GetSystemMenu(g_hWndMain, FALSE),
-									IDM_BGSOUND, MFCHECK((value & 2) ^ 2));
+	CheckMenuItem(GetMenu(g_hWndMain), IDM_BGSOUND, MFCHECK((value & 2) ^ 2));
 }
 
-void sysmenu_setscrnmul(UINT8 value) {
+void xmenu_setscrnmul(UINT8 value) {
 
 	HMENU	hmenu;
 
 //	np2cfg.scrnmul = value;
-	hmenu = GetSystemMenu(g_hWndMain, FALSE);
+	hmenu = GetMenu(g_hWndMain);
 	CheckMenuItem(hmenu, IDM_SCRNMUL4, MFCHECK(value == 4));
 	CheckMenuItem(hmenu, IDM_SCRNMUL6, MFCHECK(value == 6));
 	CheckMenuItem(hmenu, IDM_SCRNMUL8, MFCHECK(value == 8));
@@ -281,10 +245,7 @@ void xmenu_initialize(void)
 
 	nPos = 1;
 #if defined(SUPPORT_STATSAVE)
-	if (np2oscfg.statsave)
-	{
-		nPos += menu_addmenures(hMenu, nPos, IDR_STAT, FALSE);
-	}
+	nPos += menu_addmenures(hMenu, nPos, IDR_STAT, FALSE);
 #endif
 
 	for (i=0; i<4; i++)
@@ -319,14 +280,24 @@ void xmenu_initialize(void)
 	(void)menu_addmenubyid(hMenu, IDM_S98LOGGING, IDR_WAVEREC);
 #endif
 
-	if (np2oscfg.I286SAVE)
-	{
 #if defined(SUPPORT_PC9821)
-		(void)menu_addmenubyid(hMenu, IDM_SSTP, IDR_CPUSAVE32);
+	(void)menu_addmenubyid(hMenu, IDM_SSTP, IDR_CPUSAVE32);
 #else	//	defined(SUPPORT_PC9821)
-		(void)menu_addmenubyid(hMenu, IDM_SSTP, IDR_CPUSAVE16);
+	(void)menu_addmenubyid(hMenu, IDM_SSTP, IDR_CPUSAVE16);
 #endif	//	defined(SUPPORT_PC9821)
-	}
+
+	// Tools
+	(void)menu_addmenubyid(hMenu, IDM_TOOLWIN, IDR_SYSDEBUG);
+#if defined(CPUCORE_IA32) && defined(SUPPORT_MEMDBG32)
+	(void)menu_addmenubyid(hMenu, IDM_TOOLWIN, IDR_MEMDBG32);
+#endif
+
+#if defined(SUPPORT_KEYDISP)
+	(void)menu_addmenubyid(hMenu, IDM_TOOLWIN, IDR_SYSKEYDISP);
+#endif
+#if defined(SUPPORT_SOFTKBD)
+	(void)menu_addmenubyid(hMenu, IDM_TOOLWIN, IDR_SYSSOFTKBD);
+#endif
 }
 
 void xmenu_disablewindow(void) {
@@ -497,19 +468,24 @@ void xmenu_setmouse(UINT8 value) {
 	CheckMenuItem(np2class_gethmenu(g_hWndMain), IDM_MOUSE, MFCHECK(value));
 }
 
+void xmenu_settoolwin(UINT8 value) {
+
+	value &= 1;
+	np2oscfg.toolwin = value;
+	CheckMenuItem(np2class_gethmenu(g_hWndMain), IDM_TOOLWIN, MFCHECK(value));
+}
+
 #if defined(SUPPORT_S98)
 void xmenu_sets98logging(UINT8 value) {
 
-	CheckMenuItem(np2class_gethmenu(g_hWndMain),
-											IDM_S98LOGGING, MFCHECK(value));
+	CheckMenuItem(np2class_gethmenu(g_hWndMain), IDM_S98LOGGING, MFCHECK(value));
 }
 #endif
 
 #if defined(SUPPORT_WAVEREC)
 void xmenu_setwaverec(UINT8 value) {
 
-	CheckMenuItem(np2class_gethmenu(g_hWndMain),
-											IDM_WAVEREC, MFCHECK(value));
+	CheckMenuItem(np2class_gethmenu(g_hWndMain), IDM_WAVEREC, MFCHECK(value));
 }
 #endif
 

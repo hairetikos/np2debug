@@ -14,7 +14,7 @@
 
 #if defined(_WIN32) && defined(TRACE)
 extern void iptrace_out(void);
-#define	SCSICMD_ERR		MessageBox(NULL, "SCSI error", "?", MB_OK);	\
+#define	SCSICMD_ERR		__msgbox("?", "SCSI error");	\
 						exit(1);
 #else
 #define	SCSICMD_ERR

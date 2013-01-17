@@ -41,6 +41,8 @@ typedef struct {
 	UINT32		maxline;
 	UINT16		step;
 	UINT16		mul;
+	UINT16		cursor;
+	INT16		cursorline;
 	UINT8		alive;
 	UINT8		type;
 	UINT8		lock;
@@ -51,9 +53,16 @@ typedef struct {
 	SCROLLINFO	si;
 } NP2VIEW_T;
 
+extern	const int	np2viewfontheight;
 extern	const TCHAR		np2viewfont[];
 extern	NP2VIEW_T		np2view[NP2VIEW_MAX];
 
+// Colors
+extern COLORREF color_back;
+extern COLORREF color_text;
+extern COLORREF color_cursor;
+extern COLORREF color_hilite;
+extern COLORREF color_active;
 
 BOOL viewer_init(HINSTANCE hInstance);
 void viewer_term(void);
@@ -61,5 +70,6 @@ void viewer_term(void);
 void viewer_open(HINSTANCE hInstance);
 void viewer_allclose(void);
 
-void viewer_allreload(BOOL force);
+void viewer_scroll_update(NP2VIEW_T *view, HWND hwnd, UINT32 newpos);
 
+void viewer_allreload(BOOL force);

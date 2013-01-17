@@ -19,11 +19,11 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	HFONT		hfont;
 	I386STAT	*r;
 
-	hfont = CreateFont(16, 0, 0, 0, 0, 0, 0, 0, 
-					SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+	hfont = CreateFont(np2viewfontheight, 0, 0, 0, 0, 0, 0, 0, 
+					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 					DEFAULT_QUALITY, FIXED_PITCH, np2viewfont);
-	SetTextColor(hdc, 0xffffff);
-	SetBkColor(hdc, 0x400000);
+	SetTextColor(hdc, color_text);
+	SetBkColor(hdc, color_back);
 	hfont = (HFONT)SelectObject(hdc, hfont);
 
 	if (view->lock) {
@@ -48,7 +48,7 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 		r = &i386core.s;
 	}
 
-	for (y=0; y<rc->bottom && pos<4; y+=16, pos++) {
+	for (y=0; y<rc->bottom && pos<4; y+=np2viewfontheight, pos++) {
 		switch(pos) {
 			case 0:
 				wsprintf(str, _T("EAX=%.8x EBX=%.8x ECX=%.8x EDX=%.8x"),
@@ -95,8 +95,8 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	HFONT		hfont;
 	V30STAT		*r;
 
-	hfont = CreateFont(16, 0, 0, 0, 0, 0, 0, 0, 
-					SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+	hfont = CreateFont(np2viewfontheight, 0, 0, 0, 0, 0, 0, 0, 
+					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 					DEFAULT_QUALITY, FIXED_PITCH, np2viewfont);
 	SetTextColor(hdc, 0xffffff);
 	SetBkColor(hdc, 0x400000);
@@ -159,8 +159,8 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	HFONT		hfont;
 	I286STAT	*r;
 
-	hfont = CreateFont(16, 0, 0, 0, 0, 0, 0, 0, 
-					SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+	hfont = CreateFont(np2viewfontheight, 0, 0, 0, 0, 0, 0, 0, 
+					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 					DEFAULT_QUALITY, FIXED_PITCH, np2viewfont);
 	SetTextColor(hdc, 0xffffff);
 	SetBkColor(hdc, 0x400000);
@@ -216,8 +216,7 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 }
 #endif
 
-LRESULT CALLBACK viewreg_proc(NP2VIEW_T *view,
-								HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
+LRESULT CALLBACK viewreg_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	switch (msg) {
 
@@ -233,7 +232,7 @@ LRESULT CALLBACK viewreg_proc(NP2VIEW_T *view,
 			break;
 
 		case WM_PAINT:
-			viewcmn_paint(view, 0x400000, viewreg_paint);
+			viewcmn_paint(view, color_back, viewreg_paint);
 			break;
 
 	}

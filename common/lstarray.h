@@ -1,3 +1,5 @@
+#ifndef LSTARRAY_H
+#define LSTARRAY_H
 
 typedef struct _la {
 	UINT	maxitems;
@@ -26,3 +28,4 @@ void *listarray_enum(LISTARRAY laHandle,
 }
 #endif
 
+#endif /* LSTARRAY_H */

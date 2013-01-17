@@ -405,7 +405,7 @@ static void toolwincreate(HWND hWnd) {
 	const TCHAR *fontface = toolskin.font;
 #endif
 	toolwin.hfont = CreateFont(toolskin.fontsize, 0, 0, 0, 0, 0, 0, 0,
-					SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 					DEFAULT_QUALITY, FIXED_PITCH, fontface);
 	HDC hdc = GetDC(NULL);
 	toolwin.hdcfont = CreateCompatibleDC(hdc);
@@ -934,7 +934,7 @@ static LRESULT CALLBACK twproc(HWND hWnd, UINT uMsg, WPARAM wp, LPARAM lp)
 			break;
 
 		case WM_CLOSE:
-			sysmenu_settoolwin(0);
+			xmenu_settoolwin(0);
 			sysmng_update(SYS_UPDATEOSCFG);
 			DestroyWindow(hWnd);
 			break;
@@ -1027,7 +1027,7 @@ twope_err2:
 	DeleteObject(hbmp);
 
 twope_err1:
-	sysmenu_settoolwin(0);
+	xmenu_settoolwin(0);
 	sysmng_update(SYS_UPDATEOSCFG);
 	return;
 }

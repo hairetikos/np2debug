@@ -30,10 +30,11 @@
 #define IDD_SNDPAD1                     157
 #define IDD_CALENDAR                    161
 #define IDD_ABOUT                       171
+#define IDD_ADDRESS                     181
 #define IDR_SYS                         201
 #define IDR_SYSKEYDISP                  202
 #define IDR_SYSSOFTKBD                  203
-#define IDR_SYSDEBUG32                  204
+#define IDR_MEMDBG32                    204
 #define IDR_SYSDEBUG                    205
 #define IDR_MAIN                        211
 #define IDR_STAT                        212
@@ -266,6 +267,9 @@
 #define IDC_TOOL_FDD2EJECT              18009
 #define IDC_TOOL_RESET                  18010
 #define IDC_TOOL_POWER                  18011
+#define IDC_ADDR_SEG                    18101
+#define IDC_ADDR_OFF                    18102
+#define IDC_ADDR_REAL                   18103
 #define IDS_APP_NAME2                   30001
 #define IDS_APP_NAME21                  30002
 #define IDS_FILENAME_HELP               30003
@@ -563,6 +567,11 @@
 #define IDM_BIOS                        43033
 #define IDM_ITF                         43034
 #define IDM_A20LINE                     43035
+#define IDM_DEBUG_RUN                   43041
+#define IDM_DEBUG_STOP                  43042
+#define IDM_DEBUG_STEPINTO              43043
+#define IDM_DEBUG_STEPOVER              43044
+#define IDM_BREAK_TOGGLE                43051
 #define IDM_TRACE_TRACE                 43101
 #define IDM_TRACE_VERBOSE               43102
 #define IDM_TRACE_ENABLE                43103

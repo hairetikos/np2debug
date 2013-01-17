@@ -1,3 +1,6 @@
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #if !defined(SUPPORT_PC9821)
 #define PROJECTNAME			"Neko Project II"
@@ -125,5 +128,6 @@ extern	OEMCHAR		fddfolder[MAX_PATH];
 extern	OEMCHAR		hddfolder[MAX_PATH];
 extern	OEMCHAR		bmpfilefolder[MAX_PATH];
 
-void np2active_renewal(void);
-
+#ifdef __cplusplus
+}
+#endif

@@ -564,7 +564,7 @@ void gdcsub_write(void) {
 #if 0
 	TRACEOUT(("gdcsub_write"));
 	if (grcg.gdcwithgrcg & 0x8) {
-		MessageBox(NULL, "!!! grcg working", "?", MB_OK);
+		__msgbox("?", "!!! grcg working");
 	}
 #endif
 

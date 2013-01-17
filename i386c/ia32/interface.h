@@ -54,6 +54,7 @@
 #define	CPU_INTERRUPT(vect, soft)	ia32_interrupt(vect, soft)
 #define	CPU_EXEC()			ia32()
 #define	CPU_EXECV30()			ia32()
+#define	CPU_STEPEXEC()			ia32_step()
 #define	CPU_SHUT()			ia32shut()
 #define	CPU_SETEXTSIZE(size)		ia32_setextsize((UINT32)(size) << 20)
 #define CPU_SETEMM(frame, addr)		ia32_setemm(frame, addr)

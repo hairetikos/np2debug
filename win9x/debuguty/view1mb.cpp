@@ -32,11 +32,11 @@ static void view1mb_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	TCHAR	str[16];
 	HFONT	hfont;
 
-	hfont = CreateFont(16, 0, 0, 0, 0, 0, 0, 0, 
-					SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+	hfont = CreateFont(12, 0, 0, 0, 0, 0, 0, 0, 
+					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 					DEFAULT_QUALITY, FIXED_PITCH, np2viewfont);
-	SetTextColor(hdc, 0xffffff);
-	SetBkColor(hdc, 0x400000);
+	SetTextColor(hdc, color_text);
+	SetBkColor(hdc, color_back);
 	hfont = (HFONT)SelectObject(hdc, hfont);
 
 	if (view->lock) {
@@ -55,7 +55,7 @@ static void view1mb_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	}
 
 	off = (view->pos) << 4;
-	for (y=0; y<rc->bottom && off<0x10fff0; y+=16, off+=16) {
+	for (y=0; y<rc->bottom && off<0x10fff0; y+=np2viewfontheight, off+=16) {
 		wsprintf(str, _T("%08x"), off);
 		TextOut(hdc, 0, y, str, 8);
 		if (view->lock) {
@@ -79,8 +79,7 @@ static void view1mb_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 }
 
 
-LRESULT CALLBACK view1mb_proc(NP2VIEW_T *view,
-								HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
+LRESULT CALLBACK view1mb_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	switch (msg) {
 		case WM_COMMAND:
@@ -115,7 +114,7 @@ LRESULT CALLBACK view1mb_proc(NP2VIEW_T *view,
 			break;
 
 		case WM_PAINT:
-			viewcmn_paint(view, 0x400000, view1mb_paint);
+			viewcmn_paint(view, color_back, view1mb_paint);
 	}
 	return(0L);
 }

@@ -34,6 +34,7 @@
 #include "iocore.h"
 #include "dmax86.h"
 #include "bios.h"
+#include "break.h"
 
 
 void
@@ -126,25 +127,19 @@ ia32(void)
 		break;
 	}
 
-	if (CPU_TRAP) {
-		do {
-			exec_1step();
-			if (CPU_TRAP) {
-				CPU_DR6 |= CPU_DR6_BS;
-				INTERRUPT(1, INTR_TYPE_EXCEPTION);
-			}
+	do {
+		exec_1step();
+		if (CPU_TRAP) {
+			CPU_DR6 |= CPU_DR6_BS;
+			INTERRUPT(1, INTR_TYPE_EXCEPTION);
 			dmax86();
-		} while (CPU_REMCLOCK > 0);
-	} else if (dmac.working) {
-		do {
-			exec_1step();
+		} else if (dmac.working) {
 			dmax86();
-		} while (CPU_REMCLOCK > 0);
-	} else {
-		do {
-			exec_1step();
-		} while (CPU_REMCLOCK > 0);
-	}
+		}
+		if(np2break_is_set(CPU_CS, CPU_EIP))	{
+			break;
+		}
+	} while (CPU_REMCLOCK > 0);
 }
 
 void
@@ -170,7 +165,7 @@ ia32_step(void)
 		break;
 	}
 
-	do {
+	// do {
 		exec_1step();
 		if (CPU_TRAP) {
 			CPU_DR6 |= CPU_DR6_BS;
@@ -179,7 +174,7 @@ ia32_step(void)
 		if (dmac.working) {
 			dmax86();
 		}
-	} while (CPU_REMCLOCK > 0);
+	// } while (CPU_REMCLOCK > 0);
 }
 
 void CPUCALL

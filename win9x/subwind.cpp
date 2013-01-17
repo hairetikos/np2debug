@@ -57,7 +57,7 @@ static const TCHAR kdispclass[] = _T("NP2-KeyDispWin");
 static const UINT32 kdisppal[KEYDISP_PALS] =
 									{0x00000000, 0xffffffff, 0xf9ff0000};
 
-static const OEMCHAR kdispapp[] = OEMTEXT("Key Display");
+static const OEMCHAR kdispapp[] = OEMTEXT("Note Display");
 static const PFTBL kdispini[] = {
 				PFVAL("WindposX", PFTYPE_SINT32,	&kdispcfg.posx),
 				PFVAL("WindposY", PFTYPE_SINT32,	&kdispcfg.posy),
@@ -254,7 +254,7 @@ static LRESULT CALLBACK kdproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			break;
 
 		case WM_CLOSE:
-			sysmenu_setkeydisp(0);
+			xmenu_setkeydisp(0);
 			sysmng_update(SYS_UPDATEOSCFG);
 			DestroyWindow(hWnd);
 			break;
@@ -348,7 +348,7 @@ kdcre_err2:
 	DestroyWindow(hwnd);
 
 kdcre_err1:
-	sysmenu_setkeydisp(0);
+	xmenu_setkeydisp(0);
 	sysmng_update(SYS_UPDATEOSCFG);
 }
 
