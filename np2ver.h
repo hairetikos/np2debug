@@ -1,3 +1,13 @@
+#if !defined(SUPPORT_PC9821)
+#define PROJECTNAME			OEMTEXT("Neko Project II - Debug Edition")
+#else
+#define PROJECTNAME			OEMTEXT("Neko Project 21 - Debug Edition")
+#endif
+#if !defined(_WIN64)
+#define PROJECTSUBNAME		OEMTEXT("")
+#else
+#define PROJECTSUBNAME		OEMTEXT(" x64")
+#endif
 
 #define	NP2VER_CORE			"ver.0.83"
 

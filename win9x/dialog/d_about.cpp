@@ -12,8 +12,8 @@
 
 static	SIZE	s_szAbout;
 
-static const OEMCHAR str_np2title[] = OEMTEXT(PROJECTNAME) \
-										OEMTEXT(PROJECTSUBNAME) \
+static const OEMCHAR str_np2title[] = PROJECTNAME \
+										PROJECTSUBNAME \
 										OEMTEXT("  ");
 static const OEMCHAR np2infostr[] = OEMTEXT("CPU: %CPU% %CLOCK%\nMEM: %MEM1%\nGDC: %GDC%\n     %GDC2%\nTEXT: %TEXT%\nGRPH: %GRPH%\nSOUND: %EXSND%\n\nBIOS: %BIOS%\nRHYTHM: %RHYTHM%\n\nSCREEN: %DISP%");
 

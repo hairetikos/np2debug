@@ -270,8 +270,6 @@
 #define IDC_ADDR_SEG                    18101
 #define IDC_ADDR_OFF                    18102
 #define IDC_ADDR_REAL                   18103
-#define IDS_APP_NAME2                   30001
-#define IDS_APP_NAME21                  30002
 #define IDS_FILENAME_HELP               30003
 #define IDS_FONTFACE                    30011
 #define IDS_PFONTFACE                   30012

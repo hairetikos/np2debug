@@ -15,6 +15,7 @@
 #if defined(OSLANG_UTF8) || defined(OSLANG_UCS2)
 #include "oemtext.h"
 #endif
+#include "np2ver.h"
 
 static	HWND		sstphwnd = NULL;
 static	int			sstp_stat = SSTP_READY;
@@ -27,7 +28,7 @@ static	void		(*sstpproc)(HWND, char *) = NULL;
 
 static const OEMCHAR sendermes[] = 										\
 					OEMTEXT("SEND SSTP/1.2\r\n")						\
-					OEMTEXT("Sender: Neko Project II\r\n")				\
+					OEMTEXT("Sender: " PROJECTNAME)				\
 					OEMTEXT("Script: \\h\\s0%s\\e\r\n")					\
 					OEMTEXT("Option: notranslate\r\n")					\
 					OEMTEXT("Charset: Shift_JIS\r\n")					\

@@ -1,5 +1,6 @@
 #include	"compiler.h"
 #include	"strres.h"
+#include	"np2ver.h"
 
 
 const UINT8 str_utf8[3] = {0xef, 0xbb, 0xbf};
@@ -43,7 +44,7 @@ const OEMCHAR str_posy[] = OEMTEXT("posy");
 const OEMCHAR str_width[] = OEMTEXT("width");
 const OEMCHAR str_height[] = OEMTEXT("height");
 
-const OEMCHAR str_np2[] = OEMTEXT("Neko Project II");
+const OEMCHAR str_np2[] = PROJECTNAME;
 const OEMCHAR str_resume[] = OEMTEXT("Resume");
 
 const OEMCHAR str_VM[] = OEMTEXT("VM");

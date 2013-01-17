@@ -1075,8 +1075,6 @@ FONT 8, "MS Shell Dlg", 0, 0, 1
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 STRINGTABLE
 {
-    IDS_APP_NAME2                 "Neko Project II"
-    IDS_APP_NAME21                "Neko Project 21"
     IDS_FILENAME_HELP             "np2.chm"
     IDS_CAPTION_TOOL              "NP2 tool"
     IDS_CAPTION_KEYDISP           "Key display"

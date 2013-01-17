@@ -58,6 +58,7 @@
 #if defined(SUPPORT_DCLOCK)
 #include "dclock.h"
 #endif
+#include "np2ver.h"
 #include "break.h"
 
 #ifdef BETA_RELEASE
@@ -75,7 +76,7 @@ static	TCHAR		szClassName[] = _T("NP2-MainWindow");
 		BOOL		winui_en;
 
 		NP2OSCFG	np2oscfg = {
-						OEMTEXT(PROJECTNAME) OEMTEXT(PROJECTSUBNAME),
+						PROJECTNAME PROJECTSUBNAME,
 						OEMTEXT("NP2"),
 						CW_USEDEFAULT, CW_USEDEFAULT, 1, 1, 0, 0, 0, 1, 0, 0,
 						0, 0, KEY_UNKNOWN, 0,

@@ -2,18 +2,6 @@
 extern "C" {
 #endif
 
-#if !defined(SUPPORT_PC9821)
-#define PROJECTNAME			"Neko Project II"
-#else
-#define PROJECTNAME			"Neko Project 21"
-#endif
-
-#if !defined(_WIN64)
-#define PROJECTSUBNAME		""
-#else
-#define PROJECTSUBNAME		" x64"
-#endif
-
 typedef struct {
 	UINT8	port;
 	UINT8	def_en;
