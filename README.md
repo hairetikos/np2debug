@@ -2,7 +2,7 @@
 Neko Project II - Debug Edition
 ===============================
 
-__([Windows binaries are here] (http://thpatch.net/wiki/PC-98_hacking))__
+__([Windows binaries are here] (http://thpatch.net/wiki/Neko_Project_II_-_Debug_Edition))__
 
 
 
@@ -10,7 +10,7 @@ __([Windows binaries are here] (http://thpatch.net/wiki/PC-98_hacking))__
 About
 -----
 
-This is a fork of [Xnp2] (https://github.com/nonakap/xnp2) with extended debugging features. The aim is to achieve a level of debugging comfort high enough to thoroughly modify PC-98 binaries and add new features to it.
+This is a fork of the PC-98 emulator [Xnp2] (https://github.com/nonakap/xnp2) with extended debugging features. The aim is to achieve a level of debugging comfort high enough to thoroughly modify PC-98 binaries and add new features to them.
 
 In addition to the assembly, memory and register viewers for emulated code already present in Xnp2, this version also includes:
 
@@ -64,7 +64,7 @@ Also, the Touhou games require the build to be configured with IA-32 support:
 	
 Debugging
 ---------
-The debugging window can be accessed under `Tools ? Debug utility`.
+The debugging window can be accessed under `Tools → Debug utility`.
 
 ##### Unassemble
 * Current instruction is always at the top of the window
