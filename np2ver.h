@@ -1,7 +1,9 @@
 #if !defined(SUPPORT_PC9821)
 #define PROJECTNAME			OEMTEXT("Neko Project II - Debug Edition")
+#define SHORTNAME			OEMTEXT("np2")
 #else
 #define PROJECTNAME			OEMTEXT("Neko Project 21 - Debug Edition")
+#define SHORTNAME			OEMTEXT("np21")
 #endif
 #if !defined(_WIN64)
 #define PROJECTSUBNAME		OEMTEXT("")

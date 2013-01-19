@@ -5,6 +5,7 @@
 #include	"profile.h"
 #include	"np2.h"
 #include	"np2arg.h"
+#include	"np2ver.h"
 #if defined(OSLANG_UCS2)
 #include	"oemtext.h"
 #endif
@@ -575,7 +576,8 @@ const OEMCHAR	*ext;
 		}
 	}
 	else {
-		file_cutext(path);
+		file_cutname(path);
+		file_catname(path, SHORTNAME, size);
 		file_catname(path, ext_ini, size);
 	}
 }
