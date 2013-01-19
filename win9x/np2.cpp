@@ -79,10 +79,10 @@ static	TCHAR		szClassName[] = _T("NP2-MainWindow");
 						PROJECTNAME PROJECTSUBNAME,
 						OEMTEXT("NP2"),
 						CW_USEDEFAULT, CW_USEDEFAULT, 1, 1, 0, 0, 0, 1, 0, 0,
-						0, 0, KEY_UNKNOWN, 0,
+						0, 3, KEY_UNKNOWN, 5,
 						0, 0, 0, {1, 2, 2, 1},
 						{5, 0, 0x3e, 19200,
-						 OEMTEXT(""), OEMTEXT(""), OEMTEXT(""), OEMTEXT("")},
+						 OEMTEXT("MIDI MAPPER"), OEMTEXT(""), OEMTEXT("GM"), OEMTEXT("")},
 						{0, 0, 0x3e, 19200,
 						 OEMTEXT(""), OEMTEXT(""), OEMTEXT(""), OEMTEXT("")},
 						{0, 0, 0x3e, 19200,
@@ -90,7 +90,7 @@ static	TCHAR		szClassName[] = _T("NP2-MainWindow");
 						{0, 0, 0x3e, 19200,
 						 OEMTEXT(""), OEMTEXT(""), OEMTEXT(""), OEMTEXT("")},
 						0xffffff, 0xffbf6a, 0, 0,
-						0, 1, 0, 9801, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+						0, 1, 0, 9801, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 		OEMCHAR		fddfolder[MAX_PATH];
 		OEMCHAR		hddfolder[MAX_PATH];
