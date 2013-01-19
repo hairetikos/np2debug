@@ -9,6 +9,14 @@
       <Configuration>Debug</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+	<ProjectConfiguration Include="Debug NT|Win32">
+      <Configuration>Debug NT</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug NT|x64">
+      <Configuration>Debug NT</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release NT|Win32">
       <Configuration>Release NT</Configuration>
       <Platform>Win32</Platform>
@@ -60,6 +68,9 @@
   <PropertyGroup Condition="'$(Configuration)'=='Debug'" Label="Configuration">
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)'=='Debug NT'" Label="Configuration">
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)'=='Release'" Label="Configuration">
     <CharacterSet>MultiByte</CharacterSet>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -84,11 +95,19 @@
   <ImportGroup Condition="'$(Platform)'=='x64'" Label="PropertySheets">
     <Import Project="np21x64.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)'=='Debug'" Label="PropertySheets">
+    <Import Project="np21debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)'=='Debug NT'" Label="PropertySheets">
+    <Import Project="np21debug.props" />
+  </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
     <LinkIncremental Condition="'$(Configuration)'=='Debug'">true</LinkIncremental>
+	<LinkIncremental Condition="'$(Configuration)'=='Debug NT'">true</LinkIncremental>
     <TargetName Condition="'$(Configuration)'=='Debug'">$(ProjectName)d</TargetName>
+	<TargetName Condition="'$(Configuration)'=='Debug NT'">$(ProjectName)dnt</TargetName>
     <TargetName Condition="'$(Configuration)'=='Release'">$(ProjectName)</TargetName>
     <TargetName Condition="'$(Configuration)'=='Release NT'">$(ProjectName)nt</TargetName>
     <TargetName Condition="'$(Configuration)'=='Trace'">$(ProjectName)t</TargetName>
@@ -110,21 +129,6 @@
     <ResourceCompile>
       <Culture>0x0411</Culture>
     </ResourceCompile>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='Debug'">
-    <ClCompile>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
-    </ClCompile>
-    <ResourceCompile>
-      <Culture>0x0411</Culture>
-    </ResourceCompile>
-    <Link>
-      <GenerateDebugInformation Condition="'$(Configuration)'=='Debug'">true</GenerateDebugInformation>
-    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release NT'">
     <ClCompile>
@@ -148,7 +152,6 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <OutputFile>$(OutDir)np21t.exe</OutputFile>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
