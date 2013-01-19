@@ -16,17 +16,18 @@ In addition to the assembly, memory and register viewers for emulated code alrea
 
 * single-step execution
 * code breakpoints
+* Shift-JIS memory display
 
 What's still missing:
 
+* memory modification
 * memory breakpoints
-* Shift-JIS memory display and modification
 * assembly modification
 * read emulated files from a directory instead of using .hdi images
 
 As Xnp2 (and, most importantly, its debugging features already present) doesn't come with a cross-platform method for GUI coding, these extended features are currently _exclusive to the Win9x build_. After all that refactoring, it probably doesn't even build on Linux anymore...
 
-This is, and probably ever will be, only tested against the Touhou Project games 01-05. While it is fully compatible with them, both the debugging functions and the rather outdated code base make it __noticeably laggier__ than the recommended [fmgen build] (http://www.shrinemaiden.org/forum/index.php?topic=11117.0). Thus, this edition is not what you're looking for if you want to actually _play_ the games.
+This is, and probably ever will be, only tested against the Touhou Project games 01-05. While it is fully compatible with them, both the debugging functions and the rather outdated code base make it __noticeably laggier__ (on average about 10 fps slower) than the recommended [fmgen build] (http://www.shrinemaiden.org/forum/index.php?topic=11117.0). Thus, this edition is not what you're looking for if you want to actually _play_ the games.
 
 
 

@@ -15,6 +15,7 @@ static	const TCHAR		np2viewclass[] = _T("NP2-ViewWindow");
 
 COLORREF color_back = 0x400000;
 COLORREF color_text = 0xffffff;
+COLORREF color_dim = 0x909090;
 COLORREF color_cursor = 0x606060;
 COLORREF color_hilite = 0x0000ff;
 COLORREF color_active = 0x000000;

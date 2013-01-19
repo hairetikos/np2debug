@@ -60,6 +60,7 @@ extern	NP2VIEW_T		np2view[NP2VIEW_MAX];
 // Colors
 extern COLORREF color_back;
 extern COLORREF color_text;
+extern COLORREF color_dim;
 extern COLORREF color_cursor;
 extern COLORREF color_hilite;
 extern COLORREF color_active;

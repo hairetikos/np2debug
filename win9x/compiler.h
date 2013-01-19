@@ -13,6 +13,7 @@
 #if !defined(__GNUC__)
 #include <tchar.h>
 #endif	// !defined(__GNUC__)
+#include <malloc.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <setjmp.h>

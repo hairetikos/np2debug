@@ -293,8 +293,7 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 			}
 			break;
 
-		case WM_LBUTTONDOWN:
-			{
+		case WM_LBUTTONDOWN:	{
 				POINTS mpos = MAKEPOINTS(lp);
 				view->cursorline = view->pos + (mpos.y / np2viewfontheight);
 				view->cursor = viewasm_line_to_off(view, view->cursorline);
