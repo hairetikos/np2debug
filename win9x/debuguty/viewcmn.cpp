@@ -162,8 +162,7 @@ void viewcmn_setbank(NP2VIEW_T *view) {
 
 // ----
 
-static void modmenu(HMENU hmenu, int pos, UINT16 id,
-											const TCHAR *seg, UINT16 value) {
+static void modmenu(HMENU hmenu, int pos, UINT16 id, const TCHAR *seg, UINT16 value) {
 
 	TCHAR	buf[256];
 
@@ -207,8 +206,7 @@ void viewcmn_setvscroll(HWND hWnd, NP2VIEW_T *view) {
 
 // -----
 
-void viewcmn_paint(NP2VIEW_T *view, UINT32 bkgcolor,
-					void (*callback)(NP2VIEW_T *view, RECT *rc, HDC hdc)) {
+void viewcmn_paint(NP2VIEW_T *view, void (*callback)(NP2VIEW_T *view, RECT *rc, HDC hdc)) {
 
 	HDC			hdc;
 	PAINTSTRUCT	ps;
@@ -222,9 +220,13 @@ void viewcmn_paint(NP2VIEW_T *view, UINT32 bkgcolor,
 	hmemdc = CreateCompatibleDC(hdc);
 	hbitmap = CreateCompatibleBitmap(hdc, rc.right, rc.bottom);
 	hbitmap = (HBITMAP)SelectObject(hmemdc, hbitmap);
-	hbrush = (HBRUSH)SelectObject(hmemdc, CreateSolidBrush(bkgcolor));
+	hbrush = (HBRUSH)SelectObject(hmemdc, CreateSolidBrush(viewcfg.color_back));
 	PatBlt(hmemdc, 0, 0, rc.right, rc.bottom, PATCOPY);
 	DeleteObject(SelectObject(hmemdc, hbrush));
+
+	SetTextColor(hmemdc, viewcfg.color_text);
+	SetBkColor(hmemdc, viewcfg.color_back);
+	SelectObject(hmemdc, np2viewfont);
 
 	callback(view, &rc, hmemdc);
 

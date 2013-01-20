@@ -77,16 +77,8 @@ static void viewsnd_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	UINT	pos;
 const UINT8	*p;
 	TCHAR	str[16];
-	HFONT	hfont;
 	UINT	reg;
 	UINT16	mask;
-
-	hfont = CreateFont(np2viewfontheight, 0, 0, 0, 0, 0, 0, 0, 
-					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-					DEFAULT_QUALITY, FIXED_PITCH, np2viewfont);
-	SetTextColor(hdc, color_text);
-	SetBkColor(hdc, color_back);
-	hfont = (HFONT)SelectObject(hdc, hfont);
 
 	if (view->lock) {
 		if (view->buf1.type != ALLOCTYPE_SND) {
@@ -105,7 +97,7 @@ const UINT8	*p;
 	}
 
 	pos = view->pos;
-	for (y=0; (y<rc->bottom) && (pos<NELEMENTS(fmsndtbl)); y+=np2viewfontheight, pos++) {
+	for (y=0; (y<rc->bottom) && (pos<NELEMENTS(fmsndtbl)); y+=viewcfg.font_height, pos++) {
 		if (fmsndtbl[pos].str) {
 			TextOut(hdc, 0, y, fmsndtbl[pos].str, lstrlen(fmsndtbl[pos].str));
 		}
@@ -141,12 +133,10 @@ const UINT8	*p;
 			}
 		}
 	}
-	DeleteObject(SelectObject(hdc, hfont));
 }
 
 
-LRESULT CALLBACK viewsnd_proc(NP2VIEW_T *view,
-								HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
+LRESULT CALLBACK viewsnd_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	switch (msg) {
 		case WM_COMMAND:
@@ -161,7 +151,7 @@ LRESULT CALLBACK viewsnd_proc(NP2VIEW_T *view,
 			break;
 
 		case WM_PAINT:
-			viewcmn_paint(view, color_back, viewsnd_paint);
+			viewcmn_paint(view, viewsnd_paint);
 			break;
 
 	}

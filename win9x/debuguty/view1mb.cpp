@@ -24,7 +24,7 @@ static void set_viewseg(HWND hwnd, NP2VIEW_T *view, UINT16 seg) {
 
 static void view1mb_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 
-	viewmem_paint(view, rc, hdc, ALLOCTYPE_1MB, 0x10fff0, 16, false);
+	viewmem_paint(view, rc, hdc, ALLOCTYPE_1MB, 0x10fff0, false);
 }
 
 
@@ -63,9 +63,9 @@ LRESULT CALLBACK view1mb_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 			break;
 
 		case WM_PAINT:
-			viewcmn_paint(view, color_back, view1mb_paint);
+			viewcmn_paint(view, view1mb_paint);
 	}
-	return(0L);
+	return(viewmem_proc(view, hwnd, msg, wp, lp));
 }
 
 
@@ -98,4 +98,5 @@ void view1mb_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 	dst->type = VIEWMODE_1MB;
 	dst->maxline = 0x10fff;
 	dst->mul = 2;
+	dst->seg = 0;
 }

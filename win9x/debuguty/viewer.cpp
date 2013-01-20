@@ -6,20 +6,32 @@
 #include	"cpucore.h"
 #include	"break.h"
 #include	"dialog.h"
+#include	"ini.h"
 
 
 static	const TCHAR		np2viewclass[] = _T("NP2-ViewWindow");
-		const TCHAR		np2viewfont[] = _T("MS Gothic");
-		const int   	np2viewfontheight = 12;
+		HFONT    	np2viewfont;
+		int         	np2viewfontwidth = 0;
 		NP2VIEW_T		np2view[NP2VIEW_MAX];
 
-COLORREF color_back = 0x400000;
-COLORREF color_text = 0xffffff;
-COLORREF color_dim = 0x909090;
-COLORREF color_cursor = 0x606060;
-COLORREF color_hilite = 0x0000ff;
-COLORREF color_active = 0x000000;
+		VIEWCFG	viewcfg = {
+			 _T("MS Gothic"), 14,
 
+			 0xffffff, 0x909090, 0x400000, 0xff8000, 0x0000ff, 0x000000
+		};
+
+static	const PFTBL viewerini[] = {
+	PFSTR("fontname", PFTYPE_STR,	viewcfg.font_name),
+	PFVAL("fontsize", PFTYPE_UINT32,	&viewcfg.font_height),
+	PFVAL("col_text", PFTYPE_HEX32, &viewcfg.color_text),
+	PFVAL("col_dimm", PFTYPE_HEX32, &viewcfg.color_dim),
+	PFVAL("col_back", PFTYPE_HEX32, &viewcfg.color_back),
+	PFVAL("col_curs", PFTYPE_HEX32, &viewcfg.color_cursor),
+	PFVAL("col_high", PFTYPE_HEX32, &viewcfg.color_hilite),
+	PFVAL("col_actv", PFTYPE_HEX32, &viewcfg.color_active)
+};
+
+static const OEMCHAR viewerapp[] = OEMTEXT("Debug Utility");
 
 static void viewer_segmode(HWND hwnd, UINT8 type) {
 
@@ -35,15 +47,16 @@ static void viewer_segmode(HWND hwnd, UINT8 type) {
 }
 
 static UINT32 viewer_pageup(NP2VIEW_T *view, HWND hwnd) 	{
+
 	if (view->pos > view->step) {
 		return view->pos - view->step;
-	}
-	else {
+	} else {
 		return 0;
 	}
 }
 
 static UINT32 viewer_pagedown(NP2VIEW_T *view, HWND hwnd)	{
+
 	UINT32 newpos = view->pos + view->step;
 	if (newpos > (view->maxline - view->step)) {
 		newpos = view->maxline - view->step;
@@ -52,10 +65,30 @@ static UINT32 viewer_pagedown(NP2VIEW_T *view, HWND hwnd)	{
 }
 
 void viewer_scroll_update(NP2VIEW_T *view, HWND hwnd, UINT32 newpos)	{
+
 	if (view->pos != newpos) {
 		view->pos = newpos;
 		viewcmn_setvscroll(hwnd, view);
 		InvalidateRect(hwnd, NULL, TRUE);
+	}
+}
+
+void viewer_scroll_fit_line(NP2VIEW_T *view, HWND hwnd, LONG line)	{
+
+	LONG scrolldiff;
+	RECT rc;
+	LONG viewlines;
+
+	scrolldiff = line - view->pos;
+	GetClientRect(hwnd, &rc);
+	viewlines = (rc.bottom / viewcfg.font_height) - 1;
+
+	if(scrolldiff < 0)	{
+		viewer_scroll_update(view, hwnd, view->pos + scrolldiff);
+	}
+	scrolldiff = line - view->pos - viewlines;
+	if(scrolldiff > 0)	{
+		viewer_scroll_update(view, hwnd, view->pos + scrolldiff);
 	}
 }
 
@@ -307,6 +340,10 @@ LRESULT CALLBACK ViewProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 BOOL viewer_init(HINSTANCE hInstance) {
 
 	WNDCLASS	np2vc;
+	HDC htempdc;
+	TEXTMETRIC tm;
+
+	viewer_readini();
 
 	ZeroMemory(np2view, sizeof(np2view));
 
@@ -323,12 +360,24 @@ BOOL viewer_init(HINSTANCE hInstance) {
 	if (!RegisterClass(&np2vc)) {
 		return(FAILURE);
 	}
+
+	np2viewfont = CreateFont(viewcfg.font_height, 0, 0, 0, 0, 0, 0, 0,
+					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
+					DEFAULT_QUALITY, FIXED_PITCH, viewcfg.font_name);
+
+	htempdc = CreateCompatibleDC(NULL);
+	SelectObject(htempdc, np2viewfont);
+	GetTextMetrics(htempdc, &tm);
+	np2viewfontwidth = tm.tmMaxCharWidth / 2;
+	DeleteDC(htempdc);
 	return(SUCCESS);
 }
 
 
 void viewer_term(void) {
 
+	DeleteObject(np2viewfont);
+	viewer_writeini();
 }
 
 
@@ -402,3 +451,18 @@ static UINT32	last = 0;
 	}
 }
 
+void viewer_readini(void) {
+
+	OEMCHAR	path[MAX_PATH];
+
+	initgetfile(path, NELEMENTS(path));
+	ini_read(path, viewerapp, viewerini, NELEMENTS(viewerini));
+}
+
+void viewer_writeini(void) {
+
+	OEMCHAR	path[MAX_PATH];
+
+	initgetfile(path, NELEMENTS(path));
+	ini_write(path, viewerapp, viewerini, NELEMENTS(viewerini));
+}

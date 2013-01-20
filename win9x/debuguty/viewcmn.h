@@ -17,6 +17,5 @@ void viewcmn_setmenuseg(HWND hwnd);
 
 void viewcmn_setvscroll(HWND hWnd, NP2VIEW_T *view);
 
-void viewcmn_paint(NP2VIEW_T *view, UINT32 bkgcolor,
-						void (*callback)(NP2VIEW_T *view, RECT *rc, HDC hdc));
+void viewcmn_paint(NP2VIEW_T *view, void (*callback)(NP2VIEW_T *view, RECT *rc, HDC hdc));
 

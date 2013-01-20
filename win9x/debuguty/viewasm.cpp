@@ -82,20 +82,12 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	UINT8	*p;
 	UINT8	buf[16];
 	TCHAR	str[16];
-	HFONT	hfont;
-//	BOOL	opsize;
 	_UNASM	una;
 	int		step;
 #if defined(UNICODE)
 	TCHAR	cnv[64];
 #endif
 	COLORREF	bkcol;
-
-	hfont = CreateFont(np2viewfontheight, 0, 0, 0, 0, 0, 0, 0, 
-					DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-					ANTIALIASED_QUALITY, FIXED_PITCH, np2viewfont);
-	SetTextColor(hdc, color_text);
-	hfont = (HFONT)SelectObject(hdc, hfont);
 
 	if (view->lock) {
 		if ((view->buf1.type != ALLOCTYPE_SEG) ||
@@ -142,32 +134,32 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 
 	prevoff = off = viewasm_line_to_off(view, view->pos);
 
-	for (y=0; y<rc->bottom; y+=np2viewfontheight) {
+	for (y=0; y<rc->bottom; y+=viewcfg.font_height) {
 		x = 0;
 		// Emphasize wrapping
 		if(prevoff > off)	{
-			viewasm_fill_line(y, 2, color_hilite, rc, hdc);
+			viewasm_fill_line(y, 2, viewcfg.color_hilite, rc, hdc);
 		}
 		
-		bkcol = color_back;
+		bkcol = viewcfg.color_back;
 		// IP?
 		if(view->seg == CPU_CS && off == CPU_IP)	{
-			viewasm_fill_line(y, np2viewfontheight, color_text, rc, hdc);
-			bkcol = color_text;
-			SetTextColor(hdc, color_active);
+			viewasm_fill_line(y, viewcfg.font_height, viewcfg.color_text, rc, hdc);
+			bkcol = viewcfg.color_text;
+			SetTextColor(hdc, viewcfg.color_active);
 		}
 		else		{
-			SetTextColor(hdc, color_text);
+			SetTextColor(hdc, viewcfg.color_text);
 		}
 		// Cursor?
 		if(off == view->cursor)	{
-			viewasm_fill_line(y, np2viewfontheight, color_cursor, rc, hdc);
-			bkcol = color_cursor;
+			viewasm_fill_line(y, viewcfg.font_height, viewcfg.color_cursor, rc, hdc);
+			bkcol = viewcfg.color_cursor;
 		}
 
 		// Breakpoint?
 		if(np2break_is_set(view->seg, off))	{
-			SetBkColor(hdc, color_hilite);
+			SetBkColor(hdc, viewcfg.color_hilite);
 		}
 		else {
 			SetBkColor(hdc, bkcol);
@@ -207,24 +199,17 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 		prevoff = off;
 		off += (UINT16)step;
 	}
-
-	DeleteObject(SelectObject(hdc, hfont));
 }
 
 
 LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	UINT step = 0;
-	UINT16 newcursor;
-	INT32 viewlines;
-	INT32 scrolldiff;
-	RECT rc;
+	LONG newcursor;
 
 	switch (msg) {
 		case WM_SYSKEYDOWN:
 		case WM_KEYDOWN:
-			GetClientRect(hwnd, &rc);
-			viewlines = (rc.bottom / np2viewfontheight) - 1;
 			switch(wp)
 			{
 			case VK_UP:
@@ -240,18 +225,15 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 				view->cursorline += view->step;
 				break;
 			}
-			if(view->cursorline < 0)	view->cursorline = 0;
-			if(view->cursorline > (INT32)(view->maxline - 1))	view->cursorline = view->maxline - 1;
+			// Clamp
+			if(view->cursorline < 0) {
+				view->cursorline = 0;
+			} else if(view->cursorline > (view->maxline - 1)) {
+				view->cursorline = view->maxline - 1;
+			}
 
+			viewer_scroll_fit_line(view, hwnd, view->cursorline);
 			newcursor = viewasm_line_to_off(view, view->cursorline);
-			scrolldiff = view->cursorline - view->pos;
-			if(scrolldiff < 0)	{
-				viewer_scroll_update(view, hwnd, view->pos + scrolldiff);
-			}
-			scrolldiff = view->cursorline - view->pos - viewlines;
-			if(scrolldiff > 0)	{
-				viewer_scroll_update(view, hwnd, view->pos + scrolldiff);
-			}
 			if(newcursor != view->cursor)	{
 				view->cursor = newcursor;
 				InvalidateRect(hwnd, NULL, TRUE);
@@ -295,14 +277,14 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 		case WM_LBUTTONDOWN:	{
 				POINTS mpos = MAKEPOINTS(lp);
-				view->cursorline = view->pos + (mpos.y / np2viewfontheight);
+				view->cursorline = view->pos + (mpos.y / viewcfg.font_height);
 				view->cursor = viewasm_line_to_off(view, view->cursorline);
 				InvalidateRect(hwnd, NULL, TRUE);
 			}
 			break;
 
 		case WM_PAINT:
-			viewcmn_paint(view, color_back, viewasm_paint);
+			viewcmn_paint(view, viewasm_paint);
 			break;
 
 		default:
