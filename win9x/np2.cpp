@@ -49,7 +49,6 @@
 #include "fddfile.h"
 #include "timing.h"
 #include "keystat.h"
-#include "debugsub.h"
 #include "subwind.h"
 #include "viewer.h"
 #if !defined(_WIN64)
@@ -839,10 +838,6 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 			update |= SYS_UPDATEOSCFG;
 			break;
 
-		case IDM_MEMORYDUMP:
-			debugsub_memorydump();
-			break;
-
 		case IDM_DEBUGUTY:
 			viewer_open(g_hInstance);
 			break;
@@ -911,10 +906,6 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 		case IDM_SSTP:
 			xmenu_setsstp(np2oscfg.sstp ^ 1);
 			update |= SYS_UPDATECFG;
-			break;
-
-		case IDM_CPUSAVE:
-			debugsub_status();
 			break;
 
 		case IDM_HELP:

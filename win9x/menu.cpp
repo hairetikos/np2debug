@@ -280,12 +280,6 @@ void xmenu_initialize(void)
 	(void)menu_addmenubyid(hMenu, IDM_S98LOGGING, IDR_WAVEREC);
 #endif
 
-#if defined(SUPPORT_PC9821)
-	(void)menu_addmenubyid(hMenu, IDM_SSTP, IDR_CPUSAVE32);
-#else	//	defined(SUPPORT_PC9821)
-	(void)menu_addmenubyid(hMenu, IDM_SSTP, IDR_CPUSAVE16);
-#endif	//	defined(SUPPORT_PC9821)
-
 	// Tools
 	(void)menu_addmenubyid(hMenu, IDM_TOOLWIN, IDR_SYSDEBUG);
 #if defined(CPUCORE_IA32) && defined(SUPPORT_MEMDBG32)

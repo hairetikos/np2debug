@@ -7,6 +7,7 @@
 #include	"break.h"
 #include	"dialog.h"
 #include	"ini.h"
+#include	"debugsub.h"
 
 
 static	const TCHAR		np2viewclass[] = _T("NP2-ViewWindow");
@@ -238,6 +239,14 @@ LRESULT CALLBACK ViewProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 						view->seg = ret >> 16;
 						view->off = ret & CPU_ADRSMASK;
 					}
+					break;
+
+				case IDM_MEMORYDUMP:
+					debugsub_memorydump();
+					break;
+
+				case IDM_CPUSAVE:
+					debugsub_status();
 					break;
 
 				default:
