@@ -15,6 +15,13 @@ enum {
 	SNDDRV_DRVMAX
 };
 
+enum {
+	SNDPROC_MASTER	= 0,
+	SNDPROC_MAIN,
+	SNDPROC_TOOL,
+	SNDPROC_SUBWIND
+};
+
 BYTE snddrv_drv2num(const char *);
 const char *snddrv_num2drv(BYTE);
 
@@ -29,6 +36,9 @@ void soundmng_setreverse(BOOL reverse);
 
 BOOL soundmng_pcmplay(UINT num, BOOL loop);
 void soundmng_pcmstop(UINT num);
+
+void soundmng_disable(UINT proc);
+void soundmng_enable(UINT proc);
 
 /* ---- for X11 */
 

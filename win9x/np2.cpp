@@ -71,7 +71,6 @@ static	TCHAR		szClassName[] = _T("NP2-MainWindow");
 #if !defined(_WIN64)
 		int			mmxflag;
 #endif
-		UINT8		np2break = 0;									// ver0.30
 		BOOL		winui_en;
 
 		NP2OSCFG	np2oscfg = {

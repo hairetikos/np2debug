@@ -54,6 +54,8 @@ static mouse_stat_t ms_default = {
 };
 static mouse_stat_t ms;
 
+static UINT8 flag;
+
 static void getmaincenter(GtkWidget *w, int *cx, int *cy);
 static void mouseonoff(int onoff);
 
@@ -219,4 +221,23 @@ mousemng_set_ratio(UINT8 new_ratio)
 	ms.mouse_move_ratio = np2oscfg.mouse_move_ratio;
 	ms.mouse_move_mul = (ms.mouse_move_ratio >> 4) & 0xf;
 	ms.mouse_move_div = ms.mouse_move_ratio & 0xf;
+}
+
+
+// ----
+
+void mousemng_enable(UINT proc) {
+
+	flag &= (1 << proc);
+	if(!flag)	{
+		mouse_running(MOUSE_ON);
+	}
+}
+
+void mousemng_disable(UINT proc) {
+
+	if(!flag)	 {
+		mouse_running(MOUSE_OFF);
+	}
+	flag |= 1 << proc;
 }

@@ -85,6 +85,7 @@ static struct {
 static int audio_fd = -1;
 static BOOL opened = FALSE;
 static UINT opna_frame;
+static UINT mute = 0;
 
 static BOOL nosound_setup(void);
 static BOOL sdlaudio_setup(void);
@@ -1056,3 +1057,25 @@ sdlaudio_callback(void *userdata, unsigned char *stream, int len)
 #endif	/* USE_SDLAUDIO || USE_SDLMIXER */
 
 #endif	/* !NOSOUND */
+
+// ----
+
+void soundmng_enable(UINT proc) {
+
+	if (!(mute & (1 << proc))) {
+		return;
+	}
+	mute &= ~(1 << proc);
+	if (!mute) {
+		soundmng_reset();
+		soundmng_play();
+	}
+}
+
+void soundmng_disable(UINT proc) {
+
+	if (!mute) {
+		soundmng_stop();
+	}
+	mute |= 1 << proc;
+}

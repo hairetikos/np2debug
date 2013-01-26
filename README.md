@@ -35,8 +35,6 @@ This is, and probably ever will be, only tested against the Touhou Project games
 Building
 --------
 
-
-
 ### Windows
 Visual C++ 2010 is required for building. I don't really see a reason in maintaining project configurations for previous versions. Once you've understood property sheets, you really don't want to go back.
 
@@ -57,9 +55,10 @@ You need the development libraries of `GTK2`, `SDL` and `SDL_mixer`, as well as 
 
     build-essential nasm libsdl1.2-dev libsdl-mixer1.2-dev libgtk2.0-dev libxxf86vm-dev
 	
-Also, the Touhou games require the build to be configured with IA-32 support:
+Also, the Touhou games require the build to be configured with IA-32 support. From the root directory, the build commands are:
 
-    ./configure --enable-ia32
+    cd x11
+    ./autogen.sh --enable-ia32
     make
 
 

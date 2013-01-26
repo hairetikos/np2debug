@@ -26,6 +26,7 @@
 #include "compiler.h"
 
 #include "np2.h"
+#include "np2ver.h"
 #include "pccore.h"
 #include "dosio.h"
 #include "scrndraw.h"
@@ -49,18 +50,14 @@
 
 
 NP2OSCFG np2oscfg = {
-#if !defined(CPUCORE_IA32)		/* titles */
-	"Neko Project II",
-#else
-	"Neko Project II + IA32",
-#endif
-
+	PROJECTNAME,		/* titles */
 	0, 			/* paddingx */
 	0,			/* paddingy */
 
 	0,			/* NOWAIT */
 	0,			/* DRAW_SKIP */
 
+	0,			/* background */
 	0,			/* DISPCLK */
 
 	KEY_KEY106,		/* KEYBOARD */

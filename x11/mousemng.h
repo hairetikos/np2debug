@@ -24,6 +24,11 @@ G_BEGIN_DECLS
 #define	MOUSE_RIGHTDOWN	2
 #define	MOUSE_RIGHTUP	3
 
+enum {
+	MOUSEPROC_SYSTEM	= 0,
+	MOUSEPROC_WINUI,
+	MOUSEPROC_BG
+};
 
 BYTE mousemng_getstat(short *x, short *y, int clear);
 void mousemng_callback(void);
@@ -32,8 +37,13 @@ BYTE mouse_flag(void);
 void mouse_running(BYTE flg);
 BYTE mouse_btn(BYTE btn);
 
+void mousemng_enable(UINT proc);
+void mousemng_disable(UINT proc);
+
 /* for X11 */
 int mousemng_initialize(void);
+void mousemng_enable(UINT proc);
+void mousemng_disable(UINT proc);
 void mousemng_term(void);
 void mousemng_set_ratio(BYTE);
 

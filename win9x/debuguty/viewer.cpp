@@ -108,18 +108,19 @@ void viewer_debug_menu_toggle(HMENU hmenu, BOOL running)
 
 static void vieweractive_renewal(void) {
 
-	int			i;
+	int  		i;
+	UINT8		breakflag = NP2BREAK_RESUME;
 	NP2VIEW_T	*view;
 
 	view = np2view;
-	np2break &= ~NP2BREAK_DEBUG;
+	breakflag &= ~NP2BREAK_DEBUG;
 	for (i=0; i<NP2VIEW_MAX; i++, view++) {
 		if ((view->alive) && (view->active)) {
-			np2break |= NP2BREAK_DEBUG;
+			breakflag |= NP2BREAK_DEBUG;
 			break;
 		}
 	}
-	np2active_renewal();
+	np2active_renewal(breakflag);
 }
 
 

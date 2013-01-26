@@ -18,13 +18,13 @@ BOOL 	np2singlestep = 0;
 LISTARRAY np2breakpoints = NULL;
 /// =======
 
-void np2active_renewal(void) {										// ver0.30
+void np2active_renewal(UINT8 breakflag) {										// ver0.30
 
-	if (np2break & (~NP2BREAK_MAIN)) {
+	if (breakflag & (~NP2BREAK_MAIN)) {
 		np2stopemulate = 2;
 		soundmng_disable(SNDPROC_MASTER);
 	}
-	else if (np2break & NP2BREAK_MAIN) {
+	else if (breakflag & NP2BREAK_MAIN) {
 		if (np2oscfg.background & 1) {
 			np2stopemulate = 1;
 		}
@@ -48,16 +48,14 @@ void np2active_renewal(void) {										// ver0.30
 void np2active_set(int active)
 {
 	if (active) {
-		np2break &= ~NP2BREAK_DEBUG;
 		scrnmng_update();
 		keystat_allrelease();
 		mousemng_enable(MOUSEPROC_BG);
 	}
 	else {
-		np2break |= NP2BREAK_DEBUG;
 		mousemng_disable(MOUSEPROC_BG);
 	}
-	np2active_renewal();
+	np2active_renewal(active ? NP2BREAK_RESUME : NP2BREAK_DEBUG);
 }
 
 void np2active_step()
@@ -82,8 +80,8 @@ LISTARRAY np2break_create()
 static BOOL np2break_lookup(void *vpItem, void *vpArg) {
 	CODEADDR16* seek = (CODEADDR16*)vpArg;
 	CODEADDR16* cur = (CODEADDR16*)vpItem;
-	DWORD seek_real = (seek->cs << 4) + seek->ip;
-	DWORD cur_real = (cur->cs << 4) + cur->ip;
+	UINT32 seek_real = (seek->cs << 4) + seek->ip;
+	UINT32 cur_real = (cur->cs << 4) + cur->ip;
 	return seek_real == cur_real;
 }
 
@@ -133,3 +131,4 @@ void np2break_destroy()
 	listarray_destroy(np2breakpoints);
 }
 /// -----------
+

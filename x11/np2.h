@@ -27,6 +27,7 @@ typedef struct {
 	BYTE	NOWAIT;
 	BYTE	DRAW_SKIP;
 
+	BYTE	background;
 	BYTE	DISPCLK;
 
 	BYTE	KEYBOARD;

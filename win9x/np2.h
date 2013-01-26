@@ -79,11 +79,6 @@ enum {
 };
 
 enum {
-	NP2BREAK_MAIN		= 0x01,
-	NP2BREAK_DEBUG		= 0x02
-};
-
-enum {
 	WM_NP2CMD			= (WM_USER + 200),
 	WM_SSTP				= (WM_USER + 201)
 };
@@ -105,7 +100,6 @@ extern	NP2OSCFG	np2oscfg;
 extern	HWND		g_hWndMain;
 extern	HINSTANCE	g_hInstance;
 extern	HINSTANCE	g_hPrevInst;
-extern	UINT8		np2break;
 extern	BOOL		winui_en;
 #if !defined(_WIN64)
 extern	int			mmxflag;

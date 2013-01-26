@@ -22,6 +22,12 @@ typedef struct {
 #pragma pack(pop)
 #endif
 
+enum {
+	NP2BREAK_RESUME		= 0x00,
+	NP2BREAK_MAIN		= 0x01,
+	NP2BREAK_DEBUG		= 0x02
+};
+
 /// Globals
 /// =======
 extern	UINT8	np2stopemulate;
@@ -31,7 +37,7 @@ extern	LISTARRAY np2breakpoints;
 
 /// Activity
 /// --------
-void np2active_renewal(void);
+void np2active_renewal(UINT8 breakflag);
 void np2active_set(int active);
 // Sets the single-step flag and resumes emulation.
 // Next CPU loop will perform one instruction only, then pause the emulation again
