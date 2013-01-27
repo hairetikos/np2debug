@@ -21,7 +21,6 @@ In addition to the assembly, memory and register viewers for emulated code alrea
 
 What's still missing:
 
-* memory modification
 * memory breakpoints
 * assembly modification
 * read emulated files from a directory instead of using .hdi images
