@@ -22,7 +22,10 @@ static	const TCHAR		np2viewclientclass[] = _T("NP2-ViewClient");
 		VIEWCFG	viewcfg = {
 			 _T("MS Gothic"), 14,
 
-			 0xffffff, 0x909090, 0x400000, 0xff8000, 0x0000ff, 0x000000
+			 // Colors
+			 0xffffff, 0x909090, 0x400000, 0xff8000, 0x0000ff, 0x000000,
+			 // Sizes
+			 {0, 0}, {0, 0}, {0, 0}, {0, 0}
 		};
 
 static	const PFTBL viewerini[] = {
@@ -33,7 +36,16 @@ static	const PFTBL viewerini[] = {
 	PFVAL("col_back", PFTYPE_HEX32, &viewcfg.color_back),
 	PFVAL("col_curs", PFTYPE_HEX32, &viewcfg.color_cursor),
 	PFVAL("col_high", PFTYPE_HEX32, &viewcfg.color_hilite),
-	PFVAL("col_actv", PFTYPE_HEX32, &viewcfg.color_active)
+	PFVAL("col_actv", PFTYPE_HEX32, &viewcfg.color_active),
+
+	PFVAL("sizeasmx", PFTYPE_UINT16, &viewcfg.size_asm.x),
+	PFVAL("sizeasmy", PFTYPE_UINT16, &viewcfg.size_asm.y),
+	PFVAL("sizememx", PFTYPE_UINT16, &viewcfg.size_mem.x),
+	PFVAL("sizememy", PFTYPE_UINT16, &viewcfg.size_mem.y),
+	PFVAL("sizeregx", PFTYPE_UINT16, &viewcfg.size_reg.x),
+	PFVAL("sizeregy", PFTYPE_UINT16, &viewcfg.size_reg.y),
+	PFVAL("sizesndx", PFTYPE_UINT16, &viewcfg.size_snd.x),
+	PFVAL("sizesndy", PFTYPE_UINT16, &viewcfg.size_snd.y),
 };
 
 static const OEMCHAR viewerapp[] = OEMTEXT("Debug Utility");
@@ -271,7 +283,6 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 LRESULT CALLBACK ViewClientProc(HWND hClientWnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	NP2VIEW_T *view = viewcmn_find(hClientWnd);
-	UINT32 ret;
 
 	switch (msg) {
 		case WM_SYSKEYDOWN:
@@ -333,19 +344,42 @@ LRESULT CALLBACK ViewClientProc(HWND hClientWnd, UINT msg, WPARAM wp, LPARAM lp)
 			{
 				RECT rc_parent;
 				RECT rc_client;
-				RECT rc_status;
+				RECT rc_status_abs;
+				POINTS *save = NULL;
 				int w, h;
 
 				GetClientRect(view->hwnd, &rc_parent);
 				GetClientRect(view->clientwnd, &rc_client);
-				GetWindowRect(view->statwnd, &rc_status);
+				GetWindowRect(view->statwnd, &rc_status_abs);
 
 				w = rc_parent.right;
-				h = rc_parent.bottom - (rc_status.bottom - rc_status.top);
+				h = rc_parent.bottom - (rc_status_abs.bottom - rc_status_abs.top);
 
 				view->step = (UINT16)(rc_client.bottom / viewcfg.font_height);
 				viewcmn_setvscroll(view);
 				SetWindowPos(view->clientwnd, NULL, 0, 0, w, h, 0);
+
+				switch(view->type)	{
+					case VIEWMODE_ASM:
+						save = &viewcfg.size_asm;
+						break;
+					case VIEWMODE_1MB:
+					case VIEWMODE_SEG:
+						save = &viewcfg.size_mem;
+						break;
+					case VIEWMODE_REG:
+						save = &viewcfg.size_reg;
+						break;
+					case VIEWMODE_SND:
+						save = &viewcfg.size_snd;
+						break;
+				}
+				if(save)	{
+					RECT rc_parent_abs;
+					GetWindowRect(view->hwnd, &rc_parent_abs);
+					save->x = rc_parent_abs.right - rc_parent_abs.left;
+					save->y = rc_parent_abs.bottom - rc_parent_abs.top;
+				}
 			}
 			break;
 

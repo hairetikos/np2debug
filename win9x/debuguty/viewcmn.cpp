@@ -99,26 +99,35 @@ NP2VIEW_T *viewcmn_find(HWND hwnd) {
 
 void viewcmn_setmode(NP2VIEW_T *dst, NP2VIEW_T *src, UINT8 type) {
 
+	POINTS* size = NULL;
 	switch(type) {
 		case VIEWMODE_REG:
 			viewreg_init(dst, src);
+			size = &viewcfg.size_reg;
 			break;
 
 		case VIEWMODE_SEG:
 			viewseg_init(dst, src);
+			size = &viewcfg.size_mem;
 			break;
 
 		case VIEWMODE_1MB:
 			view1mb_init(dst, src);
+			size = &viewcfg.size_mem;
 			break;
 
 		case VIEWMODE_ASM:
 			viewasm_init(dst, src);
+			size = &viewcfg.size_asm;
 			break;
 
 		case VIEWMODE_SND:
 			viewsnd_init(dst, src);
+			size = &viewcfg.size_snd;
 			break;
+	}
+	if(size && size->x && size->y)	{
+		SetWindowPos(dst->hwnd, NULL, 0, 0, size->x, size->y, SWP_NOMOVE);
 	}
 	viewmenu_mode(dst);
 }

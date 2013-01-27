@@ -66,6 +66,11 @@ typedef struct {
 	COLORREF color_cursor;
 	COLORREF color_hilite;
 	COLORREF color_active;
+
+	POINTS size_asm;
+	POINTS size_mem;
+	POINTS size_reg;
+	POINTS size_snd;
 } VIEWCFG;
 
 extern	VIEWCFG viewcfg;
