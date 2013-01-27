@@ -57,6 +57,9 @@ char * STRCALL mileuc_chr(const char *str, int c);
 char * STRCALL milutf8_chr(const char *str, int c);
 
 
+BOOL STRCALL milstr_validhex(const OEMCHAR c);
+
+
 // 0~9, A~Z のみを大文字小文字を同一視して比較
 // ret 0:一致
 int STRCALL milstr_extendcmp(const OEMCHAR *str, const OEMCHAR *cmp);
@@ -66,6 +69,9 @@ OEMCHAR * STRCALL milstr_nextword(const OEMCHAR *str);
 
 // 文字列からARGの取得
 int STRCALL milstr_getarg(OEMCHAR *str, OEMCHAR *arg[], int maxarg);
+
+// HEX2buffer
+UINT STRCALL milstr_solveHEXbuffer(UINT8 *buf, const UINT buflen, const OEMCHAR *str);
 
 // HEX2INT
 long STRCALL milstr_solveHEX(const OEMCHAR *str);

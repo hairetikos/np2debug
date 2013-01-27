@@ -3,14 +3,18 @@
 #include	"np2.h"
 #include	"viewer.h"
 #include	"viewcmn.h"
+#include	"viewmenu.h"
+#include	"viewstat.h"
 #include	"cpucore.h"
 #include	"break.h"
 #include	"dialog.h"
 #include	"ini.h"
 #include	"debugsub.h"
+#include	"soundmng.h"
 
 
-static	const TCHAR		np2viewclass[] = _T("NP2-ViewWindow");
+static	const TCHAR		np2viewparentclass[] = _T("NP2-ViewWindow");
+static	const TCHAR		np2viewclientclass[] = _T("NP2-ViewClient");
 		HFONT    	np2viewfont;
 		int         	np2viewfontwidth = 0;
 		NP2VIEW_T		np2view[NP2VIEW_MAX];
@@ -34,20 +38,18 @@ static	const PFTBL viewerini[] = {
 
 static const OEMCHAR viewerapp[] = OEMTEXT("Debug Utility");
 
-static void viewer_segmode(HWND hwnd, UINT8 type) {
+static void viewer_segmode(NP2VIEW_T *view, UINT8 type) {
 
-	NP2VIEW_T	*view;
-
-	view = viewcmn_find(hwnd);
 	if ((view) && (view->type != type)) {
 		viewcmn_setmode(view, view, type);
 		viewcmn_setbank(view);
-		viewcmn_setvscroll(hwnd, view);
-		InvalidateRect(hwnd, NULL, TRUE);
+		viewcmn_setvscroll(view);
+		viewstat_update(view);
+		InvalidateRect(view->clientwnd, NULL, TRUE);
 	}
 }
 
-static UINT32 viewer_pageup(NP2VIEW_T *view, HWND hwnd) 	{
+static UINT32 viewer_pageup(NP2VIEW_T *view) 	{
 
 	if (view->pos > view->step) {
 		return view->pos - view->step;
@@ -56,7 +58,7 @@ static UINT32 viewer_pageup(NP2VIEW_T *view, HWND hwnd) 	{
 	}
 }
 
-static UINT32 viewer_pagedown(NP2VIEW_T *view, HWND hwnd)	{
+static UINT32 viewer_pagedown(NP2VIEW_T *view)	{
 
 	UINT32 newpos = view->pos + view->step;
 	if (newpos > (view->maxline - view->step)) {
@@ -65,46 +67,35 @@ static UINT32 viewer_pagedown(NP2VIEW_T *view, HWND hwnd)	{
 	return newpos;
 }
 
-void viewer_scroll_update(NP2VIEW_T *view, HWND hwnd, UINT32 newpos)	{
+void viewer_scroll_update(NP2VIEW_T *view, UINT32 newpos)	{
 
 	if (view->pos != newpos) {
 		view->pos = newpos;
-		viewcmn_setvscroll(hwnd, view);
-		InvalidateRect(hwnd, NULL, TRUE);
+		viewcmn_setvscroll(view);
+		InvalidateRect(view->clientwnd, NULL, TRUE);
 	}
 }
 
-void viewer_scroll_fit_line(NP2VIEW_T *view, HWND hwnd, LONG line)	{
+void viewer_scroll_fit_line(NP2VIEW_T *view, LONG line)	{
 
 	LONG scrolldiff;
 	RECT rc;
 	LONG viewlines;
 
 	scrolldiff = line - view->pos;
-	GetClientRect(hwnd, &rc);
+	GetClientRect(view->clientwnd, &rc);
 	viewlines = (rc.bottom / viewcfg.font_height) - 1;
 
 	if(scrolldiff < 0)	{
-		viewer_scroll_update(view, hwnd, view->pos + scrolldiff);
+		viewer_scroll_update(view, view->pos + scrolldiff);
 	}
 	scrolldiff = line - view->pos - viewlines;
 	if(scrolldiff > 0)	{
-		viewer_scroll_update(view, hwnd, view->pos + scrolldiff);
+		viewer_scroll_update(view, view->pos + scrolldiff);
 	}
 }
 
-void viewer_debug_menu_toggle(HMENU hmenu, BOOL running)
-{
-	DWORD flag;
-	
-	flag = running ? MF_GRAYED : MF_ENABLED;
-	EnableMenuItem(hmenu, IDM_DEBUG_RUN, MF_BYCOMMAND | flag);
-	EnableMenuItem(hmenu, IDM_DEBUG_STEPINTO, MF_BYCOMMAND | flag);
-	EnableMenuItem(hmenu, IDM_DEBUG_STEPOVER, MF_BYCOMMAND | flag);
 
-	flag = running ? MF_ENABLED : MF_GRAYED;
-	EnableMenuItem(hmenu, IDM_DEBUG_STOP, MF_BYCOMMAND | flag);
-}
 
 static void vieweractive_renewal(void) {
 
@@ -126,6 +117,8 @@ static void vieweractive_renewal(void) {
 
 static void viewer_close(NP2VIEW_T *view) {
 
+	viewstat_close(view);
+	DestroyWindow(view->hwnd);
 	view->alive = FALSE;
 	viewcmn_free(&view->buf1);
 	viewcmn_free(&view->buf2);
@@ -133,56 +126,15 @@ static void viewer_close(NP2VIEW_T *view) {
 }
 
 
-LRESULT CALLBACK ViewProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
+LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp) {
 
-	NP2VIEW_T *view = viewcmn_find(hwnd);
+	NP2VIEW_T *view = viewcmn_find(hParentWnd);
 	UINT32 ret;
+	UINT8 flag;
 
 	switch (msg) {
-		case WM_CREATE:
-			break;
-
 		case WM_SYSKEYDOWN:
 		case WM_KEYDOWN:
-			// Accelerators suck
-			switch(wp)
-			{
-			case VK_PRIOR:
-				viewer_scroll_update(view, hwnd, viewer_pageup(view, hwnd));
-				return(viewcmn_dispat(hwnd, msg, wp, lp));
-
-			case VK_NEXT:
-				viewer_scroll_update(view, hwnd, viewer_pagedown(view, hwnd));
-				return(viewcmn_dispat(hwnd, msg, wp, lp));
-
-			case VK_F2:
-				SendMessage(hwnd, WM_COMMAND, IDM_BREAK_TOGGLE, NULL);
-				break;
-
-			case VK_F7:
-				SendMessage(hwnd, WM_COMMAND, IDM_DEBUG_STEPINTO, NULL);
-				break;
-
-			case VK_F8:
-				SendMessage(hwnd, WM_COMMAND, IDM_DEBUG_STEPOVER, NULL);
-				break;
-
-			case VK_F9:
-				SendMessage(hwnd, WM_COMMAND, IDM_DEBUG_RUN, NULL);
-				break;
-
-			case VK_F12:
-				SendMessage(hwnd, WM_COMMAND, IDM_DEBUG_STOP, NULL);
-				break;
-
-			case 'G':
-				if(GetKeyState(VK_CONTROL) < 0)
-					SendMessage(hwnd, WM_COMMAND, IDM_SETSEG, NULL);
-				break;
-
-			default:
-				return(viewcmn_dispat(hwnd, msg, wp, lp));
-			}
 			break;
 
 		case WM_COMMAND:
@@ -192,7 +144,7 @@ LRESULT CALLBACK ViewProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 					break;
 
 				case IDM_VIEWWINCLOSE:
-					return(ViewProc(hwnd, WM_CLOSE, 0, 0));
+					return(ViewParentProc(hParentWnd, WM_CLOSE, 0, 0));
 					break;
 
 				case IDM_VIEWWINALLCLOSE:
@@ -200,23 +152,23 @@ LRESULT CALLBACK ViewProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 					break;
 
 				case IDM_VIEWMODEREG:
-					viewer_segmode(hwnd, VIEWMODE_REG);
+					viewer_segmode(view, VIEWMODE_REG);
 					break;
 
 				case IDM_VIEWMODESEG:
-					viewer_segmode(hwnd, VIEWMODE_SEG);
+					viewer_segmode(view, VIEWMODE_SEG);
 					break;
 
 				case IDM_VIEWMODE1MB:
-					viewer_segmode(hwnd, VIEWMODE_1MB);
+					viewer_segmode(view, VIEWMODE_1MB);
 					break;
 
 				case IDM_VIEWMODEASM:
-					viewer_segmode(hwnd, VIEWMODE_ASM);
+					viewer_segmode(view, VIEWMODE_ASM);
 					break;
 
 				case IDM_VIEWMODESND:
-					viewer_segmode(hwnd, VIEWMODE_SND);
+					viewer_segmode(view, VIEWMODE_SND);
 					break;
 
 				case IDM_DEBUG_STEPINTO:
@@ -224,22 +176,21 @@ LRESULT CALLBACK ViewProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 					break;
 
 				case IDM_DEBUG_RUN:
-					np2active_set(1);
-					viewer_debug_menu_toggle(GetMenu(hwnd), 1);
-					break;
-
 				case IDM_DEBUG_STOP:
-					np2active_set(0);
-					viewer_debug_menu_toggle(GetMenu(hwnd), 0);
+					flag = LOWORD(wp) == IDM_DEBUG_RUN;
+					np2active_set(flag);
+					viewmenu_debug_toggle(view, flag);
 					break;
 
 				case IDM_SETSEG:
-					ret = (UINT32)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_ADDRESS), hwnd, (DLGPROC)AddrDialogProc);
+					np2active_set(0);
+					ret = (UINT32)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_ADDRESS), hParentWnd, (DLGPROC)AddrDialogProc);
 
 					if(ret != -1 && view)	{
 						view->seg = ret >> 16;
 						view->off = ret & CPU_ADRSMASK;
 					}
+					np2active_set(1);
 					break;
 
 				case IDM_MEMORYDUMP:
@@ -250,29 +201,161 @@ LRESULT CALLBACK ViewProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 					debugsub_status();
 					break;
 
+				/// Status
+				case IDM_STATUS_FOUND:
+					viewstat_found(view, (FINDDATA*)lp);
+					break;
+
+				case IDM_STATUS_NOTFOUND:
+					viewstat_notfound(view, (FINDDATA*)lp);
+					break;
+
 				default:
-					return(viewcmn_dispat(hwnd, msg, wp, lp));
+					return(viewcmn_dispat(view->clientwnd, msg, wp, lp));
+			}
+			break;
+
+		case WM_SIZE:
+			if (view) {
+				SendMessage(view->statwnd, WM_SIZE, 0, 0);
+				SendMessage(view->clientwnd, WM_SIZE, 0, 0);
+			}
+			break;
+
+		case WM_ENTERMENULOOP:
+			viewcmn_setmenuseg(hParentWnd);
+			soundmng_disable(SNDPROC_SUBWIND);
+			break;
+
+		case WM_EXITMENULOOP:
+			soundmng_enable(SNDPROC_SUBWIND);
+			break;
+
+		case WM_ENTERSIZEMOVE:
+			soundmng_disable(SNDPROC_SUBWIND);
+			break;
+
+		case WM_EXITSIZEMOVE:
+			soundmng_enable(SNDPROC_SUBWIND);
+			break;
+
+		case WM_ACTIVATE:
+			if (view) {
+				if (LOWORD(wp) != WA_INACTIVE) {
+					view->active = 1;
+					InvalidateRect(view->clientwnd, NULL, TRUE);
+					SetFocus(view->clientwnd);
+				}
+				else {
+					view->active = 0;
+				}
+				// vieweractive_renewal();
+			}
+			break;
+
+		case WM_CLOSE:
+			viewcmn_dispat(view->clientwnd, msg, wp, lp);
+			DestroyWindow(hParentWnd);
+			if (view) {
+				viewer_close(view);
+				vieweractive_renewal();
+			}
+			break;
+		
+		default:
+			return(DefWindowProc(hParentWnd, msg, wp, lp));
+	}
+	return(0);
+}
+
+LRESULT CALLBACK ViewClientProc(HWND hClientWnd, UINT msg, WPARAM wp, LPARAM lp) {
+
+	NP2VIEW_T *view = viewcmn_find(hClientWnd);
+	UINT32 ret;
+
+	switch (msg) {
+		case WM_SYSKEYDOWN:
+		case WM_KEYDOWN:
+			// Accelerators suck
+			switch(wp)
+			{
+			case VK_PRIOR:
+				viewer_scroll_update(view, viewer_pageup(view));
+				return(viewcmn_dispat(hClientWnd, msg, wp, lp));
+
+			case VK_NEXT:
+				viewer_scroll_update(view, viewer_pagedown(view));
+				return(viewcmn_dispat(hClientWnd, msg, wp, lp));
+
+			case VK_F2:
+				SendMessage(view->hwnd, WM_COMMAND, IDM_BREAK_TOGGLE, NULL);
+				break;
+
+			case VK_F3:
+				SendMessage(view->hwnd, WM_COMMAND, IDM_FINDAGAIN, NULL);
+				break;
+
+			case VK_F7:
+				SendMessage(view->hwnd, WM_COMMAND, IDM_DEBUG_STEPINTO, NULL);
+				break;
+
+			case VK_F8:
+				SendMessage(view->hwnd, WM_COMMAND, IDM_DEBUG_STEPOVER, NULL);
+				break;
+
+			case VK_F9:
+				SendMessage(view->hwnd, WM_COMMAND, IDM_DEBUG_RUN, NULL);
+				break;
+
+			case VK_F12:
+				SendMessage(view->hwnd, WM_COMMAND, IDM_DEBUG_STOP, NULL);
+				break;
+
+			case 'G':
+				if(GetKeyState(VK_CONTROL) < 0)
+					SendMessage(view->hwnd, WM_COMMAND, IDM_SETSEG, NULL);
+				break;
+
+			case 'F':
+				if(GetKeyState(VK_CONTROL) < 0)
+					SendMessage(view->hwnd, WM_COMMAND, IDM_FIND, NULL);
+				break;
+
+			default:
+				return(viewcmn_dispat(hClientWnd, msg, wp, lp));
 			}
 			break;
 
 		case WM_LBUTTONDOWN:
-			return(viewcmn_dispat(hwnd, msg, wp, lp));
-
-		case WM_PAINT:
-			return(viewcmn_dispat(hwnd, msg, wp, lp));
+			return(viewcmn_dispat(hClientWnd, msg, wp, lp));
 
 		case WM_SIZE:
-			if (view) {
-				RECT rc;
-				GetClientRect(hwnd, &rc);
-				view->step = (UINT16)(rc.bottom / 16);
-				viewcmn_setvscroll(hwnd, view);
+			{
+				RECT rc_parent;
+				RECT rc_client;
+				RECT rc_status;
+				int w, h;
+
+				GetClientRect(view->hwnd, &rc_parent);
+				GetClientRect(view->clientwnd, &rc_client);
+				GetWindowRect(view->statwnd, &rc_status);
+
+				w = rc_parent.right;
+				h = rc_parent.bottom - (rc_status.bottom - rc_status.top);
+
+				view->step = (UINT16)(rc_client.bottom / viewcfg.font_height);
+				viewcmn_setvscroll(view);
+				SetWindowPos(view->clientwnd, NULL, 0, 0, w, h, 0);
 			}
 			break;
+
+		case WM_PAINT:
+			return(viewcmn_dispat(hClientWnd, msg, wp, lp));
 
 		case WM_VSCROLL:
 			if (view) {
 				UINT32 newpos = view->pos;
+				soundmng_disable(SNDPROC_SUBWIND);
 				switch(LOWORD(wp)) {
 					case SB_LINEUP:
 						if (newpos) {
@@ -285,16 +368,17 @@ LRESULT CALLBACK ViewProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 						}
 						break;
 					case SB_PAGEUP:
-						newpos = viewer_pageup(view, hwnd);
+						newpos = viewer_pageup(view);
 						break;
 					case SB_PAGEDOWN:
-						newpos = viewer_pagedown(view, hwnd);
+						newpos = viewer_pagedown(view);
 						break;
 					case SB_THUMBTRACK:
 						newpos = HIWORD(wp) * (view->mul);
 						break;
 				}
-				viewer_scroll_update(view, hwnd, newpos);
+				viewer_scroll_update(view, newpos);
+				soundmng_enable(SNDPROC_SUBWIND);
 			}
 			break;
 
@@ -307,41 +391,16 @@ LRESULT CALLBACK ViewProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 					(delta > 0 && view->pos)
 				)	{
 					view->pos -= (delta / WHEEL_DELTA) * 4;
-					viewcmn_setvscroll(hwnd, view);
-					InvalidateRect(hwnd, NULL, TRUE);
+					viewcmn_setvscroll(view);
+					InvalidateRect(view->clientwnd, NULL, TRUE);
 				}
-			}
-			break;
-
-		case WM_ENTERMENULOOP:
-			viewcmn_setmenuseg(hwnd);
-			break;
-
-		case WM_ACTIVATE:
-			if (view) {
-				if (LOWORD(wp) != WA_INACTIVE) {
-					view->active = 1;
-					InvalidateRect(hwnd, NULL, TRUE);
-				}
-				else {
-					view->active = 0;
-				}
-				// vieweractive_renewal();
-			}
-			break;
-
-		case WM_CLOSE:
-			DestroyWindow(hwnd);
-			if (view) {
-				viewer_close(view);
-				vieweractive_renewal();
 			}
 			break;
 
 		default:
-			return(DefWindowProc(hwnd, msg, wp, lp));
+			return(DefWindowProc(hClientWnd, msg, wp, lp));
 	}
-	return(0L);
+	return(0);
 }
 
 
@@ -357,16 +416,30 @@ BOOL viewer_init(HINSTANCE hInstance) {
 
 	ZeroMemory(np2view, sizeof(np2view));
 
-	np2vc.style = CS_BYTEALIGNCLIENT | CS_HREDRAW | CS_VREDRAW;
-	np2vc.lpfnWndProc = ViewProc;
+	np2vc.style = CS_BYTEALIGNCLIENT | CS_BYTEALIGNWINDOW;
+	np2vc.lpfnWndProc = ViewParentProc;
 	np2vc.cbClsExtra = 0;
 	np2vc.cbWndExtra = 0;
 	np2vc.hInstance = hInstance;
 	np2vc.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON2));
-	np2vc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	np2vc.hCursor = NULL;
 	np2vc.hbrBackground = (HBRUSH)0;
 	np2vc.lpszMenuName = MAKEINTRESOURCE(IDR_VIEW);
-	np2vc.lpszClassName = np2viewclass;
+	np2vc.lpszClassName = np2viewparentclass;
+	if (!RegisterClass(&np2vc)) {
+		return(FAILURE);
+	}
+
+	np2vc.style = CS_BYTEALIGNCLIENT | CS_HREDRAW | CS_VREDRAW;
+	np2vc.lpfnWndProc = ViewClientProc;
+	np2vc.cbClsExtra = 0;
+	np2vc.cbWndExtra = 0;
+	np2vc.hInstance = hInstance;
+	np2vc.hIcon = NULL;
+	np2vc.hCursor = LoadCursor(NULL, IDC_ARROW);
+	np2vc.hbrBackground = (HBRUSH)0;
+	np2vc.lpszMenuName = NULL;
+	np2vc.lpszClassName = np2viewclientclass;
 	if (!RegisterClass(&np2vc)) {
 		return(FAILURE);
 	}
@@ -400,15 +473,24 @@ void viewer_open(HINSTANCE hInstance) {
 	for (i=0; i<NP2VIEW_MAX; i++, view++) {
 		if (!view->alive) {
 			TCHAR buf[256];
+			
 			viewcmn_caption(view, buf);
 			ZeroMemory(view, sizeof(NP2VIEW_T));
 			view->alive = TRUE;
 			view->hwnd = CreateWindowEx(0,
-							np2viewclass, buf,
-							WS_OVERLAPPEDWINDOW | WS_VSCROLL,
+							np2viewparentclass, buf,
+							WS_OVERLAPPEDWINDOW,
 							CW_USEDEFAULT, CW_USEDEFAULT,
 							480, 640,
 							NULL, NULL, hInstance, NULL);
+			viewstat_open(view, hInstance);
+
+			view->clientwnd = CreateWindowEx(0,
+							np2viewclientclass, buf,
+							WS_CHILD | WS_VSCROLL | WS_VISIBLE,
+							CW_USEDEFAULT, CW_USEDEFAULT,
+							CW_USEDEFAULT, CW_USEDEFAULT,
+							view->hwnd, NULL, hInstance, NULL);
 			viewcmn_setmode(view, NULL, VIEWMODE_REG);
 			ShowWindow(view->hwnd, SW_SHOWNORMAL);
 			UpdateWindow(view->hwnd);
@@ -426,7 +508,6 @@ void viewer_allclose(void) {
 	view = np2view;
 	for (i=0; i<NP2VIEW_MAX; i++, view++) {
 		if (view->alive) {
-			DestroyWindow(view->hwnd);
 			viewer_close(view);
 		}
 	}
@@ -452,10 +533,10 @@ static UINT32	last = 0;
 					view->seg = CPU_CS;
 					view->off = CPU_IP;
 					view->pos = 0;
-					viewcmn_setvscroll(view->hwnd, view);
+					viewcmn_setvscroll(view);
 				}
 				viewcmn_setbank(view);
-				InvalidateRect(view->hwnd, NULL, TRUE);
+				InvalidateRect(view->clientwnd, NULL, TRUE);
 			}
 		}
 	}

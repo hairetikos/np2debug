@@ -1,15 +1,21 @@
 #include	"compiler.h"
 #include	"resource.h"
 #include	"np2.h"
+#include	"dialogs.h"
 #include	"viewer.h"
 #include	"viewcmn.h"
 #include	"viewmenu.h"
 #include	"viewmem.h"
+#include	"viewstat.h"
 #include	"cpucore.h"
+#include	"dialog.h"
+#include	"break.h"
 
-const float CHAR_SPACING = 1.5f;
-	UINT16 bytesperline = 16;
+const float	CHAR_SPACING = 1.5f;
+	UINT16	bytesperline = 16;
 
+static LONG	bytes_left, bytes_cell, bytes_right;
+static LONG	char_left, char_cell, char_right;
 
 void viewmem_read(VIEWMEM_T *cfg, UINT32 adrs, UINT8 *buf, UINT32 size) {
 
@@ -223,7 +229,7 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 
 		}
 
 		TextOut(hdc, x, y, str, 9);
-		x += 10 * np2viewfontwidth;
+		x = bytes_left;
 
 		if (view->lock) {
 			p = (UINT8 *)view->buf1.ptr;
@@ -246,9 +252,9 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 
 			}
 			SetBkColor(hdc, bkcol);
 			TextOut(hdc, x, y, str, 2);
-			x += 2*CHAR_SPACING*np2viewfontwidth;
+			x += bytes_cell;
 		}
-		x += 2*np2viewfontwidth;
+		x = char_left;
 
 		for(i=0, p = buf; i<bytesperline; i++, p++) {
 			if(mad + i == view->cursor)	{
@@ -282,7 +288,7 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 
 			} else {
 				dbskip = false;
 			}
-			x += np2viewfontwidth;
+			x += char_cell;
 		}
 		mad += bytesperline;
 	}
@@ -298,11 +304,63 @@ LONG viewmem_mouse_to_cursor(NP2VIEW_T *view, HWND hwnd, POINTS mpos, LONG left,
 	return ret;
 }
 
+static LONG viewmem_find(NP2VIEW_T *view, FINDDATA *_fd)	{
+
+	void *needle;
+	UINT32 seg4 = view->seg << 4;
+	LONG newcursor = view->cursor - seg4;
+
+	static FINDDATA* fd = NULL;
+	if(_fd)	{
+		fd = _fd;
+	}
+
+	if(!fd)	{
+		return -1;
+	}
+	needle = memmem(mem + view->cursor + 1, (view->maxline << 4) - newcursor - 1, fd->bytes, fd->bytes_len);
+	if(!needle)	{
+		// Wrap
+		needle = memmem(mem, view->cursor, fd->bytes, fd->bytes_len);
+	}
+	
+	if(needle)	{
+		PostMessage(view->hwnd, WM_COMMAND, IDM_STATUS_FOUND, (LPARAM)fd);
+		return ((UINT8*)needle - mem) - seg4;
+	} else {
+		PostMessage(view->hwnd, WM_COMMAND, IDM_STATUS_NOTFOUND, (LPARAM)fd);
+		return -1;
+	}
+	
+}
+
 LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
-	LONG newcursor = view->cursor - (view->seg << 4);
+	UINT32 seg4 = view->seg << 4;
+	LONG oldcursor = view->cursor - seg4;
+	LONG newcursor = oldcursor;
+	FINDDATA *fd;
+	POINTS mpos;
 
 	switch (msg) {
+		case WM_COMMAND:
+			switch (LOWORD(wp))	{
+				case IDM_FIND:
+					np2active_set(0);
+					fd = (FINDDATA*)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_FIND), view->clientwnd, (DLGPROC)FindDialogProc);
+					np2active_set(1);
+					newcursor = viewmem_find(view, fd);
+					if(newcursor != -1)	{
+						EnableMenuItem(GetMenu(view->hwnd), IDM_FINDAGAIN, MF_BYCOMMAND | MF_ENABLED);
+					}
+					break;
+
+				case IDM_FINDAGAIN:
+					newcursor = viewmem_find(view, NULL);
+					break;
+			}
+			break;
+
 		case WM_SYSKEYDOWN:
 		case WM_KEYDOWN:
 			switch(wp)
@@ -335,34 +393,42 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 			// Clamp
 			if(newcursor < 0) {
 				newcursor = 0;
-			} else if(newcursor >= view->maxline * bytesperline) {
+			} else if(newcursor >= (LONG)(view->maxline * bytesperline)) {
 				newcursor = (view->maxline * bytesperline) - 1;
 			}
-
-			viewer_scroll_fit_line(view, hwnd, (newcursor / bytesperline));
 			break;
 
-		case WM_LBUTTONDOWN:	{
-			POINTS mpos = MAKEPOINTS(lp);
-
-			LONG bytes_left = 10*np2viewfontwidth;
-			LONG bytes_cell = 2*CHAR_SPACING*np2viewfontwidth;
-			LONG bytes_right = bytes_left + bytes_cell*bytesperline;
-
-			LONG char_left = bytes_right + 2*np2viewfontwidth;
-			LONG char_cell = np2viewfontwidth;
-			LONG char_right = char_left + char_cell*bytesperline;
-
+		case WM_LBUTTONDOWN:	
+			mpos = MAKEPOINTS(lp);
 			newcursor = viewmem_mouse_to_cursor(view, hwnd, mpos, bytes_left, bytes_cell, bytes_right);
 			if(newcursor < 0)	{
 				newcursor = viewmem_mouse_to_cursor(view, hwnd, mpos, char_left, char_cell, char_right);
 			}
-		}
-		break;
+			break;
 	}
-	if(newcursor != view->cursor && newcursor != -1)	{
-		view->cursor = newcursor + (view->seg << 4);
+	if(newcursor != oldcursor && newcursor != -1)	{
+		viewer_scroll_fit_line(view, (newcursor / bytesperline));
+		view->cursor = newcursor + seg4;
+		viewstat_update(view);
 		InvalidateRect(hwnd, NULL, TRUE);
 	}
 	return(0L);
+}
+
+
+// ---------------------------------------------------------------------------
+
+void viewmem_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
+
+	bytes_left = 12*np2viewfontwidth;
+	bytes_cell = 2*CHAR_SPACING*np2viewfontwidth;
+	bytes_right = bytes_left + bytes_cell*bytesperline;
+
+	char_left = bytes_right + 3*np2viewfontwidth;
+	char_cell = np2viewfontwidth;
+	char_right = char_left + char_cell*bytesperline;
+	
+	if (!src) {
+		dst->pos = 0;
+	}
 }

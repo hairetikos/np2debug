@@ -16,7 +16,7 @@ static void set_viewseg(HWND hwnd, NP2VIEW_T *view, UINT16 seg) {
 	pos = (UINT32)seg;
 	if (view->pos != pos) {
 		view->pos = pos;
-		viewcmn_setvscroll(hwnd, view);
+		viewcmn_setvscroll(view);
 		InvalidateRect(hwnd, NULL, TRUE);
 	}
 }
@@ -73,10 +73,11 @@ LRESULT CALLBACK view1mb_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 void view1mb_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 
+	viewmem_init(dst, src);
 	if (src) {
 		switch(src->type) {
 			case VIEWMODE_SEG:
-				dst->pos = src->seg;
+				dst->pos = src->seg + src->pos;
 				break;
 
 			case VIEWMODE_1MB:
@@ -91,9 +92,6 @@ void view1mb_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 				src = NULL;
 				break;
 		}
-	}
-	if (!src) {
-		dst->pos = 0;
 	}
 	dst->type = VIEWMODE_1MB;
 	dst->maxline = 0x10fff;

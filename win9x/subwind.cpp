@@ -27,8 +27,7 @@ static void wintypechange(HWND hWnd, UINT8 type) {
 	winlocex_destroy(wlex);
 }
 
-
-// ---- key display
+// ---- note display
 
 #if defined(SUPPORT_KEYDISP)
 enum {
@@ -163,7 +162,6 @@ static LRESULT CALLBACK kdproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	switch(msg) {
 		case WM_CREATE:
-			np2class_wmcreate(hWnd);
 			np2class_windowtype(hWnd, (kdispcfg.type & 1) << 1);
 			break;
 
@@ -213,23 +211,8 @@ static LRESULT CALLBACK kdproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			sysmng_update(SYS_UPDATEOSCFG);
 			break;
 
-		case WM_KEYDOWN:
-		case WM_KEYUP:
-			SendMessage(g_hWndMain, msg, wp, lp);
-			break;
-
-		case WM_ENTERMENULOOP:
-			soundmng_disable(SNDPROC_SUBWIND);
-			break;
-
-		case WM_EXITMENULOOP:
-			soundmng_enable(SNDPROC_SUBWIND);
-			break;
-
 		case WM_ENTERSIZEMOVE:
-			soundmng_disable(SNDPROC_SUBWIND);
-			winlocex_destroy(kdispwin.wlex);
-			kdispwin.wlex = np2_winlocexallwin(hWnd);
+			kdispwin.wlex = np2class_entersizemove(hWnd, kdispwin.wlex);
 			break;
 
 		case WM_MOVING:
@@ -237,9 +220,7 @@ static LRESULT CALLBACK kdproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			break;
 
 		case WM_EXITSIZEMOVE:
-			winlocex_destroy(kdispwin.wlex);
-			kdispwin.wlex = NULL;
-			soundmng_enable(SNDPROC_SUBWIND);
+			kdispwin.wlex = np2class_exitsizemove(hWnd, kdispwin.wlex);
 			break;
 
 		case WM_MOVE:
@@ -256,20 +237,16 @@ static LRESULT CALLBACK kdproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 		case WM_CLOSE:
 			xmenu_setkeydisp(0);
 			sysmng_update(SYS_UPDATEOSCFG);
-			DestroyWindow(hWnd);
 			break;
 
 		case WM_DESTROY:
-			np2class_wmdestroy(hWnd);
 			dd2_release(kdispwin.dd2hdl);
 			kdispwin.hwnd = NULL;
 			kdsetdispmode(KEYDISP_MODENONE);
 			break;
 
-		default:
-			return(DefWindowProc(hWnd, msg, wp, lp));
 	}
-	return(0L);
+	return np2class_wndproc(hWnd, msg, wp, lp);
 }
 
 BOOL kdispwin_initialize(HINSTANCE hInstance) {
@@ -525,23 +502,8 @@ static LRESULT CALLBACK mdproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			sysmng_update(SYS_UPDATEOSCFG);
 			break;
 
-		case WM_KEYDOWN:
-		case WM_KEYUP:
-			SendMessage(g_hWndMain, msg, wp, lp);
-			break;
-
-		case WM_ENTERMENULOOP:
-			soundmng_disable(SNDPROC_SUBWIND);
-			break;
-
-		case WM_EXITMENULOOP:
-			soundmng_enable(SNDPROC_SUBWIND);
-			break;
-
 		case WM_ENTERSIZEMOVE:
-			soundmng_disable(SNDPROC_SUBWIND);
-			winlocex_destroy(mdbgwin.wlex);
-			mdbgwin.wlex = np2_winlocexallwin(hWnd);
+			mdbgwin.wlex = np2class_entersizemove(hWnd, mdbgwin.wlex);
 			break;
 
 		case WM_MOVING:
@@ -549,9 +511,7 @@ static LRESULT CALLBACK mdproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			break;
 
 		case WM_EXITSIZEMOVE:
-			winlocex_destroy(mdbgwin.wlex);
-			mdbgwin.wlex = NULL;
-			soundmng_enable(SNDPROC_SUBWIND);
+			mdbgwin.wlex = np2class_exitsizemove(hWnd, mdbgwin.wlex);
 			break;
 
 		case WM_MOVE:
@@ -565,20 +525,13 @@ static LRESULT CALLBACK mdproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			}
 			break;
 
-		case WM_CLOSE:
-			DestroyWindow(hWnd);
-			break;
-
 		case WM_DESTROY:
-			np2class_wmdestroy(hWnd);
 			dd2_release(mdbgwin.dd2hdl);
 			mdbgwin.hwnd = NULL;
 			break;
 
-		default:
-			return(DefWindowProc(hWnd, msg, wp, lp));
 	}
-	return(0);
+	return np2class_wndproc(hWnd, msg, wp, lp);
 }
 
 BOOL mdbgwin_initialize(HINSTANCE hInstance) {
@@ -793,23 +746,8 @@ static LRESULT CALLBACK skproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			softkbd_up();
 			break;
 
-		case WM_KEYDOWN:
-		case WM_KEYUP:
-			SendMessage(g_hWndMain, msg, wp, lp);
-			break;
-
-		case WM_ENTERMENULOOP:
-			soundmng_disable(SNDPROC_SUBWIND);
-			break;
-
-		case WM_EXITMENULOOP:
-			soundmng_enable(SNDPROC_SUBWIND);
-			break;
-
 		case WM_ENTERSIZEMOVE:
-			soundmng_disable(SNDPROC_SUBWIND);
-			winlocex_destroy(skbdwin.wlex);
-			skbdwin.wlex = np2_winlocexallwin(hWnd);
+			skbdwin.wlex = np2class_entersizemove(hWnd, skbdwin.wlex);
 			break;
 
 		case WM_MOVING:
@@ -817,9 +755,7 @@ static LRESULT CALLBACK skproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			break;
 
 		case WM_EXITSIZEMOVE:
-			winlocex_destroy(skbdwin.wlex);
-			skbdwin.wlex = NULL;
-			soundmng_enable(SNDPROC_SUBWIND);
+			skbdwin.wlex = np2class_exitsizemove(hWnd, skbdwin.wlex);
 			break;
 
 		case WM_MOVE:
@@ -833,20 +769,13 @@ static LRESULT CALLBACK skproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			}
 			break;
 
-		case WM_CLOSE:
-			DestroyWindow(hWnd);
-			break;
-
 		case WM_DESTROY:
-			np2class_wmdestroy(hWnd);
 			dd2_release(skbdwin.dd2hdl);
 			skbdwin.hwnd = NULL;
 			break;
 
-		default:
-			return(DefWindowProc(hWnd, msg, wp, lp));
 	}
-	return(0L);
+	return np2class_wndproc(hWnd, msg, wp, lp);
 }
 
 BOOL skbdwin_initialize(HINSTANCE hInstance) {

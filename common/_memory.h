@@ -46,6 +46,10 @@ void _memfree(void *hdl);
 
 #endif
 
+#if !defined(__GNUC__)
+void *memmem(const void *haystack, size_t hlen, const void *needle, size_t nlen);
+#endif
+
 #ifdef __cplusplus
 }
 #endif

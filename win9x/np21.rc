@@ -357,13 +357,19 @@ IDR_VIEW MENU
         MENUITEM "&Close", IDM_VIEWWINCLOSE
         MENUITEM "&All close", IDM_VIEWWINALLCLOSE
     }
-    POPUP "&Debug"
+    POPUP "&Edit"
     {
-        MENUITEM "Run\tF9", IDM_DEBUG_RUN, GRAYED
-        MENUITEM "Stop\tF12", IDM_DEBUG_STOP
+        MENUITEM "&Go to...\tCtrl+G", IDM_SETSEG
+        MENUITEM "&Find...\tCtrl+F", IDM_FIND
+		MENUITEM "Find Again\tF3", IDM_FINDAGAIN, GRAYED
         MENUITEM SEPARATOR
-        MENUITEM "Step into\tF7", IDM_DEBUG_STEPINTO, GRAYED
-		MENUITEM "Step over\tF8", IDM_DEBUG_STEPOVER, GRAYED
+        MENUITEM "Seg = &CS", IDM_SEGCS
+        MENUITEM "Seg = &DS", IDM_SEGDS
+        MENUITEM "Seg = &ES", IDM_SEGES
+        MENUITEM "Seg = &SS", IDM_SEGSS
+        MENUITEM "Seg = &TEXT", IDM_SEGTEXT
+        MENUITEM SEPARATOR
+        MENUITEM "Reload", IDM_RELOAD, GRAYED
     }
     POPUP "&Breakpoints"
     {
@@ -379,17 +385,13 @@ IDR_VIEW MENU
         MENUITEM SEPARATOR
         MENUITEM "&Lock", IDM_VIEWMODELOCK
     }
-    POPUP "&Edit"
+    POPUP "&Debug"
     {
-        MENUITEM "Enter &address...\tCtrl+G", IDM_SETSEG
+        MENUITEM "Run\tF9", IDM_DEBUG_RUN, GRAYED
+        MENUITEM "Stop\tF12", IDM_DEBUG_STOP
         MENUITEM SEPARATOR
-        MENUITEM "Seg = &CS", IDM_SEGCS
-        MENUITEM "Seg = &DS", IDM_SEGDS
-        MENUITEM "Seg = &ES", IDM_SEGES
-        MENUITEM "Seg = &SS", IDM_SEGSS
-        MENUITEM "Seg = &TEXT", IDM_SEGTEXT
-        MENUITEM SEPARATOR
-        MENUITEM "Reload", IDM_RELOAD, GRAYED
+        MENUITEM "Step into\tF7", IDM_DEBUG_STEPINTO, GRAYED
+        MENUITEM "Step over\tF8", IDM_DEBUG_STEPOVER, GRAYED
     }
     POPUP "&Memory", GRAYED
     {
@@ -398,7 +400,7 @@ IDR_VIEW MENU
         MENUITEM SEPARATOR
         MENUITEM "&A20 line", IDM_A20LINE
     }
-	POPUP "D&ump"
+    POPUP "D&ump"
     {
         MENUITEM "Entire memory", IDM_MEMORYDUMP
         MENUITEM "Segments from current registers", IDM_CPUSAVE
@@ -429,7 +431,7 @@ FONT 8, "MS Shell Dlg", 0, 0, 1
 IDD_ADDRESS DIALOG 0, 0, 196, 44
 STYLE DS_CENTER | DS_MODALFRAME | DS_SHELLFONT | WS_CAPTION | WS_VISIBLE | WS_POPUP
 CAPTION "Enter address..."
-FONT 8, "Ms Shell Dlg"
+FONT 8, "MS Shell Dlg"
 {
     DEFPUSHBUTTON   "OK", IDOK, 139, 7, 50, 14
     PUSHBUTTON      "Cancel", IDCANCEL, 139, 23, 50, 14
@@ -525,6 +527,22 @@ FONT 8, "MS Shell Dlg", 0, 0, 1
     AUTOCHECKBOX    "Resume", IDC_RESUME, 8, 170, 162, 10
     DEFPUSHBUTTON   "&OK", IDOK, 130, 8, 44, 14, WS_GROUP
     PUSHBUTTON      "Cancel", IDCANCEL, 130, 26, 44, 14
+}
+
+IDD_FIND DIALOG 0, 0, 239, 57
+STYLE DS_MODALFRAME | DS_SHELLFONT | WS_CAPTION | WS_POPUP | WS_SYSMENU
+EXSTYLE WS_EX_WINDOWEDGE
+CAPTION "Find..."
+FONT 8, "MS Shell Dlg"
+{
+    GROUPBOX        "Find", -1, 6, 2, 164, 25
+    GROUPBOX        "Data Type", -1, 6, 28, 164, 25
+    AUTORADIOBUTTON  "Hex", IDC_FIND_TYPE_HEX, 13, 39, 29, 8, WS_TABSTOP
+    AUTORADIOBUTTON  "Text (Shift-JIS)", IDC_FIND_TYPE_SJIS, 44, 39, 62, 8, WS_TABSTOP
+    AUTORADIOBUTTON  "Text (UTF-8)", IDC_FIND_TYPE_UTF8, 106, 39, 56, 8, WS_TABSTOP
+    EDITTEXT        IDC_FIND_STR, 12, 11, 152, 12, ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK", IDOK, 179, 7, 50, 14
+    PUSHBUTTON      "Cancel", IDCANCEL, 179, 23, 50, 14
 }
 
 IDD_MPUPC98 DIALOGEX 0, 0, 192, 178
@@ -921,7 +939,7 @@ STRINGTABLE
 {
     IDS_FILENAME_HELP             "np2.chm"
     IDS_CAPTION_TOOL              "NP2 tool"
-    IDS_CAPTION_KEYDISP           "Key display"
+    IDS_CAPTION_KEYDISP           "Note display"
     IDS_CAPTION_SOFTKEY           "Soft keyboard"
     IDS_HDD                       "&Harddisk"
     IDS_SCREENOPTION              "Screen option"

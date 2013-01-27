@@ -89,7 +89,7 @@ NP2VIEW_T *viewcmn_find(HWND hwnd) {
 
 	view = np2view;
 	for (i=0; i<NP2VIEW_MAX; i++, view++) {
-		if ((view->alive) && (view->hwnd == hwnd)) {
+		if ((view->alive) && ((view->hwnd == hwnd) || view->clientwnd == hwnd)) {
 			return(view);
 		}
 	}
@@ -192,16 +192,16 @@ void viewcmn_setmenuseg(HWND hwnd) {
 
 // -----
 
-void viewcmn_setvscroll(HWND hWnd, NP2VIEW_T *view) {
+void viewcmn_setvscroll(NP2VIEW_T *view) {
 
 	ZeroMemory(&(view->si), sizeof(SCROLLINFO));
 	view->si.cbSize = sizeof(SCROLLINFO);
 	view->si.fMask = SIF_ALL;
 	view->si.nMin = 0;
 	view->si.nPage = view->step / view->mul;
-	view->si.nMax = ((view->maxline + view->mul - 1) / view->mul) - 1;
+	view->si.nMax = ((view->maxline) / view->mul) - 1;
 	view->si.nPos = view->pos / view->mul;
-	SetScrollInfo(hWnd, SB_VERT, &(view->si), TRUE);
+	SetScrollInfo(view->clientwnd, SB_VERT, &(view->si), TRUE);
 }
 
 // -----
@@ -215,8 +215,8 @@ void viewcmn_paint(NP2VIEW_T *view, void (*callback)(NP2VIEW_T *view, RECT *rc, 
 	HBITMAP		hbitmap;
 	HBRUSH		hbrush;
 
-	hdc = BeginPaint(view->hwnd, &ps);
-	GetClientRect(view->hwnd, &rc);
+	hdc = BeginPaint(view->clientwnd, &ps);
+	GetClientRect(view->clientwnd, &rc);
 	hmemdc = CreateCompatibleDC(hdc);
 	hbitmap = CreateCompatibleBitmap(hdc, rc.right, rc.bottom);
 	hbitmap = (HBITMAP)SelectObject(hmemdc, hbitmap);
@@ -233,5 +233,5 @@ void viewcmn_paint(NP2VIEW_T *view, void (*callback)(NP2VIEW_T *view, RECT *rc, 
 	BitBlt(hdc, 0, 0, rc.right, rc.bottom, hmemdc, 0, 0, SRCCOPY);
 	DeleteObject(SelectObject(hmemdc, hbitmap));
 	DeleteDC(hmemdc);
-	EndPaint(view->hwnd, &ps);
+	EndPaint(view->clientwnd, &ps);
 }

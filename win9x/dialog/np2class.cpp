@@ -2,7 +2,11 @@
 #include	<prsht.h>
 #include	"resource.h"
 #include	"winloc.h"
+#include	"np2.h"
 #include	"np2class.h"
+#include "soundmng.h"
+
+extern WINLOCEX np2_winlocexallwin(HWND base);
 
 
 const TCHAR np2dlgclass[] = _T("np2dialog");
@@ -163,8 +167,7 @@ void np2class_frametype(HWND hWnd, UINT8 thick) {
 	SetWindowPos(hWnd, 0, 0, 0, 0, 0,
 					SWP_FRAMECHANGED | SWP_DRAWFRAME | 
 					SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER);
-	winloc_setclientsize(hWnd,
-							rect.right - rect.left, rect.bottom - rect.top);
+	winloc_setclientsize(hWnd, rect.right - rect.left, rect.bottom - rect.top);
 }
 
 
@@ -180,3 +183,50 @@ HMENU np2class_gethmenu(HWND hWnd) {
 	return(ret);
 }
 
+LRESULT CALLBACK np2class_wndproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
+
+	switch(msg)	{
+		case WM_CREATE:
+			np2class_wmcreate(hWnd);
+			break;
+
+		case WM_KEYDOWN:
+		case WM_KEYUP:
+			SendMessage(g_hWndMain, msg, wp, lp);
+			break;
+
+		case WM_ENTERMENULOOP:
+			soundmng_disable(SNDPROC_SUBWIND);
+			break;
+
+		case WM_EXITMENULOOP:
+			soundmng_enable(SNDPROC_SUBWIND);
+			break;
+
+		case WM_CLOSE:
+			DestroyWindow(hWnd);
+			break;
+
+		case WM_DESTROY:
+			np2class_wmdestroy(hWnd);
+			break;
+
+		default:
+			return(DefWindowProc(hWnd, msg, wp, lp));
+	}
+	return(0);
+}
+
+WINLOCEX np2class_entersizemove(HWND hWnd, WINLOCEX in)	{
+
+	soundmng_disable(SNDPROC_SUBWIND);
+	winlocex_destroy(in);
+	return np2_winlocexallwin(hWnd);
+}
+
+WINLOCEX np2class_exitsizemove(HWND hWnd, WINLOCEX in)	{
+
+	winlocex_destroy(in);
+	soundmng_enable(SNDPROC_SUBWIND);
+	return NULL;
+}

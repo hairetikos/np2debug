@@ -4,29 +4,18 @@
 
 #include	"compiler.h"
 #include	"resource.h"
-#include	"np2.h"
-#include	"oemtext.h"
-#include	"milstr.h"
-#include	"dialog.h"
-#include	"dialogs.h"
-#include	"pccore.h"
 
-#define SOURCE_SEG_OFF 0
-#define SOURCE_REAL 1
+
+enum	{
+	SOURCE_SEG_OFF,
+	SOURCE_REAL
+};
 
 static bool blockchange = false;
 static UINT16 seg, off;
 
-int validhex(OEMCHAR c)
-{
-	return
-		(_T('0') <= c && c <= _T('9')) ||
-		(_T('A') <= c && c <= _T('F')) ||
-		(_T('a') <= c && c <= _T('f'));
-}
+static void calc_addr(HWND hWnd, UINT8 updatesource)	{
 
-static void calc_addr(HWND hWnd, UINT8 updatesource)
-{
 	OEMCHAR work[32];
 	UINT32 real;
 
@@ -59,6 +48,7 @@ static void calc_addr(HWND hWnd, UINT8 updatesource)
 }
 
 LRESULT CALLBACK AddrDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+
 	OEMCHAR work[6];
 	int i, len;
 	bool changed = false;
@@ -75,8 +65,7 @@ LRESULT CALLBACK AddrDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 			return FALSE;
 
 		case WM_COMMAND:
-			switch (LOWORD(wParam))
-			{
+			switch (LOWORD(wParam))	{
 				case IDOK:
 					EndDialog(hWnd, (seg << 16) + off);
 					return TRUE;
@@ -92,25 +81,21 @@ LRESULT CALLBACK AddrDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 					GetDlgItemText(hWnd, LOWORD(wParam), work, 6);
 					SendDlgItemMessage(hWnd, LOWORD(wParam), EM_GETSEL, (WPARAM)&selstart, (LPARAM)&selend);
 					len = lstrlen(work);
-					for(i = 0; i < len; i++)
-					{
+					for(i = 0; i < len; i++)	{
 						OEMCHAR last = work[i];
-						if(!validhex(work[i]))
-						{
+						if(!milstr_validhex(work[i]))	{
 							memmove(&work[i], &work[i+1], sizeof(OEMCHAR) * (len - i));
 							changed = true;
 						}
 					}
-					if(changed)
-					{
+					if(changed)	{
 						SetDlgItemText(hWnd, LOWORD(wParam), work);
 						selstart--;
 						selend--;
 						SendDlgItemMessage(hWnd, LOWORD(wParam), EM_SETSEL, (WPARAM)(selstart), (LPARAM) selend);
 					}
 					// Advance if seg was filled out
-					if(!changed && len == 4 && LOWORD(wParam) == IDC_ADDR_SEG)
-					{
+					if(!changed && len == 4 && LOWORD(wParam) == IDC_ADDR_SEG)	{
 						// http://blogs.msdn.com/b/oldnewthing/archive/2004/08/02/205624.aspx
 						SendMessage(hWnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hWnd, IDC_ADDR_OFF), TRUE);
 					}
@@ -118,14 +103,14 @@ LRESULT CALLBACK AddrDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 					break;
 
 				case EN_CHANGE:
-					if(!blockchange)
-					{
+					if(!blockchange)	{
 						calc_addr(hWnd, LOWORD(wParam) == IDC_ADDR_REAL ? SOURCE_REAL : SOURCE_SEG_OFF);
 						return TRUE;
 					}
 					else
 						return FALSE;
-			 }
+			}
+			break;
 	}
 	return FALSE;
 }

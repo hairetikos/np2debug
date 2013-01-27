@@ -27,3 +27,20 @@ void viewmenu_lock(NP2VIEW_T *view) {
 	hmenu = GetMenu(view->hwnd);
 	CheckMenuItem(hmenu, IDM_VIEWMODELOCK, MFCHECK(view->lock));
 }
+
+
+void viewmenu_debug_toggle(NP2VIEW_T *view, BOOL running)
+{
+	HMENU	hmenu;
+	DWORD	flag;
+
+	hmenu = GetMenu(view->hwnd);
+	
+	flag = running ? MF_GRAYED : MF_ENABLED;
+	EnableMenuItem(hmenu, IDM_DEBUG_RUN, MF_BYCOMMAND | flag);
+	EnableMenuItem(hmenu, IDM_DEBUG_STEPINTO, MF_BYCOMMAND | flag);
+	EnableMenuItem(hmenu, IDM_DEBUG_STEPOVER, MF_BYCOMMAND | flag);
+
+	flag = running ? MF_ENABLED : MF_GRAYED;
+	EnableMenuItem(hmenu, IDM_DEBUG_STOP, MF_BYCOMMAND | flag);
+}

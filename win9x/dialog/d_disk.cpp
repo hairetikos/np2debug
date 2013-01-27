@@ -217,8 +217,7 @@ static LRESULT CALLBACK NewHddDlgProc(HWND hWnd, UINT msg,
 	return(TRUE);
 }
 
-static LRESULT CALLBACK NewSASIDlgProc(HWND hWnd, UINT msg,
-													WPARAM wp, LPARAM lp) {
+static LRESULT CALLBACK NewSASIDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	UINT	val;
 
@@ -261,8 +260,7 @@ static LRESULT CALLBACK NewSASIDlgProc(HWND hWnd, UINT msg,
 	return(TRUE);
 }
 
-static LRESULT CALLBACK NewdiskDlgProc(HWND hWnd, UINT msg,
-													WPARAM wp, LPARAM lp) {
+static LRESULT CALLBACK NewdiskDlgProc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	UINT16	res;
 #if defined(OSLANG_UTF8)

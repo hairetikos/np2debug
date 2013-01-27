@@ -6,6 +6,7 @@
 #include	"viewmenu.h"
 #include	"viewmem.h"
 #include	"viewasm.h"
+#include	"viewstat.h"
 #include	"unasm.h"
 #include	"cpucore.h"
 #include	"break.h"
@@ -57,7 +58,7 @@ static void viewasm_toggle_breakpoint(NP2VIEW_T *view)
 	if(view->cursorline < 0)	return;
 
 	if(np2break_toggle(view->seg, view->cursor))	{
-		InvalidateRect(view->hwnd, NULL, TRUE);
+		InvalidateRect(view->clientwnd, NULL, TRUE);
 	}
 }
 
@@ -228,11 +229,11 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 			// Clamp
 			if(view->cursorline < 0) {
 				view->cursorline = 0;
-			} else if(view->cursorline > (view->maxline - 1)) {
+			} else if((UINT32)view->cursorline > (view->maxline - 1)) {
 				view->cursorline = view->maxline - 1;
 			}
 
-			viewer_scroll_fit_line(view, hwnd, view->cursorline);
+			viewer_scroll_fit_line(view, view->cursorline);
 			newcursor = viewasm_line_to_off(view, view->cursorline);
 			if(newcursor != view->cursor)	{
 				view->cursor = newcursor;
@@ -284,6 +285,7 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 			break;
 
 		case WM_PAINT:
+			viewstat_update(view);
 			viewcmn_paint(view, viewasm_paint);
 			break;
 

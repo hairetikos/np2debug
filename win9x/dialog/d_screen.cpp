@@ -7,6 +7,7 @@
  */
 
 #include "compiler.h"
+#include "winloc.h"
 #include <commctrl.h>
 #include <prsht.h>
 #include "strres.h"

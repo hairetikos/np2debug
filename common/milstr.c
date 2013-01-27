@@ -567,6 +567,14 @@ char * STRCALL milutf8_chr(const char *str, int c) {
 #endif
 
 
+BOOL STRCALL milstr_validhex(const OEMCHAR c)	{
+
+	return
+		(_T('0') <= c && c <= _T('9')) ||
+		(_T('A') <= c && c <= _T('F')) ||
+		(_T('a') <= c && c <= _T('f'));
+}
+
 // ---- other
 
 int STRCALL milstr_extendcmp(const OEMCHAR *str, const OEMCHAR *cmp) {
@@ -646,6 +654,41 @@ int STRCALL milstr_getarg(OEMCHAR *str, OEMCHAR *arg[], int maxarg) {
 		}
 		*p = '\0';
 	}
+	return(ret);
+}
+
+UINT STRCALL milstr_solveHEXbuffer(UINT8 *buf, const UINT buflen, const OEMCHAR *str) {
+
+	long	ret = 0;
+	const OEMCHAR*	c = str;
+
+	while(*c) {
+		if(milstr_validhex(*c) && milstr_validhex(*(c+1)) )	{
+			UINT8 conv = 0;
+			UINT8 nibble;
+			for(nibble = 0; nibble < 2; nibble++)	{
+				OEMCHAR cur = *(c+nibble);
+
+				conv <<= 4;
+				if ((cur >= _T('0')) && (cur <= '9')) {
+					cur -= '0';
+				}
+				else if ((cur >= 'A') && (cur <= 'F')) {
+					cur -= '7';
+				}
+				else if ((cur >= 'a') && (cur <= 'f')) {
+					cur -= 'W';
+				}
+				conv |= cur;
+			}
+			*buf = conv;
+
+			buf++;
+			c++;
+			ret++;
+		}
+		c++;
+	};
 	return(ret);
 }
 

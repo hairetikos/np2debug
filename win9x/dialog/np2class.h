@@ -23,3 +23,6 @@ void np2class_windowtype(HWND hWnd, UINT8 type);
 void np2class_frametype(HWND hWnd, UINT8 thick);
 HMENU np2class_gethmenu(HWND hWnd);
 
+WINLOCEX np2class_entersizemove(HWND hWnd, WINLOCEX in);
+WINLOCEX np2class_exitsizemove(HWND hWnd, WINLOCEX in);
+LRESULT CALLBACK np2class_wndproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp);

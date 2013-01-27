@@ -35,6 +35,9 @@ typedef struct {
 
 typedef struct {
 	HWND		hwnd;
+	HWND		clientwnd;
+	HWND		helpwnd;
+	HWND		statwnd;
 	VIEWMEMBUF	buf1;
 	VIEWMEMBUF	buf2;
 	UINT32		pos;
@@ -79,8 +82,8 @@ void viewer_term(void);
 void viewer_open(HINSTANCE hInstance);
 void viewer_allclose(void);
 
-void viewer_scroll_update(NP2VIEW_T *view, HWND hwnd, UINT32 newpos);
-void viewer_scroll_fit_line(NP2VIEW_T *view, HWND hwnd, LONG line);
+void viewer_scroll_update(NP2VIEW_T *view, UINT32 newpos);
+void viewer_scroll_fit_line(NP2VIEW_T *view, LONG line);
 
 void viewer_allreload(BOOL force);
 

@@ -710,9 +710,6 @@
     <ClCompile Include="..\SOUND\opngeng.c">
       <Filter>sound</Filter>
     </ClCompile>
-    <ClCompile Include="..\WIN9X\DIALOG\D_ADDR.cpp">
-      <Filter>Win9x</Filter>
-    </ClCompile>
     <ClCompile Include="..\WIN9X\NP2.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
@@ -720,6 +717,24 @@
       <Filter>Win9x</Filter>
     </ClCompile>
     <ClCompile Include="..\break.c" />
+    <ClCompile Include="..\win9x\dialog\d_addr.cpp">
+      <Filter>Win9x\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win9x\dialog\d_find.cpp">
+      <Filter>Win9x\dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="..\COMMON\_memory.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\COMMON\rect.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\COMMON\resize.c">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win9x\debuguty\viewstat.cpp">
+      <Filter>Win9x\debuguty</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="bios">
@@ -1090,34 +1105,11 @@
     <ClInclude Include="..\COMMON\_memory.h">
       <Filter>common</Filter>
     </ClInclude>
-    <ClInclude Include="..\win9x\dclock.h" />
-    <ClInclude Include="..\win9x\targetver.h" />
-    <ClInclude Include="..\win9x\DEBUGUTY\view1mb.h">
-      <Filter>Win9x\debuguty</Filter>
+    <ClInclude Include="..\win9x\dclock.h">
+      <Filter>Win9x</Filter>
     </ClInclude>
-    <ClInclude Include="..\win9x\DEBUGUTY\viewsnd.h">
-      <Filter>Win9x\debuguty</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\DEBUGUTY\viewasm.h">
-      <Filter>Win9x\debuguty</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\DEBUGUTY\viewcmn.h">
-      <Filter>Win9x\debuguty</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\DEBUGUTY\viewer.h">
-      <Filter>Win9x\debuguty</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\DEBUGUTY\viewmem.h">
-      <Filter>Win9x\debuguty</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\DEBUGUTY\viewmenu.h">
-      <Filter>Win9x\debuguty</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\DEBUGUTY\viewreg.h">
-      <Filter>Win9x\debuguty</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\DEBUGUTY\viewseg.h">
-      <Filter>Win9x\debuguty</Filter>
+    <ClInclude Include="..\win9x\targetver.h">
+      <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\compiler.h">
       <Filter>Win9x</Filter>
@@ -1224,6 +1216,39 @@
     <ClInclude Include="..\win9x\sstpres.h">
       <Filter>Win9x</Filter>
     </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\view1mb.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\viewsnd.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\viewasm.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\viewcmn.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\viewer.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\viewmem.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\viewmenu.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\viewreg.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\viewseg.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\DEBUGUTY\viewstat.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\dialog\dialog.h">
+      <Filter>Win9x\dialog</Filter>
+    </ClInclude>
     <ClInclude Include="..\common.h" />
     <ClInclude Include="..\debugsub.h" />
     <ClInclude Include="..\keystat.h" />
@@ -1233,6 +1258,12 @@
     <ClInclude Include="..\statsave.h" />
     <ClInclude Include="..\timing.h" />
     <ClInclude Include="..\break.h" />
+    <ClInclude Include="DIALOG\dialogs.h">
+      <Filter>Win9x\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DIALOG\np2class.h">
+      <Filter>Win9x\dialog</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <YASM Include="..\win9x\DCLOCKD.X86" />

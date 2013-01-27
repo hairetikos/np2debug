@@ -1,4 +1,5 @@
 #include	"compiler.h"
+#include	"winloc.h"
 #include	"resource.h"
 #include	"np2.h"
 #include	"oemtext.h"

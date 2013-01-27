@@ -71,6 +71,7 @@ LRESULT CALLBACK viewseg_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 void viewseg_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 
+	viewmem_init(dst, src);
 	if (src) {
 		switch(src->type) {
 			case VIEWMODE_SEG:
@@ -94,9 +95,6 @@ void viewseg_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 				src = NULL;
 				break;
 		}
-	}
-	if (!src) {
-		dst->seg = 0;
 	}
 	dst->type = VIEWMODE_SEG;
 	dst->maxline = 0x1000;

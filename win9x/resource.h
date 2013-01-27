@@ -31,6 +31,7 @@
 #define IDD_CALENDAR                    161
 #define IDD_ABOUT                       171
 #define IDD_ADDRESS                     181
+#define IDD_FIND                        191
 #define IDR_SYS                         201
 #define IDR_SYSKEYDISP                  202
 #define IDR_SYSSOFTKBD                  203
@@ -268,6 +269,10 @@
 #define IDC_ADDR_SEG                    18101
 #define IDC_ADDR_OFF                    18102
 #define IDC_ADDR_REAL                   18103
+#define IDC_FIND_STR                    19101
+#define IDC_FIND_TYPE_HEX               19102
+#define IDC_FIND_TYPE_SJIS              19103
+#define IDC_FIND_TYPE_UTF8              19104
 #define IDS_FILENAME_HELP               30003
 #define IDS_FONTFACE                    30011
 #define IDS_PFONTFACE                   30012
@@ -558,6 +563,8 @@
 #define IDM_SEGSS                       43025
 #define IDM_SEGTEXT                     43026
 #define IDM_RELOAD                      43027
+#define IDM_FIND                        43028
+#define IDM_FINDAGAIN                   43029
 #define IDM_VRAM0                       43031
 #define IDM_VRAM1                       43032
 #define IDM_BIOS                        43033
@@ -573,6 +580,8 @@
 #define IDM_TRACE_ENABLE                43103
 #define IDM_TRACE_FILEOUT               43104
 #define IDM_TRACE_CLEAR                 43105
+#define IDM_STATUS_FOUND                43201
+#define IDM_STATUS_NOTFOUND             43202
 
 // Next default values for new objects
 // 

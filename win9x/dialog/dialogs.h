@@ -28,6 +28,19 @@ typedef struct tagCBNParam			CBNPARAM;
 typedef struct tagCBNParam			*PCBNPARAM;
 typedef const struct tagCBNParam	*PCCBNPARAM;
 
+#define MAX_FIND_STR	256
+
+struct tagFindData
+{
+	UINT8 bytes[MAX_FIND_STR * 3];
+	WCHAR str[MAX_FIND_STR];
+	UINT	bytes_len;
+	UINT16 type;
+};
+typedef struct tagFindData			FINDDATA;
+typedef struct tagFindData			*PFINDDATA;
+typedef const struct tagFindData	*PCFINDDATA;
+
 
 #define	SetDlgItemCheck(a, b, c)	\
 			SendDlgItemMessage((a), (b), BM_SETCHECK, (c), 0)
