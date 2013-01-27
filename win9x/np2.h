@@ -110,6 +110,9 @@ extern	OEMCHAR		fddfolder[MAX_PATH];
 extern	OEMCHAR		hddfolder[MAX_PATH];
 extern	OEMCHAR		bmpfilefolder[MAX_PATH];
 
+void winuienter();
+void winuileave();
+
 #ifdef __cplusplus
 }
 #endif

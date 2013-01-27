@@ -346,9 +346,9 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 		case WM_COMMAND:
 			switch (LOWORD(wp))	{
 				case IDM_FIND:
-					np2active_set(0);
+					winuienter();
 					fd = (FINDDATA*)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_FIND), view->clientwnd, (DLGPROC)FindDialogProc);
-					np2active_set(1);
+					winuileave();
 					newcursor = viewmem_find(view, fd);
 					if(newcursor != -1)	{
 						EnableMenuItem(GetMenu(view->hwnd), IDM_FINDAGAIN, MF_BYCOMMAND | MF_ENABLED);

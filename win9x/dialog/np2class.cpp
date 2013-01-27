@@ -4,7 +4,6 @@
 #include	"winloc.h"
 #include	"np2.h"
 #include	"np2class.h"
-#include "soundmng.h"
 
 extern WINLOCEX np2_winlocexallwin(HWND base);
 
@@ -196,11 +195,11 @@ LRESULT CALLBACK np2class_wndproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 			break;
 
 		case WM_ENTERMENULOOP:
-			soundmng_disable(SNDPROC_SUBWIND);
+			winuienter();
 			break;
 
 		case WM_EXITMENULOOP:
-			soundmng_enable(SNDPROC_SUBWIND);
+			winuileave();
 			break;
 
 		case WM_CLOSE:
@@ -219,7 +218,7 @@ LRESULT CALLBACK np2class_wndproc(HWND hWnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 WINLOCEX np2class_entersizemove(HWND hWnd, WINLOCEX in)	{
 
-	soundmng_disable(SNDPROC_SUBWIND);
+	winuileave();
 	winlocex_destroy(in);
 	return np2_winlocexallwin(hWnd);
 }
@@ -227,6 +226,6 @@ WINLOCEX np2class_entersizemove(HWND hWnd, WINLOCEX in)	{
 WINLOCEX np2class_exitsizemove(HWND hWnd, WINLOCEX in)	{
 
 	winlocex_destroy(in);
-	soundmng_enable(SNDPROC_SUBWIND);
+	winuienter();
 	return NULL;
 }

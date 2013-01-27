@@ -177,14 +177,14 @@ static void unloadextinst(void)
 
 // ----
 
-static void winuienter(void) {
+void winuienter(void) {
 
 	winui_en = TRUE;
 	soundmng_disable(SNDPROC_MAIN);
 	scrnmng_topwinui();
 }
 
-static void winuileave(void) {
+void winuileave(void) {
 
 	scrnmng_clearwinui();
 	soundmng_enable(SNDPROC_MAIN);

@@ -10,7 +10,6 @@
 #include	"dialog.h"
 #include	"ini.h"
 #include	"debugsub.h"
-#include	"soundmng.h"
 
 
 static	const TCHAR		np2viewparentclass[] = _T("NP2-ViewWindow");
@@ -199,14 +198,14 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 					break;
 
 				case IDM_SETSEG:
-					np2active_set(0);
+					winuienter();
 					ret = (UINT32)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_ADDRESS), hParentWnd, (DLGPROC)AddrDialogProc);
 
 					if(ret != -1 && view)	{
 						view->seg = ret >> 16;
 						view->off = ret & CPU_ADRSMASK;
 					}
-					np2active_set(1);
+					winuileave();
 					break;
 
 				case IDM_MEMORYDUMP:
@@ -240,19 +239,14 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 		case WM_ENTERMENULOOP:
 			viewcmn_setmenuseg(hParentWnd);
-			soundmng_disable(SNDPROC_SUBWIND);
+			// fall through
+		case WM_ENTERSIZEMOVE:
+			winuileave();
 			break;
 
 		case WM_EXITMENULOOP:
-			soundmng_enable(SNDPROC_SUBWIND);
-			break;
-
-		case WM_ENTERSIZEMOVE:
-			soundmng_disable(SNDPROC_SUBWIND);
-			break;
-
 		case WM_EXITSIZEMOVE:
-			soundmng_enable(SNDPROC_SUBWIND);
+			winuileave();
 			break;
 
 		case WM_ACTIVATE:
@@ -345,6 +339,7 @@ LRESULT CALLBACK ViewClientProc(HWND hClientWnd, UINT msg, WPARAM wp, LPARAM lp)
 			return(viewcmn_dispat(hClientWnd, msg, wp, lp));
 
 		case WM_SIZE:
+			if(view)
 			{
 				RECT rc_parent;
 				RECT rc_client;
@@ -393,7 +388,7 @@ LRESULT CALLBACK ViewClientProc(HWND hClientWnd, UINT msg, WPARAM wp, LPARAM lp)
 		case WM_VSCROLL:
 			if (view) {
 				UINT32 newpos = view->pos;
-				soundmng_disable(SNDPROC_SUBWIND);
+				winuienter();
 				switch(LOWORD(wp)) {
 					case SB_LINEUP:
 						if (newpos) {
@@ -416,7 +411,7 @@ LRESULT CALLBACK ViewClientProc(HWND hClientWnd, UINT msg, WPARAM wp, LPARAM lp)
 						break;
 				}
 				viewer_scroll_update(view, newpos);
-				soundmng_enable(SNDPROC_SUBWIND);
+				winuileave();
 			}
 			break;
 
