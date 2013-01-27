@@ -57,7 +57,7 @@ static void viewasm_toggle_breakpoint(NP2VIEW_T *view)
 {
 	if(view->cursorline < 0)	return;
 
-	if(np2break_toggle(view->seg, view->cursor))	{
+	if(np2break_toggle(view->seg, view->cursor, FALSE))	{
 		InvalidateRect(view->clientwnd, NULL, TRUE);
 	}
 }

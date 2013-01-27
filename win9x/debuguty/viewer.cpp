@@ -187,6 +187,10 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 					np2active_step();
 					break;
 
+				case IDM_DEBUG_STEPOVER:
+					np2active_step_over();
+					break;
+
 				case IDM_DEBUG_RUN:
 				case IDM_DEBUG_STOP:
 					flag = LOWORD(wp) == IDM_DEBUG_RUN;
