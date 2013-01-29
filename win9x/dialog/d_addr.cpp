@@ -4,7 +4,7 @@
 
 #include	"compiler.h"
 #include	"resource.h"
-
+#include	"cpucore.h"
 
 enum	{
 	SOURCE_SEG_OFF,
@@ -13,6 +13,38 @@ enum	{
 
 static bool blockchange = false;
 static UINT16 seg, off;
+
+static UINT32 solve_reg(OEMCHAR* in)	{
+
+	size_t i;
+	CHAR str[32];
+
+#if defined(OSLANG_UCS2)
+	WideCharToMultiByte(CP_ACP, WC_COMPOSITECHECK, in, -1, str, 32, NULL, NULL);
+#else
+	strcpy(str, work);
+#endif
+
+	for(i = 0; i < CPU_REG_NUM; i++)	{
+		if(!stricmp(str, reg16_str[i]))	{
+			return CPU_REGS_WORD(i);
+		}
+		if(!stricmp(str, reg32_str[i]))	{
+			return CPU_REGS_DWORD(i);
+		}
+	}
+	for(i = 0; i < CPU_SEGREG_NUM; i++)	{
+		if(!stricmp(str, sreg_str[i]))	{
+			return CPU_REGS_SREG(i);
+		}
+	}
+	if(!stricmp(str, "ip"))	{
+		return CPU_IP;
+	} else if(!stricmp(str, "eip"))	{
+		return CPU_EIP;
+	}
+	return milstr_solveHEX(in);
+}
 
 static void calc_addr(HWND hWnd, UINT8 updatesource)	{
 
@@ -25,9 +57,9 @@ static void calc_addr(HWND hWnd, UINT8 updatesource)	{
 	// {
 		// seg:off -> real
 		GetDlgItemText(hWnd, IDC_ADDR_SEG, work, 5);
-		seg = (UINT16)milstr_solveHEX(work);
+		seg = (UINT16)solve_reg(work);
 		GetDlgItemText(hWnd, IDC_ADDR_OFF, work, 5);
-		off = (UINT16)milstr_solveHEX(work);
+		off = (UINT16)solve_reg(work);
 		real = (seg << 4) + off;
 		wsprintf(work, _T("%04x"), real);
 		SetDlgItemText(hWnd, IDC_ADDR_REAL, work);
@@ -47,17 +79,43 @@ static void calc_addr(HWND hWnd, UINT8 updatesource)	{
 	blockchange = false;
 }
 
-// Returns the address entered in a combined 32-bit value
-// (high word = segment part, low word = offset part)
-LRESULT CALLBACK AddrDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+// Not needed anymore...
+static void assure_hex(HWND hWnd, int item) {
 
 	OEMCHAR work[6];
 	int i, len;
 	bool changed = false;
 	DWORD selstart, selend;
 
-	if(blockchange)	return FALSE;
+	GetDlgItemText(hWnd, item, work, 6);
+	len = lstrlen(work);
 
+	SendDlgItemMessage(hWnd, item, EM_GETSEL, (WPARAM)&selstart, (LPARAM)&selend);
+	for(i = 0; i < len; i++)	{
+		OEMCHAR last = work[i];
+		if(!milstr_validhex(work[i]))	{
+			memmove(&work[i], &work[i+1], sizeof(OEMCHAR) * (len - i));
+			changed = true;
+		}
+	}
+	if(changed)	{
+		SetDlgItemText(hWnd, item, work);
+		selstart--;
+		selend--;
+		SendDlgItemMessage(hWnd, item, EM_SETSEL, (WPARAM)(selstart), (LPARAM)selend);
+	}
+}
+
+// Returns the address entered in a combined 32-bit value
+// (high word = segment part, low word = offset part)
+LRESULT CALLBACK AddrDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+
+	OEMCHAR work[6];
+	int len;
+
+	if(blockchange)	{
+		return FALSE;
+	}
 	switch (msg) {
 		case WM_INITDIALOG:
 			SetFocus(GetDlgItem(hWnd, IDC_ADDR_SEG));
@@ -81,23 +139,9 @@ LRESULT CALLBACK AddrDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lPara
 				case EN_UPDATE:
 					blockchange = true;
 					GetDlgItemText(hWnd, LOWORD(wParam), work, 6);
-					SendDlgItemMessage(hWnd, LOWORD(wParam), EM_GETSEL, (WPARAM)&selstart, (LPARAM)&selend);
 					len = lstrlen(work);
-					for(i = 0; i < len; i++)	{
-						OEMCHAR last = work[i];
-						if(!milstr_validhex(work[i]))	{
-							memmove(&work[i], &work[i+1], sizeof(OEMCHAR) * (len - i));
-							changed = true;
-						}
-					}
-					if(changed)	{
-						SetDlgItemText(hWnd, LOWORD(wParam), work);
-						selstart--;
-						selend--;
-						SendDlgItemMessage(hWnd, LOWORD(wParam), EM_SETSEL, (WPARAM)(selstart), (LPARAM) selend);
-					}
 					// Advance if seg was filled out
-					if(!changed && len == 4 && LOWORD(wParam) == IDC_ADDR_SEG)	{
+					if(len == 4 && LOWORD(wParam) == IDC_ADDR_SEG)	{
 						// http://blogs.msdn.com/b/oldnewthing/archive/2004/08/02/205624.aspx
 						SendMessage(hWnd, WM_NEXTDLGCTL, (WPARAM)GetDlgItem(hWnd, IDC_ADDR_OFF), TRUE);
 					}

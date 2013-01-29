@@ -361,11 +361,14 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 					break;
 
 				case IDM_GOTO:
-					newcursor = (lp & 0xffff);
-					if(view->type == VIEWMODE_1MB)	{
-						newcursor += (lp >> 16) << 4;
-					} else {
-						view->seg = (lp >> 16);
+					{
+						UINT16 seg = (lp >> 16);
+						newcursor = (lp & 0xffff);
+						if(view->type == VIEWMODE_1MB)	{
+							newcursor += seg << 4;
+						} else {
+							view->seg = seg;
+						}
 					}
 			}
 			break;

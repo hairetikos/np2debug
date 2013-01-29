@@ -428,7 +428,7 @@ FONT 8, "MS Shell Dlg", 0, 0, 1
     EDITTEXT        IDC_NP2INFO, 8, 52, 180, 48, WS_VSCROLL | ES_MULTILINE | ES_READONLY | ES_WANTRETURN
 }
 
-IDD_ADDRESS DIALOG 0, 0, 196, 44
+IDD_ADDRESS DIALOG 0, 0, 196, 66
 STYLE DS_CENTER | DS_MODALFRAME | DS_SHELLFONT | WS_CAPTION | WS_VISIBLE | WS_POPUP
 CAPTION "Enter address..."
 FONT 8, "MS Shell Dlg"
@@ -441,6 +441,7 @@ FONT 8, "MS Shell Dlg"
     EDITTEXT        IDC_ADDR_OFF, 47, 19, 24, 12, ES_RIGHT
     GROUPBOX        "Real address", -1, 83, 7, 50, 30
     EDITTEXT        IDC_ADDR_REAL, 90, 19, 37, 12, WS_DISABLED | ES_RIGHT
+	LTEXT           "You can enter 16- and 32-bit CPU register names\n(e.g. ip, eax) to apply the current value in that register.", -1, 10, 43, 170, 16, SS_LEFT
 }
 
 IDD_CALENDAR DIALOGEX 0, 0, 164, 80
