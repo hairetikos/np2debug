@@ -654,9 +654,9 @@ if(!np2singlestep)
 			else {
 				CPU_EXECV30();
 			}
-			bp = np2break_is_set(CPU_CS, CPU_EIP);
+			bp = np2break_is_exec(CPU_CS, CPU_EIP);
 			if(bp)	{
-				if(bp->oneshot)	{
+				if(bp->flag & NP2BP_ONESHOT)	{
 					bp->addr = 0;
 				}
 				np2singlestep = 1;

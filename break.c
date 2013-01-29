@@ -84,7 +84,7 @@ void np2active_step_over()
 	step = unasm(&una, ins, 16, FALSE, addr);
 
 	if(!strcmp(una.mnemonic, "call"))	{
-		np2break_toggle(CPU_CS, CPU_IP + step, TRUE);
+		np2break_toggle(CPU_CS, CPU_IP + step, NP2BP_EXECUTE | NP2BP_ONESHOT);
 		np2active_set(1);
 	} else {
 		np2active_step();
@@ -107,7 +107,7 @@ static BOOL np2break_lookup(void *vpItem, void *vpArg) {
 	return seek->addr == cur->addr;
 }
 
-BOOL np2break_toggle(UINT16 seg, UINT16 off, BOOL oneshot)
+BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flag)
 {
 	BREAKPOINT* found;
 
@@ -133,15 +133,38 @@ BOOL np2break_toggle(UINT16 seg, UINT16 off, BOOL oneshot)
 	}
 	// Set this element
 	found->addr = (seg << 4) + off;
-	found->oneshot = oneshot;
+	found->flag = flag;
 	return(TRUE);
 }
 
-BREAKPOINT* np2break_is_set(UINT16 seg, UINT16 off)
+BREAKPOINT* np2break_is_set_real(UINT32 addr)
 {
 	BREAKPOINT lookup;
-	lookup.addr = (seg << 4) + off;
+	lookup.addr = addr;
 	return (BREAKPOINT*)listarray_enum(np2breakpoints, np2break_lookup, &lookup);
+}
+
+BREAKPOINT* np2break_is_set(UINT16 seg, UINT16 off)	{
+	return np2break_is_set_real((seg << 4) + off);
+}
+
+static BREAKPOINT* np2break_is_flag(UINT16 seg, UINT16 off, UINT8 flag)
+{
+	BREAKPOINT* lookup = np2break_is_set(seg, off);
+	if(lookup && lookup->flag & flag)	{
+		return lookup;
+	}
+	return NULL;
+}
+
+BREAKPOINT* np2break_is_exec(UINT16 seg, UINT16 off)	{
+	return np2break_is_flag(seg, off, NP2BP_EXECUTE);
+}
+BREAKPOINT* np2break_is_read(UINT16 seg, UINT16 off)	{
+	return np2break_is_flag(seg, off, NP2BP_READ);
+}
+BREAKPOINT* np2break_is_write(UINT16 seg, UINT16 off)	{
+	return np2break_is_flag(seg, off, NP2BP_WRITE);
 }
 
 void np2break_reset()

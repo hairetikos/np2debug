@@ -136,7 +136,7 @@ ia32(void)
 		} else if (dmac.working) {
 			dmax86();
 		}
-		if(np2break_is_set(CPU_CS, CPU_EIP))	{
+		if(np2break_is_exec(CPU_CS, CPU_EIP))	{
 			break;
 		}
 	} while (CPU_REMCLOCK > 0);

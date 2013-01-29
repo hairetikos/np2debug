@@ -12,9 +12,16 @@ enum {
 	NP2BREAK_DEBUG		= 0x02
 };
 
+enum {
+	NP2BP_READ		= 0x01,
+	NP2BP_WRITE		= 0x02,
+	NP2BP_EXECUTE		= 0x04,
+	NP2BP_ONESHOT		= 0x08
+};
+
 typedef struct {
 	UINT32	addr;
-	BOOL  	oneshot;
+	UINT8 	flag;
 } BREAKPOINT;
 
 /// Globals
@@ -37,8 +44,12 @@ void np2active_step_over();
 /// Breakpoints
 /// -----------
 LISTARRAY np2break_create();
-BOOL np2break_toggle(UINT16 seg, UINT16 off, BOOL oneshot);
+BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flags);
+BREAKPOINT* np2break_is_set_real(UINT32 addr);
 BREAKPOINT* np2break_is_set(UINT16 seg, UINT16 off);
+BREAKPOINT* np2break_is_exec(UINT16 seg, UINT16 off);
+BREAKPOINT* np2break_is_read(UINT16 seg, UINT16 off);
+BREAKPOINT* np2break_is_write(UINT16 seg, UINT16 off);
 void np2break_reset();
 void np2break_destroy();
 /// -----------
