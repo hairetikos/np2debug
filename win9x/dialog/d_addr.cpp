@@ -47,6 +47,8 @@ static void calc_addr(HWND hWnd, UINT8 updatesource)	{
 	blockchange = false;
 }
 
+// Returns the address entered in a combined 32-bit value
+// (high word = segment part, low word = offset part)
 LRESULT CALLBACK AddrDialogProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
 	OEMCHAR work[6];

@@ -565,6 +565,7 @@
 #define IDM_RELOAD                      43027
 #define IDM_FIND                        43028
 #define IDM_FINDAGAIN                   43029
+#define IDM_GOTO                        43030
 #define IDM_VRAM0                       43031
 #define IDM_VRAM1                       43032
 #define IDM_BIOS                        43033

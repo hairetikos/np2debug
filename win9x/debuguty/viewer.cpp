@@ -200,10 +200,8 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 				case IDM_SETSEG:
 					winuienter();
 					ret = (UINT32)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_ADDRESS), hParentWnd, (DLGPROC)AddrDialogProc);
-
-					if(ret != -1 && view)	{
-						view->seg = ret >> 16;
-						view->off = ret & CPU_ADRSMASK;
+					if(ret != -1)	{
+						PostMessage(hParentWnd, WM_COMMAND, IDM_GOTO, ret);
 					}
 					winuileave();
 					break;
@@ -241,7 +239,7 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 			viewcmn_setmenuseg(hParentWnd);
 			// fall through
 		case WM_ENTERSIZEMOVE:
-			winuileave();
+			winuienter();
 			break;
 
 		case WM_EXITMENULOOP:

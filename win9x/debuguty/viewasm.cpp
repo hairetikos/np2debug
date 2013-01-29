@@ -273,6 +273,11 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 					viewcmn_putcaption(view);
 					InvalidateRect(hwnd, NULL, TRUE);
 					break;
+
+				case IDM_GOTO:
+					view->seg = lp >> 16;
+					view->off = lp & 0xffff;
+					break;
 			}
 			break;
 

@@ -177,6 +177,16 @@ void viewmem_read(VIEWMEM_T *cfg, UINT32 adrs, UINT8 *buf, UINT32 size) {
 	}
 }
 
+static COLORREF viewmem_set_bkcol(NP2VIEW_T *view, UINT32 addr)	{
+
+	if(addr == view->cursor)	{
+		return viewcfg.color_cursor;
+	} else if(np2break_is_set_real(addr)) {
+		return viewcfg.color_hilite;
+	}
+	return viewcfg.color_back;
+}
+
 void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 totalsize, BOOL segmented) {
 
 	UINT32	i;
@@ -245,23 +255,14 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 
 			str[2] = 0;
 			p++;
 
-			if(mad + i == view->cursor)	{
-				bkcol = viewcfg.color_cursor;
-			} else {
-				bkcol = viewcfg.color_back;
-			}
-			SetBkColor(hdc, bkcol);
+			SetBkColor(hdc, viewmem_set_bkcol(view, mad + i));
 			TextOut(hdc, x, y, str, 2);
 			x += bytes_cell;
 		}
 		x = char_left;
 
 		for(i=0, p = buf; i<bytesperline; i++, p++) {
-			if(mad + i == view->cursor)	{
-				bkcol = viewcfg.color_cursor;
-			} else {
-				bkcol = viewcfg.color_back;
-			}
+			bkcol = viewmem_set_bkcol(view, mad + i);
 			SetBkColor(hdc, bkcol);
 
 			if(bkcol != viewcfg.color_back) {
@@ -326,7 +327,7 @@ static LONG viewmem_find(NP2VIEW_T *view, FINDDATA *_fd)	{
 	
 	if(needle)	{
 		PostMessage(view->hwnd, WM_COMMAND, IDM_STATUS_FOUND, (LPARAM)fd);
-		return ((UINT8*)needle - mem) - seg4;
+		return (LONG)((UINT8*)needle - mem) - seg4;
 	} else {
 		PostMessage(view->hwnd, WM_COMMAND, IDM_STATUS_NOTFOUND, (LPARAM)fd);
 		return -1;
@@ -358,6 +359,14 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 				case IDM_FINDAGAIN:
 					newcursor = viewmem_find(view, NULL);
 					break;
+
+				case IDM_GOTO:
+					newcursor = (lp & 0xffff);
+					if(view->type == VIEWMODE_1MB)	{
+						newcursor += (lp >> 16) << 4;
+					} else {
+						view->seg = (lp >> 16);
+					}
 			}
 			break;
 
@@ -384,10 +393,10 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 				newcursor += view->step * bytesperline;
 				break;
 			case VK_HOME:
-				newcursor = (view->cursor / bytesperline) * bytesperline;
+				newcursor = (newcursor / bytesperline) * bytesperline;
 				break;
 			case VK_END:
-				newcursor = (((view->cursor / bytesperline) + 1) * bytesperline) - 1;
+				newcursor = (((newcursor / bytesperline) + 1) * bytesperline) - 1;
 				break;
 			}
 			// Clamp

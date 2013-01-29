@@ -208,6 +208,9 @@ LRESULT CALLBACK viewreg_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 			viewcmn_paint(view, viewreg_paint);
 			break;
 
+		default:
+			return(DefWindowProc(hwnd, msg, wp, lp));
+
 	}
 	return(0L);
 }
