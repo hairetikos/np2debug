@@ -13,6 +13,8 @@
 #include "cpucore.h"
 #include "break.h"
 #include "unasmdef.tbl"
+#include "viewer.h"
+#include "viewstat.h"
 
 /// Globals
 /// =======
@@ -209,7 +211,10 @@ UINT32 np2break_is_next()	{
 
 #ifdef DEBUG
 	ret = np2break_memory_write_naive();
-	if(ret)	return ret;
+	if(ret)	{
+		viewstat_all_breakpoint(NP2BP_WRITE, ret);
+		return ret;
+	}
 #endif
 	if(!listarray_getitems(np2breakpoints))	{
 		return 0;
@@ -219,20 +224,24 @@ UINT32 np2break_is_next()	{
 	if(una.off)	{
 		if(is_mem_type(una.type_oper))	{
 			bp = np2break_is_read(una.seg, una.off);
+			type = NP2BP_READ;
 #ifndef DEBUG
 		} else if(is_mem_type(una.type_targ))	{
 			bp = np2break_is_write(una.seg, una.off);
+			type = NP2BP_WRITE;
 #endif
 		}
 	}
 	if(!bp)	{
 		bp = np2break_is_exec(CPU_CS, CPU_EIP);
+		type = NP2BP_EXECUTE;
 	}
 	if(bp)	{
 		ret = bp->addr;
 		if(bp->flag & NP2BP_ONESHOT)	{
 			bp->addr = 0;
 		}
+		viewstat_all_breakpoint(type, ret);
 	}
 	return ret;
 }

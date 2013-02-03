@@ -3,6 +3,8 @@
 #include	<CommCtrl.h>
 #include	"dialogs.h"
 #include	"viewer.h"
+#include	"viewstat.h"
+#include	"break.h"
 
 static void print_addr(OEMCHAR *str, UINT32 seg, UINT32 addr, BOOL segmented)	{
 
@@ -17,18 +19,18 @@ static void print_addr(OEMCHAR *str, UINT32 seg, UINT32 addr, BOOL segmented)	{
 static void viewstat_found_base(NP2VIEW_T *view, FINDDATA *fd, WCHAR *msg)	{
 
 	WCHAR str_msg[MAX_FIND_STR * 2];
-	OEMCHAR str_addr[32];
+	WCHAR str_addr[32];
 	const OEMCHAR* str_type;
 
 	switch(fd->type)	{
 		case IDC_FIND_TYPE_HEX:
-			str_type = _T("hex");
+			str_type = L"hex";
 			break;
 		case IDC_FIND_TYPE_SJIS:
-			str_type = _T("Shift-JIS");
+			str_type = L"Shift-JIS";
 			break;			
 		case IDC_FIND_TYPE_UTF8:
-			str_type = _T("UTF-8");
+			str_type = L"UTF-8";
 			break;
 	}
 
@@ -42,6 +44,40 @@ void viewstat_found(NP2VIEW_T *view, FINDDATA *fd)	{
 }
 void viewstat_notfound(NP2VIEW_T *view, FINDDATA *fd)	{
 	viewstat_found_base(view, fd, L"'%s' (%s) not found");
+}
+
+void viewstat_breakpoint(NP2VIEW_T *view, UINT8 type, UINT32 addr)	{
+
+	OEMCHAR str_msg[MAX_FIND_STR * 2];
+	OEMCHAR str_addr[32];
+	const OEMCHAR* str_type;
+
+	switch(type)	{
+		case NP2BP_READ:
+			str_type = _T("memory read");
+			break;
+		case NP2BP_WRITE:
+			str_type = _T("memory write");
+			break;			
+		case NP2BP_EXECUTE:
+			str_type = _T("code");
+			break;
+	}
+
+	print_addr(str_addr, 0, addr, FALSE);
+	wsprintf(str_msg, _T("Hit %s breakpoint at %s"), str_type, str_addr);
+	SendMessage(view->statwnd, SB_SETTEXT, 1, (LPARAM)str_msg);
+}
+
+void viewstat_all_breakpoint(UINT8 type, UINT32 addr) {
+
+	int			i;
+	NP2VIEW_T	*view = np2view;
+	for (i=0; i<NP2VIEW_MAX; i++, view++) {
+		if ((view->alive)) {
+			viewstat_breakpoint(view, type, addr);
+		}
+	}
 }
 
 void viewstat_update(NP2VIEW_T *view)	{
