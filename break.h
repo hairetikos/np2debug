@@ -25,11 +25,11 @@ typedef struct {
 } BREAKPOINT;
 
 /// Globals
-/// =======
+/// -------
 extern	UINT8	np2stopemulate;
 extern	BOOL 	np2singlestep;
 extern	LISTARRAY np2breakpoints;
-/// =======
+/// -------
 
 /// Activity
 /// --------
@@ -44,15 +44,29 @@ void np2active_step_over();
 /// Breakpoints
 /// -----------
 LISTARRAY np2break_create();
-BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flags);
+
+BOOL np2break_toggle_real(UINT32 addr, UINT8 flag);
+BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flag);
 BREAKPOINT* np2break_is_set_real(UINT32 addr);
 BREAKPOINT* np2break_is_set(UINT16 seg, UINT16 off);
 BREAKPOINT* np2break_is_exec(UINT16 seg, UINT16 off);
 BREAKPOINT* np2break_is_read(UINT16 seg, UINT16 off);
 BREAKPOINT* np2break_is_write(UINT16 seg, UINT16 off);
+
+// Returns the address of the breakpoint hit at the next instruction, or 0 for none
+UINT32 np2break_is_next();
+
 void np2break_reset();
 void np2break_destroy();
 /// -----------
+
+/// Helper
+/// ------
+typedef struct _UNASM_t _UNASM, *UNASM;
+
+// Disassembles the instruction at CS:IP
+UINT unasm_next(UNASM una);
+/// ------
 
 #ifdef __cplusplus
 }

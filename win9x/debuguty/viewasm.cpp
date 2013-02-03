@@ -57,7 +57,7 @@ static void viewasm_toggle_breakpoint(NP2VIEW_T *view)
 {
 	if(view->cursorline < 0)	return;
 
-	if(np2break_toggle(view->seg, view->cursor, NP2BP_EXECUTE))	{
+	if(np2break_toggle_real(view->cursor, NP2BP_EXECUTE))	{
 		InvalidateRect(view->clientwnd, NULL, TRUE);
 	}
 }
@@ -153,7 +153,7 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 			SetTextColor(hdc, viewcfg.color_text);
 		}
 		// Cursor?
-		if(off == view->cursor)	{
+		if((view->seg << 4) + off == view->cursor)	{
 			viewasm_fill_line(y, viewcfg.font_height, viewcfg.color_cursor, rc, hdc);
 			bkcol = viewcfg.color_cursor;
 		}
@@ -206,7 +206,7 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	UINT step = 0;
-	LONG newcursor;
+	LONG newcursor = view->cursor;
 
 	switch (msg) {
 		case WM_SYSKEYDOWN:
@@ -235,10 +235,6 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 			viewer_scroll_fit_line(view, view->cursorline);
 			newcursor = viewasm_line_to_off(view, view->cursorline);
-			if(newcursor != view->cursor)	{
-				view->cursor = newcursor;
-				InvalidateRect(hwnd, NULL, TRUE);
-			}
 			break;
 
 		case WM_COMMAND:
@@ -284,8 +280,7 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 		case WM_LBUTTONDOWN:	{
 				POINTS mpos = MAKEPOINTS(lp);
 				view->cursorline = view->pos + (mpos.y / viewcfg.font_height);
-				view->cursor = viewasm_line_to_off(view, view->cursorline);
-				InvalidateRect(hwnd, NULL, TRUE);
+				newcursor = viewasm_line_to_off(view, view->cursorline);
 			}
 			break;
 
@@ -297,6 +292,10 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 		default:
 			return(DefWindowProc(hwnd, msg, wp, lp));
 	}
+	if(newcursor != view->cursor)	{
+		view->cursor = newcursor + (view->seg << 4);
+		InvalidateRect(hwnd, NULL, TRUE);
+	}
 	return(0L);
 }
 
@@ -307,22 +306,6 @@ void viewasm_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 
 	if (src) {
 		switch(src->type) {
-			case VIEWMODE_SEG:
-				dst->seg = dst->seg;
-				dst->off = (UINT16)(dst->pos << 4);
-				break;
-
-			case VIEWMODE_1MB:
-				if (dst->pos < 0x10000) {
-					dst->seg = (UINT16)dst->pos;
-					dst->off = 0;
-				}
-				else {
-					dst->seg = 0xffff;
-					dst->off = (UINT16)((dst->pos - 0xffff) << 4);
-				}
-				break;
-
 			case VIEWMODE_ASM:
 				dst->seg = src->seg;
 				dst->off = src->off;

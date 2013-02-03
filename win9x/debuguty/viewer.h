@@ -44,6 +44,7 @@ typedef struct {
 	UINT32		maxline;
 	UINT16		step;
 	UINT16		mul;
+	// in segmented modes, this always contains the absolute memory address at the cursor position
 	LONG		cursor;
 	INT16		cursorline;
 	UINT8		alive;

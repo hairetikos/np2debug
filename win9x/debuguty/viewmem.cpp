@@ -370,6 +370,13 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 							view->seg = seg;
 						}
 					}
+					break;
+
+				case IDM_BREAK_TOGGLE:
+					if(np2break_toggle_real(seg4 + newcursor, NP2BP_READ | NP2BP_WRITE))	{
+						InvalidateRect(view->clientwnd, NULL, TRUE);
+					}
+					break;
 			}
 			break;
 

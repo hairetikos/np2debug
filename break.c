@@ -12,6 +12,7 @@
 #include "keystat.h"
 #include "cpucore.h"
 #include "break.h"
+#include "unasmdef.tbl"
 
 /// Globals
 /// =======
@@ -69,20 +70,15 @@ void np2active_step()
 	np2singlestep = 1;
 }
 
-void np2active_step_over()
-{
-	UINT8 ins[16];
+void np2active_step_over()	{
+
 	UINT step;
-	UINT32 addr;
 	_UNASM una;
 
 	if(!np2stopemulate)	{
 		return;
 	}
-	addr = (CPU_CS<<4)+CPU_IP;
-	memp_reads(addr, ins, 16);
-	step = unasm(&una, ins, 16, FALSE, addr);
-
+	step = unasm_next(&una);
 	if(!strcmp(una.mnemonic, "call"))	{
 		np2break_toggle(CPU_CS, CPU_IP + step, NP2BP_EXECUTE | NP2BP_ONESHOT);
 		np2active_set(1);
@@ -107,7 +103,7 @@ static BOOL np2break_lookup(void *vpItem, void *vpArg) {
 	return seek->addr == cur->addr;
 }
 
-BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flag)
+BOOL np2break_toggle_real(UINT32 addr, UINT8 flag)
 {
 	BREAKPOINT* found;
 
@@ -115,7 +111,7 @@ BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flag)
 	// We work around that here by zeroing out the elements that should be deleted.
 	// Once a new element should be appended, we check for these zeroed entries
 	// in order to keep the list from becoming larger and larger over time.
-	found = np2break_is_set(seg, off);
+	found = np2break_is_set_real(addr);
 	if(found)	{
 		// Disable
 		ZeroMemory(found, sizeof(BREAKPOINT));
@@ -123,7 +119,7 @@ BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flag)
 	}
 	
 	// Look for a zeroed element
-	found = np2break_is_set(0, 0);
+	found = np2break_is_set_real(0);
 	if(!found)	{
 		// Nothing found, append a new one
 		found = (BREAKPOINT*)listarray_append(np2breakpoints, NULL);
@@ -132,9 +128,13 @@ BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flag)
 		}
 	}
 	// Set this element
-	found->addr = (seg << 4) + off;
+	found->addr = addr;
 	found->flag = flag;
 	return(TRUE);
+}
+
+BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flag)	{
+	return np2break_toggle_real((seg << 4) + off, flag);
 }
 
 BREAKPOINT* np2break_is_set_real(UINT32 addr)
@@ -167,6 +167,76 @@ BREAKPOINT* np2break_is_write(UINT16 seg, UINT16 off)	{
 	return np2break_is_flag(seg, off, NP2BP_WRITE);
 }
 
+static UINT8 is_mem_type(const UINT8 type)	{
+
+	switch(type)	{
+		case OP_MEM:
+		case OP_EA:
+		case OP_PEA:
+			return TRUE;
+	}
+	return FALSE;
+}
+
+// This is kept in here to catch edge cases not yet covered by unasm
+static UINT32 np2break_memory_write_naive()	{
+
+	static UINT bp_num = 0;
+	static UINT8* probe = NULL;
+	UINT bp_num_new = listarray_getitems(np2breakpoints);
+	UINT i;
+	if(bp_num_new > bp_num)	{
+		probe = (UINT8*)realloc(probe, bp_num_new);
+		bp_num = bp_num_new;
+	}
+	for(i = 0; i < bp_num; i++)	{
+		BREAKPOINT* bp = (BREAKPOINT*)listarray_getitem(np2breakpoints, i);
+		UINT8 cur_val = mem[bp->addr];
+		if(bp->flag & NP2BP_WRITE && probe[i] != cur_val)	{
+			probe[i] = cur_val;
+			return bp->addr;
+		}
+	}
+	return 0;
+}
+
+UINT32 np2break_is_next()	{
+
+	_UNASM una;
+	BREAKPOINT* bp = NULL;
+	UINT32 ret = 0;
+	UINT8 type;
+
+#ifdef DEBUG
+	ret = np2break_memory_write_naive();
+	if(ret)	return ret;
+#endif
+	if(!listarray_getitems(np2breakpoints))	{
+		return 0;
+	}
+
+	unasm_next(&una);
+	if(una.off)	{
+		if(is_mem_type(una.type_oper))	{
+			bp = np2break_is_read(una.seg, una.off);
+#ifndef DEBUG
+		} else if(is_mem_type(una.type_targ))	{
+			bp = np2break_is_write(una.seg, una.off);
+#endif
+		}
+	}
+	if(!bp)	{
+		bp = np2break_is_exec(CPU_CS, CPU_EIP);
+	}
+	if(bp)	{
+		ret = bp->addr;
+		if(bp->flag & NP2BP_ONESHOT)	{
+			bp->addr = 0;
+		}
+	}
+	return ret;
+}
+
 void np2break_reset()
 {
 	listarray_clr(np2breakpoints);
@@ -178,3 +248,15 @@ void np2break_destroy()
 }
 /// -----------
 
+/// Helper
+/// ------
+UINT unasm_next(UNASM una)	{
+
+	UINT32 addr;
+	UINT8 ins[16];
+
+	addr = (CPU_CS<<4)+CPU_IP;
+	memp_reads(addr, ins, 16);
+	return unasm(una, ins, 16, FALSE, addr);
+}
+/// ------

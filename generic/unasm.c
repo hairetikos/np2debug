@@ -6,6 +6,7 @@
 #include	"unasmop.tbl"
 #include	"unasmop8.tbl"
 #include	"unasmfpu.tbl"
+#include	"cpucore.h"
 
 
 static const char strhex[] = "0123456789abcdef";
@@ -68,6 +69,29 @@ static char *set_hex(char *str, UINT32 value, UINT bit) {
 
 // ----
 
+static UINT32 lea_var(UINT8 op)	{
+
+	switch(op)	{
+		case 0:
+			return CPU_BX + CPU_SI;
+		case 1:
+			return CPU_BX + CPU_DI;
+		case 2:
+			return CPU_BP + CPU_SI;
+		case 3:
+			return CPU_BP + CPU_DI;
+		case 4:
+			return CPU_SI;
+		case 5:
+			return CPU_DI;
+		case 6:
+			return CPU_BP;
+		case 7:
+			return CPU_BX;
+	}
+	return 0;
+}
+
 UINT unasm(UNASM r, const UINT8 *ptr, UINT leng, BOOL d, UINT32 addr) {
 
 const UINT8	*org;
@@ -81,6 +105,12 @@ const UINT8	*term;
 	UINT	regtype;
 	UINT	f;
 	_UNASM	una;
+	INT8 stmp8;
+	INT16 stmp16;
+	INT32 stmp32;
+	UINT8 tmp8;
+	UINT16 tmp16;
+	UINT32 tmp32;
 
 	if (r == NULL) {
 		r = &una;
@@ -168,6 +198,11 @@ const UINT8	*term;
 	ctl >>= 22;
 	p = r->operand;
 
+	r->type_targ = type;
+	r->type_oper = ctl;
+	r->off = 0;
+	r->seg = CPU_DS;
+
 opeana_st:
 	switch(type) {
 		case 0:
@@ -236,6 +271,7 @@ opeana_st:
 opeana_ea:
 			f = (flag >> UAFLAG_SOR) & UAFLAG_SOMASK;
 			if (f) {
+				r->seg = CPU_REGS_SREG(f - 1);
 				p[0] = rstr.reg[RSTR_SEG][f - 1][0];
 				p[1] = rstr.reg[RSTR_SEG][f - 1][1];
 				p[2] = ':';
@@ -245,12 +281,15 @@ opeana_ea:
 			if (!(flag & (1 << UAFLAG_ADDR))) {
 				if ((ope & 0xc7) != 0x06) {
 					p = set_str(p, rstr.lea[ope & 7]);
+					r->off += lea_var(ope & 7);
 					switch(ope & 0xc0) {
 						case 0x40:
 							if (ptr >= term) {
 								return(0);
 							}
-							p = set_shex(p, *ptr++, 8);
+							stmp8 = *ptr++;
+							r->off += stmp8;
+							p = set_shex(p, stmp8, 8);
 							break;
 
 						case 0x80:
@@ -259,7 +298,9 @@ opeana_ea:
 								return(0);
 							}
 							*p++ = '+';
-							p = set_hex(p, LOADINTELWORD(ptr - 2), 16);
+							tmp16 = LOADINTELWORD(ptr - 2);
+							r->off += tmp16;
+							p = set_hex(p, tmp16, 16);
 							break;
 					}
 				}
@@ -268,7 +309,9 @@ opeana_ea:
 					if (ptr > term) {
 						return(0);
 					}
-					p = set_hex(p, LOADINTELWORD(ptr - 2), 16);
+					tmp16 = LOADINTELWORD(ptr - 2);
+					r->off += tmp16;
+					p = set_hex(p, tmp16, 16);
 				}
 			}
 			else {
@@ -342,6 +385,7 @@ opeana_ea:
 		case OP_MEM:
 			f = (flag >> UAFLAG_SOR) & UAFLAG_SOMASK;
 			if (f) {
+				r->seg = CPU_REGS_SREG(f - 1);
 				p[0] = rstr.reg[RSTR_SEG][f - 1][0];
 				p[1] = rstr.reg[RSTR_SEG][f - 1][1];
 				p[2] = ':';
@@ -353,14 +397,18 @@ opeana_ea:
 				if (ptr > term) {
 					return(0);
 				}
-				p = set_hex(p, LOADINTELWORD(ptr - 2), 16);
+				tmp16 = LOADINTELWORD(ptr - 2);
+				r->off += tmp16;
+				p = set_hex(p, tmp16, 16);
 			}
 			else {
 				ptr += 4;
 				if (ptr > term) {
 					return(0);
 				}
-				p = set_hex(p, LOADINTELDWORD(ptr - 4), 32);
+				tmp32 = LOADINTELDWORD(ptr - 4);
+				r->off += tmp32;
+				p = set_hex(p, tmp32, 32);
 			}
 			*p++ = ']';
 			break;

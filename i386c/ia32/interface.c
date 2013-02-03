@@ -104,7 +104,7 @@ ia32a20enable(BOOL enable)
 	CPU_ADRSMASK = (enable)?0xffffffff:0x00ffffff;
 }
 
-void
+UINT8
 ia32(void)
 {
 	int rv;
@@ -120,7 +120,7 @@ ia32(void)
 
 	case 2:
 		VERBOSE(("ia32: return from panic"));
-		return;
+		return FALSE;
 
 	default:
 		VERBOSE(("ia32: return from unknown cause"));
@@ -136,13 +136,14 @@ ia32(void)
 		} else if (dmac.working) {
 			dmax86();
 		}
-		if(np2break_is_exec(CPU_CS, CPU_EIP))	{
-			break;
+		if(np2break_is_next())	{
+			return FALSE;
 		}
 	} while (CPU_REMCLOCK > 0);
+	return TRUE;
 }
 
-void
+UINT8
 ia32_step(void)
 {
 	int rv;
@@ -158,7 +159,7 @@ ia32_step(void)
 
 	case 2:
 		VERBOSE(("ia32_step: return from panic"));
-		return;
+		return FALSE;
 
 	default:
 		VERBOSE(("ia32_step: return from unknown cause"));
@@ -175,6 +176,7 @@ ia32_step(void)
 			dmax86();
 		}
 	// } while (CPU_REMCLOCK > 0);
+	return TRUE;
 }
 
 void CPUCALL

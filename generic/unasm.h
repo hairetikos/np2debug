@@ -1,7 +1,12 @@
+enum OPTYPE;
 
-typedef struct {
+typedef struct _UNASM_t {
 const char	*mnemonic;
 	char	operand[44];
+	UINT8 type_targ;
+	UINT8 type_oper;
+	UINT16 seg;
+	UINT16 off;
 } _UNASM, *UNASM;
 
 

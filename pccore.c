@@ -636,7 +636,7 @@ void pccore_exec(BOOL draw) {
 //	nevent_get1stevent();
 
 	while(pcstat.screendispflag) {
-		BREAKPOINT *bp;
+		UINT8 ret;
 #if defined(TRACE)
 		resetcnt++;
 #endif
@@ -649,16 +649,12 @@ if(!np2singlestep)
 {
 		if (CPU_REMCLOCK > 0) {
 			if (!(CPU_TYPE & CPUTYPE_V30)) {
-				CPU_EXEC();
+				ret = CPU_EXEC();
 			}
 			else {
-				CPU_EXECV30();
+				ret = CPU_EXECV30();
 			}
-			bp = np2break_is_exec(CPU_CS, CPU_EIP);
-			if(bp)	{
-				if(bp->flag & NP2BP_ONESHOT)	{
-					bp->addr = 0;
-				}
+			if(!ret)	{
 				np2singlestep = 1;
 				np2active_set(0);
 				break;

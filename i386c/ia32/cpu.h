@@ -616,8 +616,8 @@ void ia32_setemm(UINT frame, UINT32 addr);
 void ia32reset(void);
 void ia32shut(void);
 void ia32a20enable(BOOL enable);
-void ia32(void);
-void ia32_step(void);
+UINT8 ia32(void);
+UINT8 ia32_step(void);
 void CPUCALL ia32_interrupt(int vect, int soft);
 
 void exec_1step(void);
