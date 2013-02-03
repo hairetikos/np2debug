@@ -14,6 +14,7 @@
 #include "break.h"
 #include "unasmdef.tbl"
 #include "viewer.h"
+#include "viewmenu.h"
 #include "viewstat.h"
 
 /// Globals
@@ -47,6 +48,7 @@ void np2active_renewal(UINT8 breakflag) {										// ver0.30
 		np2stopemulate = 0;
 		soundmng_enable(SNDPROC_MASTER);
 	}
+	viewmenu_all_debug_toggle(!np2stopemulate);
 	sysmng_updatecaption(0);
 }
 

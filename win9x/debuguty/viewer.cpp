@@ -194,7 +194,6 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 				case IDM_DEBUG_STOP:
 					flag = LOWORD(wp) == IDM_DEBUG_RUN;
 					np2active_set(flag);
-					viewmenu_debug_toggle(view, flag);
 					break;
 
 				case IDM_SETSEG:
@@ -563,6 +562,7 @@ static UINT32	last = 0;
 				if (view->type == VIEWMODE_ASM) {
 					view->seg = CPU_CS;
 					view->off = CPU_IP;
+					view->cursor = (CPU_CS << 4) + CPU_IP;
 					view->pos = 0;
 					viewcmn_setvscroll(view);
 				}

@@ -44,3 +44,15 @@ void viewmenu_debug_toggle(NP2VIEW_T *view, BOOL running)
 	flag = running ? MF_ENABLED : MF_GRAYED;
 	EnableMenuItem(hmenu, IDM_DEBUG_STOP, MF_BYCOMMAND | flag);
 }
+
+
+void viewmenu_all_debug_toggle(BOOL running) {
+
+	int			i;
+	NP2VIEW_T	*view = np2view;
+	for (i=0; i<NP2VIEW_MAX; i++, view++) {
+		if ((view->alive)) {
+			viewmenu_debug_toggle(view, running);
+		}
+	}
+}
