@@ -223,7 +223,10 @@ UINT32 np2break_is_next()	{
 	}
 
 	unasm_next(&una);
-	if(una.off)	{
+	if(
+		una.off && 
+		(stricmp(una.mnemonic, "lea") && stricmp(una.mnemonic, "les"))
+	  )	{
 		if(is_mem_type(una.type_oper))	{
 			bp = np2break_is_read(una.seg, una.off);
 			type = NP2BP_READ;
