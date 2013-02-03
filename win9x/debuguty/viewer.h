@@ -91,6 +91,8 @@ void viewer_allclose(void);
 void viewer_scroll_update(NP2VIEW_T *view, UINT32 newpos);
 void viewer_scroll_fit_line(NP2VIEW_T *view, LONG line);
 
+void viewer_edit_dlg(NP2VIEW_T *view, HWND hWnd);
+
 void viewer_allreload(BOOL force);
 
 void viewer_readini(void);

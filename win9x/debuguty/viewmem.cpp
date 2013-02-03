@@ -305,13 +305,13 @@ LONG viewmem_mouse_to_cursor(NP2VIEW_T *view, HWND hwnd, POINTS mpos, LONG left,
 	return ret;
 }
 
-static LONG viewmem_find(NP2VIEW_T *view, FINDDATA *_fd)	{
+static LONG viewmem_find(NP2VIEW_T *view, EDITDATA *_fd)	{
 
 	void *needle;
 	UINT32 seg4 = view->seg << 4;
 	LONG newcursor = view->cursor - seg4;
 
-	static FINDDATA* fd = NULL;
+	static EDITDATA* fd = NULL;
 	if(_fd)	{
 		fd = _fd;
 	}
@@ -340,20 +340,24 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 	UINT32 seg4 = view->seg << 4;
 	LONG oldcursor = view->cursor - seg4;
 	LONG newcursor = oldcursor;
-	FINDDATA *fd;
+	EDITDATA *ed;
 	POINTS mpos;
 
 	switch (msg) {
 		case WM_COMMAND:
 			switch (LOWORD(wp))	{
+				case IDM_EDIT_MEMORY:
+					viewer_edit_dlg(view, hwnd);
+					break;
+
 				case IDM_FIND:
 					winuienter();
-					fd = (FINDDATA*)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_FIND), view->clientwnd, (DLGPROC)FindDialogProc);
-					winuileave();
-					newcursor = viewmem_find(view, fd);
+					ed = (EDITDATA*)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_EDIT), view->clientwnd, (DLGPROC)FindDialogProc);
+					newcursor = viewmem_find(view, ed);
 					if(newcursor != -1)	{
 						EnableMenuItem(GetMenu(view->hwnd), IDM_FINDAGAIN, MF_BYCOMMAND | MF_ENABLED);
 					}
+					winuileave();
 					break;
 
 				case IDM_FINDAGAIN:

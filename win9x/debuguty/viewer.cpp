@@ -1,6 +1,7 @@
 #include	"compiler.h"
 #include	"resource.h"
 #include	"np2.h"
+#include 	"dialogs.h"
 #include	"viewer.h"
 #include	"viewcmn.h"
 #include	"viewmenu.h"
@@ -104,6 +105,22 @@ void viewer_scroll_fit_line(NP2VIEW_T *view, LONG line)	{
 	if(scrolldiff > 0)	{
 		viewer_scroll_update(view, view->pos + scrolldiff);
 	}
+}
+
+void viewer_edit_dlg(NP2VIEW_T *view, HWND hWnd)	{
+
+	EDITDATA *ed;
+
+	winuienter();
+	ed = (EDITDATA*)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_EDIT), view->clientwnd, (DLGPROC)EditDialogProc);
+	if(ed)	{
+		viewstat_memory_edit(view, ed);
+		if(ed->bytes_len > 0)	{
+			memcpy(mem + view->cursor, ed->bytes, ed->bytes_len);
+			InvalidateRect(view->clientwnd, NULL, TRUE);
+		}
+	}
+	winuileave();
 }
 
 
@@ -215,11 +232,11 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 				/// Status
 				case IDM_STATUS_FOUND:
-					viewstat_found(view, (FINDDATA*)lp);
+					viewstat_found(view, (EDITDATA*)lp);
 					break;
 
 				case IDM_STATUS_NOTFOUND:
-					viewstat_notfound(view, (FINDDATA*)lp);
+					viewstat_notfound(view, (EDITDATA*)lp);
 					break;
 
 				default:
@@ -317,14 +334,18 @@ LRESULT CALLBACK ViewClientProc(HWND hClientWnd, UINT msg, WPARAM wp, LPARAM lp)
 				SendMessage(view->hwnd, WM_COMMAND, IDM_DEBUG_STOP, NULL);
 				break;
 
-			case 'G':
-				if(GetKeyState(VK_CONTROL) < 0)
-					SendMessage(view->hwnd, WM_COMMAND, IDM_SETSEG, NULL);
+			case 'E':
+				SendMessage(view->hwnd, WM_COMMAND, IDM_EDIT_MEMORY, NULL);
 				break;
 
 			case 'F':
 				if(GetKeyState(VK_CONTROL) < 0)
 					SendMessage(view->hwnd, WM_COMMAND, IDM_FIND, NULL);
+				break;
+
+			case 'G':
+				if(GetKeyState(VK_CONTROL) < 0)
+					SendMessage(view->hwnd, WM_COMMAND, IDM_SETSEG, NULL);
 				break;
 
 			default:

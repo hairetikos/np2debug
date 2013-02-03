@@ -18,12 +18,14 @@ In addition to the assembly, memory and register viewers for emulated code alrea
 * code breakpoints
 * Shift-JIS memory display
 * memory searching
+* memory modification
+* memory breakpoints
 
 What's still missing:
 
-* memory breakpoints
-* assembly modification
+* stack viewer
 * read emulated files from a directory instead of using .hdi images
+* assembly modification by actually writing assembly mnemonics
 
 As Xnp2 (and, most importantly, its debugging features already present) doesn't come with a cross-platform method for GUI coding, these extended features are currently _exclusive to the Win9x build_. After all that refactoring, it probably doesn't even build on Linux anymore...
 

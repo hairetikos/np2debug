@@ -28,18 +28,19 @@ typedef struct tagCBNParam			CBNPARAM;
 typedef struct tagCBNParam			*PCBNPARAM;
 typedef const struct tagCBNParam	*PCCBNPARAM;
 
-#define MAX_FIND_STR	256
+#define MAX_EDIT_STR	256
 
-struct tagFindData
+struct tagEditData
 {
-	UINT8 bytes[MAX_FIND_STR * 3];
-	WCHAR str[MAX_FIND_STR];
-	UINT	bytes_len;
+	UINT8 bytes[MAX_EDIT_STR * 3];
+	WCHAR str[MAX_EDIT_STR];
+	INT	bytes_len;
 	UINT16 type;
+	DWORD codepage;
 };
-typedef struct tagFindData			FINDDATA;
-typedef struct tagFindData			*PFINDDATA;
-typedef const struct tagFindData	*PCFINDDATA;
+typedef struct tagEditData			EDITDATA;
+typedef struct tagEditData			*PEDITDATA;
+typedef const struct tagEditData	*PCEDITDATA;
 
 
 #define	SetDlgItemCheck(a, b, c)	\

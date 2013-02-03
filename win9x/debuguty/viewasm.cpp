@@ -239,6 +239,10 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 		case WM_COMMAND:
 			switch(LOWORD(wp)) {
+				case IDM_EDIT_MEMORY:
+					viewer_edit_dlg(view, hwnd);
+					break;
+
 				case IDM_BREAK_TOGGLE:
 					viewasm_toggle_breakpoint(view);
 					break;

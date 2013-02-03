@@ -720,9 +720,6 @@
     <ClCompile Include="..\win9x\dialog\d_addr.cpp">
       <Filter>Win9x\dialog</Filter>
     </ClCompile>
-    <ClCompile Include="..\win9x\dialog\d_find.cpp">
-      <Filter>Win9x\dialog</Filter>
-    </ClCompile>
     <ClCompile Include="..\COMMON\_memory.c">
       <Filter>common</Filter>
     </ClCompile>
@@ -734,6 +731,9 @@
     </ClCompile>
     <ClCompile Include="..\win9x\debuguty\viewstat.cpp">
       <Filter>Win9x\debuguty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win9x\dialog\d_edit.cpp">
+      <Filter>Win9x\dialog</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -1258,12 +1258,8 @@
     <ClInclude Include="..\statsave.h" />
     <ClInclude Include="..\timing.h" />
     <ClInclude Include="..\break.h" />
-    <ClInclude Include="DIALOG\dialogs.h">
-      <Filter>Win9x\dialog</Filter>
-    </ClInclude>
-    <ClInclude Include="DIALOG\np2class.h">
-      <Filter>Win9x\dialog</Filter>
-    </ClInclude>
+    <ClInclude Include="..\win9x\dialog\dialogs.h" />
+    <ClInclude Include="..\win9x\dialog\np2class.h" />
   </ItemGroup>
   <ItemGroup>
     <YASM Include="..\win9x\DCLOCKD.X86" />

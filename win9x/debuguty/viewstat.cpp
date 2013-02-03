@@ -6,66 +6,74 @@
 #include	"viewstat.h"
 #include	"break.h"
 
-static void print_addr(OEMCHAR *str, UINT32 seg, UINT32 addr, BOOL segmented)	{
+/// -------
+/// Helpers
+static void print_addr(WCHAR *str, UINT32 seg, UINT32 addr, BOOL segmented)	{
 
 	if(segmented)	{
 		addr -= seg << 4;
-		wsprintf(str, _T("%04x:%04x"), seg, addr);
+		wsprintf(str, L"%04x:%04x", seg, addr);
 	} else {
-		wsprintf(str, _T("%08x"), addr);
+		wsprintf(str, L"%08x", addr);
 	}
 }
 
-static void viewstat_found_base(NP2VIEW_T *view, FINDDATA *fd, WCHAR *msg)	{
+static WCHAR* edit_type_str(EDITDATA *ed)	{
 
-	WCHAR str_msg[MAX_FIND_STR * 2];
-	WCHAR str_addr[32];
-	const OEMCHAR* str_type;
-
-	switch(fd->type)	{
-		case IDC_FIND_TYPE_HEX:
-			str_type = L"hex";
-			break;
-		case IDC_FIND_TYPE_SJIS:
-			str_type = L"Shift-JIS";
-			break;			
-		case IDC_FIND_TYPE_UTF8:
-			str_type = L"UTF-8";
-			break;
+	switch(ed->type)	{
+		case IDC_EDIT_TYPE_HEX:
+			return L"hex";
+		case IDC_EDIT_TYPE_SJIS:
+			return L"Shift-JIS";
+		case IDC_EDIT_TYPE_UTF8:
+			return L"UTF-8";
 	}
+	return L"unknown";
+}
+/// -------
+
+/// ----
+/// Find
+static void viewstat_edit_base(NP2VIEW_T *view, EDITDATA *fd, WCHAR *msg)	{
+
+	WCHAR str_msg[MAX_EDIT_STR * 2];
+	WCHAR str_addr[32];
 
 	print_addr(str_addr, view->seg, view->cursor, view->type != VIEWMODE_1MB);
-	wsprintfW(str_msg, msg, fd->str, str_type, str_addr);
+	wsprintfW(str_msg, msg, fd->str, edit_type_str(fd), str_addr);
 	SendMessage(view->statwnd, SB_SETTEXT, 1, (LPARAM)str_msg);
 }
 
-void viewstat_found(NP2VIEW_T *view, FINDDATA *fd)	{
-	viewstat_found_base(view, fd, L"Found '%s' (%s) at %s");
+void viewstat_found(NP2VIEW_T *view, EDITDATA *fd)	{
+	viewstat_edit_base(view, fd, L"Found '%s' (%s) at %s");
 }
-void viewstat_notfound(NP2VIEW_T *view, FINDDATA *fd)	{
-	viewstat_found_base(view, fd, L"'%s' (%s) not found");
+void viewstat_notfound(NP2VIEW_T *view, EDITDATA *fd)	{
+	viewstat_edit_base(view, fd, L"'%s' (%s) not found");
 }
+/// ----
 
+/// ----------
+/// Breakpoint
 void viewstat_breakpoint(NP2VIEW_T *view, UINT8 type, UINT32 addr)	{
 
-	OEMCHAR str_msg[MAX_FIND_STR * 2];
-	OEMCHAR str_addr[32];
-	const OEMCHAR* str_type;
+	WCHAR str_msg[MAX_EDIT_STR * 2];
+	WCHAR str_addr[32];
+	const WCHAR* str_type;
 
 	switch(type)	{
 		case NP2BP_READ:
-			str_type = _T("memory read");
+			str_type = L"memory read";
 			break;
 		case NP2BP_WRITE:
-			str_type = _T("memory write");
+			str_type = L"memory write";
 			break;			
 		case NP2BP_EXECUTE:
-			str_type = _T("code");
+			str_type = L"code";
 			break;
 	}
 
 	print_addr(str_addr, 0, addr, FALSE);
-	wsprintf(str_msg, _T("Hit %s breakpoint at %s"), str_type, str_addr);
+	wsprintf(str_msg, L"Hit %s breakpoint at %s", str_type, str_addr);
 	SendMessage(view->statwnd, SB_SETTEXT, 1, (LPARAM)str_msg);
 }
 
@@ -79,13 +87,29 @@ void viewstat_all_breakpoint(UINT8 type, UINT32 addr) {
 		}
 	}
 }
+/// ----------
 
+/// --------------
+/// Memory editing
+void viewstat_memory_edit(NP2VIEW_T *view, EDITDATA *ed)	{
+	
+	if(ed->bytes_len)	{
+		viewstat_edit_base(view, ed, L"Wrote '%s' (%s) at %s");
+	} else {
+		viewstat_edit_base(view, ed, L"'%s': Invalid %s string, wrote nothing");
+	}
+}
+/// --------------
+
+/// ---------------
+/// Cursor position
 void viewstat_update(NP2VIEW_T *view)	{
 
-	OEMCHAR str[32];
+	WCHAR str[32];
 	print_addr(str, view->seg, view->cursor, view->type != VIEWMODE_1MB);
 	SendMessage(view->statwnd, SB_SETTEXT, 0, (LPARAM)str);
 }
+/// ---------------
 
 
 // -----------------------------------------------------------------------
