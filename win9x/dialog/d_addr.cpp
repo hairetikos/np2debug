@@ -12,7 +12,7 @@ enum	{
 };
 
 static bool blockchange = false;
-static UINT16 seg, off;
+static UINT32 seg, off;
 
 static UINT32 solve_reg(OEMCHAR* in)	{
 
@@ -57,9 +57,9 @@ static void calc_addr(HWND hWnd, UINT8 updatesource)	{
 	// {
 		// seg:off -> real
 		GetDlgItemText(hWnd, IDC_ADDR_SEG, work, 5);
-		seg = (UINT16)solve_reg(work);
+		seg = solve_reg(work);
 		GetDlgItemText(hWnd, IDC_ADDR_OFF, work, 5);
-		off = (UINT16)solve_reg(work);
+		off = solve_reg(work);
 		real = (seg << 4) + off;
 		wsprintf(work, _T("%04x"), real);
 		SetDlgItemText(hWnd, IDC_ADDR_REAL, work);
