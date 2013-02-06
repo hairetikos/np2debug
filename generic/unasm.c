@@ -270,6 +270,9 @@ opeana_st:
 			}
 opeana_ea:
 			f = (flag >> UAFLAG_SOR) & UAFLAG_SOMASK;
+			if (((ope & 7) - 1) == CPU_EBP_INDEX)	{
+				r->seg = CPU_SS;
+			}
 			if (f) {
 				r->seg = CPU_REGS_SREG(f - 1);
 				p[0] = rstr.reg[RSTR_SEG][f - 1][0];
