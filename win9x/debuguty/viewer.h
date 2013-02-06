@@ -10,6 +10,7 @@ typedef struct {
 enum {
 	VIEWMODE_REG = 0,
 	VIEWMODE_SEG,
+	VIEWMODE_STK,
 	VIEWMODE_1MB,
 	VIEWMODE_ASM,
 	VIEWMODE_SND
@@ -80,6 +81,7 @@ typedef struct {
 
 	POINTS size_asm;
 	POINTS size_mem;
+	POINTS size_stk;
 	POINTS size_reg;
 	POINTS size_snd;
 } VIEWCFG;

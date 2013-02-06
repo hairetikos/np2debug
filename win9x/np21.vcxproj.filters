@@ -735,6 +735,12 @@
     <ClCompile Include="..\win9x\dialog\d_edit.cpp">
       <Filter>Win9x\dialog</Filter>
     </ClCompile>
+    <ClCompile Include="..\win9x\debuguty\viewstk.cpp">
+      <Filter>Win9x\debuguty</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win9x\debuguty\viewpaint.cpp">
+      <Filter>Win9x\debuguty</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="bios">
@@ -1260,6 +1266,12 @@
     <ClInclude Include="..\break.h" />
     <ClInclude Include="..\win9x\dialog\dialogs.h" />
     <ClInclude Include="..\win9x\dialog\np2class.h" />
+    <ClInclude Include="..\win9x\debuguty\viewstk.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\debuguty\viewpaint.h">
+      <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <YASM Include="..\win9x\DCLOCKD.X86" />

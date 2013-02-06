@@ -553,10 +553,11 @@
 #define IDM_VIEWWINALLCLOSE             43003
 #define IDM_VIEWMODEREG                 43011
 #define IDM_VIEWMODESEG                 43012
-#define IDM_VIEWMODE1MB                 43013
-#define IDM_VIEWMODEASM                 43014
-#define IDM_VIEWMODESND                 43015
-#define IDM_VIEWMODELOCK                43016
+#define IDM_VIEWMODESTK                 43013
+#define IDM_VIEWMODE1MB                 43014
+#define IDM_VIEWMODEASM                 43015
+#define IDM_VIEWMODESND                 43016
+#define IDM_VIEWMODELOCK                43017
 #define IDM_SETSEG                      43021
 #define IDM_SEGCS                       43022
 #define IDM_SEGDS                       43023

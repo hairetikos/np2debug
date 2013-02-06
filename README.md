@@ -20,10 +20,10 @@ In addition to the assembly, memory and register viewers for emulated code alrea
 * memory searching
 * memory modification
 * memory breakpoints
+* stack viewer
 
 What's still missing:
 
-* stack viewer
 * read emulated files from a directory instead of using .hdi images
 * assembly modification by actually writing assembly mnemonics
 

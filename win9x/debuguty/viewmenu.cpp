@@ -14,6 +14,7 @@ void viewmenu_mode(NP2VIEW_T *view) {
 	hmenu = GetMenu(view->hwnd);
 	CheckMenuItem(hmenu, IDM_VIEWMODEREG, MFCHECK(view->type == VIEWMODE_REG));
 	CheckMenuItem(hmenu, IDM_VIEWMODESEG, MFCHECK(view->type == VIEWMODE_SEG));
+	CheckMenuItem(hmenu, IDM_VIEWMODESTK, MFCHECK(view->type == VIEWMODE_STK));
 	CheckMenuItem(hmenu, IDM_VIEWMODE1MB, MFCHECK(view->type == VIEWMODE_1MB));
 	CheckMenuItem(hmenu, IDM_VIEWMODEASM, MFCHECK(view->type == VIEWMODE_ASM));
 	CheckMenuItem(hmenu, IDM_VIEWMODESND, MFCHECK(view->type == VIEWMODE_SND));

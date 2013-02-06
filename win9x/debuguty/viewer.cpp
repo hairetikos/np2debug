@@ -42,6 +42,8 @@ static	const PFTBL viewerini[] = {
 	PFVAL("sizeasmy", PFTYPE_UINT16, &viewcfg.size_asm.y),
 	PFVAL("sizememx", PFTYPE_UINT16, &viewcfg.size_mem.x),
 	PFVAL("sizememy", PFTYPE_UINT16, &viewcfg.size_mem.y),
+	PFVAL("sizestkx", PFTYPE_UINT16, &viewcfg.size_stk.x),
+	PFVAL("sizestky", PFTYPE_UINT16, &viewcfg.size_stk.y),
 	PFVAL("sizeregx", PFTYPE_UINT16, &viewcfg.size_reg.x),
 	PFVAL("sizeregy", PFTYPE_UINT16, &viewcfg.size_reg.y),
 	PFVAL("sizesndx", PFTYPE_UINT16, &viewcfg.size_snd.x),
@@ -188,6 +190,7 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 
 				case IDM_VIEWMODEREG:
 				case IDM_VIEWMODESEG:
+				case IDM_VIEWMODESTK:
 				case IDM_VIEWMODE1MB:
 				case IDM_VIEWMODEASM:
 				case IDM_VIEWMODESND:
@@ -378,6 +381,9 @@ LRESULT CALLBACK ViewClientProc(HWND hClientWnd, UINT msg, WPARAM wp, LPARAM lp)
 					case VIEWMODE_1MB:
 					case VIEWMODE_SEG:
 						save = &viewcfg.size_mem;
+						break;
+					case VIEWMODE_STK:
+						save = &viewcfg.size_stk;
 						break;
 					case VIEWMODE_REG:
 						save = &viewcfg.size_reg;
@@ -575,12 +581,21 @@ static UINT32	last = 0;
 		view = np2view;
 		for (i=0; i<NP2VIEW_MAX; i++, view++) {
 			if ((view->alive) && (!view->lock)) {
-				if (view->type == VIEWMODE_ASM) {
-					view->seg = CPU_CS;
-					view->off = CPU_IP;
-					view->cursor = (CPU_CS << 4) + CPU_IP;
-					view->pos = 0;
-					viewcmn_setvscroll(view);
+				switch(view->type)	{
+					case VIEWMODE_ASM:
+						view->seg = CPU_CS;
+						view->off = CPU_IP;
+						view->cursor = (view->seg << 4) + view->off;
+						view->pos = 0;
+						viewcmn_setvscroll(view);
+						break;
+					case VIEWMODE_STK:
+						view->seg = CPU_SS;
+						view->off = 0;
+						view->pos = CPU_SP / view->bytesperline;
+						view->cursor = (view->seg << 4) + CPU_SP;
+						viewcmn_setvscroll(view);
+						break;
 				}
 				viewcmn_setbank(view);
 				InvalidateRect(view->clientwnd, NULL, TRUE);

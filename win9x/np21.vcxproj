@@ -421,10 +421,12 @@
     <ClCompile Include="..\win9x\debuguty\viewer.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewmem.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewmenu.cpp" />
+    <ClCompile Include="..\win9x\debuguty\viewpaint.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewreg.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewseg.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewsnd.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewstat.cpp" />
+    <ClCompile Include="..\win9x\debuguty\viewstk.cpp" />
     <ClCompile Include="..\zlib\adler32.c" />
     <ClCompile Include="..\zlib\crc32.c" />
     <ClCompile Include="..\zlib\inffast.c" />
@@ -589,10 +591,12 @@
     <ClInclude Include="..\win9x\debuguty\viewer.h" />
     <ClInclude Include="..\win9x\debuguty\viewmem.h" />
     <ClInclude Include="..\win9x\debuguty\viewmenu.h" />
+    <ClInclude Include="..\win9x\debuguty\viewpaint.h" />
     <ClInclude Include="..\win9x\debuguty\viewreg.h" />
     <ClInclude Include="..\win9x\debuguty\viewseg.h" />
     <ClInclude Include="..\win9x\debuguty\viewsnd.h" />
     <ClInclude Include="..\win9x\debuguty\viewstat.h" />
+    <ClInclude Include="..\win9x\debuguty\viewstk.h" />
     <ClInclude Include="..\win9x\dialog\dialog.h" />
     <ClInclude Include="..\win9x\dialog\dialogs.h" />
     <ClInclude Include="..\win9x\dialog\np2class.h" />

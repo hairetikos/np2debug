@@ -7,6 +7,7 @@
 #include	"viewmem.h"
 #include	"viewreg.h"
 #include	"viewseg.h"
+#include	"viewstk.h"
 #include	"view1mb.h"
 #include	"viewasm.h"
 #include	"viewsnd.h"
@@ -111,6 +112,11 @@ void viewcmn_setmode(NP2VIEW_T *dst, NP2VIEW_T *src, UINT8 type) {
 			size = &viewcfg.size_mem;
 			break;
 
+		case VIEWMODE_STK:
+			viewstk_init(dst, src);
+			size = &viewcfg.size_stk;
+			break;
+
 		case VIEWMODE_1MB:
 			view1mb_init(dst, src);
 			size = &viewcfg.size_mem;
@@ -144,6 +150,9 @@ LRESULT CALLBACK viewcmn_dispat(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 			case VIEWMODE_SEG:
 				return(viewseg_proc(dbg, hwnd, msg, wp, lp));
+
+			case VIEWMODE_STK:
+				return(viewstk_proc(dbg, hwnd, msg, wp, lp));
 
 			case VIEWMODE_1MB:
 				return(view1mb_proc(dbg, hwnd, msg, wp, lp));
