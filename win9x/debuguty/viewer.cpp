@@ -171,6 +171,13 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 					viewer_open(g_hInstance);
 					break;
 
+				case IDM_VIEWMODELOCK:
+					view->lock ^= 1;
+					viewmenu_lock(view);
+					viewcmn_putcaption(view);
+					InvalidateRect(view->clientwnd, NULL, TRUE);
+					break;
+
 				case IDM_VIEWWINCLOSE:
 					return(ViewParentProc(hParentWnd, WM_CLOSE, 0, 0));
 					break;
@@ -180,23 +187,11 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 					break;
 
 				case IDM_VIEWMODEREG:
-					viewer_segmode(view, VIEWMODE_REG);
-					break;
-
 				case IDM_VIEWMODESEG:
-					viewer_segmode(view, VIEWMODE_SEG);
-					break;
-
 				case IDM_VIEWMODE1MB:
-					viewer_segmode(view, VIEWMODE_1MB);
-					break;
-
 				case IDM_VIEWMODEASM:
-					viewer_segmode(view, VIEWMODE_ASM);
-					break;
-
 				case IDM_VIEWMODESND:
-					viewer_segmode(view, VIEWMODE_SND);
+					viewer_segmode(view, LOWORD(wp) - IDM_VIEWMODEREG);
 					break;
 
 				case IDM_DEBUG_STEPINTO:

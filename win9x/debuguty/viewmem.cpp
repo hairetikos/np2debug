@@ -7,15 +7,12 @@
 #include	"viewmenu.h"
 #include	"viewmem.h"
 #include	"viewstat.h"
+#include	"viewpaint.h"
 #include	"cpucore.h"
 #include	"dialog.h"
 #include	"break.h"
 
 const float	CHAR_SPACING = 1.5f;
-	UINT16	bytesperline = 16;
-
-static LONG	bytes_left, bytes_cell, bytes_right;
-static LONG	char_left, char_cell, char_right;
 
 void viewmem_read(VIEWMEM_T *cfg, UINT32 adrs, UINT8 *buf, UINT32 size) {
 
@@ -177,6 +174,28 @@ void viewmem_read(VIEWMEM_T *cfg, UINT32 adrs, UINT8 *buf, UINT32 size) {
 	}
 }
 
+void viewmem_lock_alloc(NP2VIEW_T *view, UINT32 alloctype)	{
+
+	if (view->lock) {
+		if ((view->buf1.type != alloctype) ||
+			(view->buf1.arg != view->seg)) {
+			if (viewcmn_alloc(&view->buf1, view->memsize)) {
+				view->lock = FALSE;
+				viewmenu_lock(view);
+			}
+			else {
+				view->buf1.type = alloctype;
+				view->buf1.arg = view->seg;
+				viewmem_read(&view->dmem, view->buf1.arg << 4, (UINT8 *)view->buf1.ptr, view->memsize);
+			}
+			viewcmn_putcaption(view);
+		}
+	}
+}
+
+// ----
+
+
 static COLORREF viewmem_set_bkcol(NP2VIEW_T *view, UINT32 addr)	{
 
 	if(addr == view->cursor)	{
@@ -187,7 +206,7 @@ static COLORREF viewmem_set_bkcol(NP2VIEW_T *view, UINT32 addr)	{
 	return viewcfg.color_back;
 }
 
-void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 totalsize, BOOL segmented) {
+void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, BOOL segmented) {
 
 	UINT32	i;
 	UINT32	x;
@@ -204,42 +223,24 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 
 	COLORREF	bkcol;
 
 	// Add 1 to accommodate double-byte characters starting at the end of a line
-	buf = (UINT8*)alloca(bytesperline + 1);
+	buf = (UINT8*)alloca(view->bytesperline + 1);
 
-	off = (view->pos) << 4;
+	off = (view->pos) * view->bytesperline;
 	mad = off;
 	if(segmented)	{
 		mad += (((UINT32)view->seg) << 4);
 	}
 
-	if (view->lock) {
-		if ((view->buf1.type != ALLOCTYPE_SEG) ||
-			(view->buf1.arg != view->seg)) {
-			if (viewcmn_alloc(&view->buf1, totalsize)) {
-				view->lock = FALSE;
-				viewmenu_lock(view);
-			}
-			else {
-				view->buf1.type = ALLOCTYPE_SEG;
-				view->buf1.arg = view->seg;
-				viewmem_read(&view->dmem, view->buf1.arg << 4, (UINT8 *)view->buf1.ptr, totalsize);
-			}
-			viewcmn_putcaption(view);
-		}
-	}
+	viewmem_lock_alloc(view, alloctype);
 
-	for (y=0; y<rc->bottom && off<totalsize; y+=viewcfg.font_height, off+=bytesperline) {
+	for (y=0; y<rc->bottom && off<view->memsize; y+=viewcfg.font_height, off+=view->bytesperline) {
 		x = 0;
 		SetTextColor(hdc, viewcfg.color_text);
 		SetBkColor(hdc, viewcfg.color_back);
-		if(segmented)	{
-			wsprintf(str, _T("%04x:%04x"), view->seg, off);
-		} else {
-			wsprintf(str, _T("%08x"), off);
-		}
 
-		TextOut(hdc, x, y, str, 9);
-		x = bytes_left;
+		viewpaint_print_addr(hdc, x, y, view->seg, off, segmented);
+
+		x = view->cp_bytes.left;
 
 		if (view->lock) {
 			p = (UINT8 *)view->buf1.ptr;
@@ -247,9 +248,9 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 
 		}
 		else {
 			p = buf;
-			viewmem_read(&view->dmem, mad, buf, bytesperline + 1);
+			viewmem_read(&view->dmem, mad, buf, view->bytesperline + 1);
 		}
-		for (i=0; i<bytesperline;i++) {
+		for (i=0; i<view->bytesperline;i++) {
 			str[0] = viewcmn_hex[*p >> 4];
 			str[1] = viewcmn_hex[*p & 15];
 			str[2] = 0;
@@ -257,11 +258,11 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 
 
 			SetBkColor(hdc, viewmem_set_bkcol(view, mad + i));
 			TextOut(hdc, x, y, str, 2);
-			x += bytes_cell;
+			x += view->cp_bytes.cell;
 		}
-		x = char_left;
+		x = view->cp_chars.left;
 
-		for(i=0, p = buf; i<bytesperline; i++, p++) {
+		for(i=0, p = buf; i<view->bytesperline; i++, p++) {
 			bkcol = viewmem_set_bkcol(view, mad + i);
 			SetBkColor(hdc, bkcol);
 
@@ -278,7 +279,7 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 
 			if(!dbskip)	{
 				dbskip = IsDBCSLeadByteEx(932, *p);
 				charlen = dbskip + 1;
-				ret = MultiByteToWideChar(932, MB_PRECOMPOSED, (LPCSTR)p, charlen, text, bytesperline);
+				ret = MultiByteToWideChar(932, MB_PRECOMPOSED, (LPCSTR)p, charlen, text, 4);
 				if(text[0] == 0 || !ret)	{
 					lstrcpyW(text, L".");
 					SetTextColor(hdc, viewcfg.color_dim);
@@ -289,18 +290,20 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, UINT32 
 			} else {
 				dbskip = false;
 			}
-			x += char_cell;
+			x += view->cp_chars.cell;
 		}
-		mad += bytesperline;
+		mad += view->bytesperline;
 	}
 }
 
-LONG viewmem_mouse_to_cursor(NP2VIEW_T *view, HWND hwnd, POINTS mpos, LONG left, LONG cell, LONG right)	{
+LONG viewmem_mouse_to_cursor(NP2VIEW_T *view, HWND hwnd, POINTS mpos, VIEWCELLPOS* cp)	{
 
 	LONG ret = -1;
-	if(mpos.x > left && mpos.x < right)	{
-		ret = (view->pos + (mpos.y / viewcfg.font_height)) * bytesperline;
-		ret += (mpos.x - left) / cell;
+	if(mpos.x > cp->left && cp->right ? (mpos.x < cp->right) : 1)	{
+		ret = (view->pos + (mpos.y / viewcfg.font_height)) * view->bytesperline;
+		if(cp->cell)	{
+			ret += (mpos.x - cp->left) / cp->cell;
+		}
 	}
 	return ret;
 }
@@ -386,51 +389,63 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 		case WM_SYSKEYDOWN:
 		case WM_KEYDOWN:
+			// Vertical
 			switch(wp)
 			{
 			case VK_UP:
-				newcursor -= bytesperline;
+				newcursor -= view->bytesperline;
 				break;
 			case VK_DOWN:
-				newcursor += bytesperline;
-				break;
-			case VK_LEFT:
-				newcursor--;
-				break;
-			case VK_RIGHT:
-				newcursor++;
+				newcursor += view->bytesperline;
 				break;
 			case VK_PRIOR:
-				newcursor -= view->step * bytesperline;
+				newcursor -= view->step * view->bytesperline;
 				break;
 			case VK_NEXT:
-				newcursor += view->step * bytesperline;
+				newcursor += view->step * view->bytesperline;
 				break;
-			case VK_HOME:
-				newcursor = (newcursor / bytesperline) * bytesperline;
-				break;
-			case VK_END:
-				newcursor = (((newcursor / bytesperline) + 1) * bytesperline) - 1;
-				break;
+			}
+			// Horizontal
+			if(view->cp_bytes.cell)	{
+				switch(wp)
+				{
+				case VK_LEFT:
+					newcursor--;
+					break;
+				case VK_RIGHT:
+					newcursor++;
+					break;
+				case VK_HOME:
+					newcursor = (newcursor / view->bytesperline) * view->bytesperline;
+					break;
+				case VK_END:
+					newcursor = (((newcursor / view->bytesperline) + 1) * view->bytesperline) - 1;
+					break;
+				}
 			}
 			// Clamp
 			if(newcursor < 0) {
 				newcursor = 0;
-			} else if(newcursor >= (LONG)(view->maxline * bytesperline)) {
-				newcursor = (view->maxline * bytesperline) - 1;
+			} else if(newcursor >= (LONG)(view->maxline * view->bytesperline)) {
+				newcursor = (view->maxline * view->bytesperline);
+				if(view->cp_bytes.cell)	{
+					newcursor--;
+				} else {
+					newcursor -= view->bytesperline;
+				}
 			}
 			break;
 
 		case WM_LBUTTONDOWN:	
 			mpos = MAKEPOINTS(lp);
-			newcursor = viewmem_mouse_to_cursor(view, hwnd, mpos, bytes_left, bytes_cell, bytes_right);
+			newcursor = viewmem_mouse_to_cursor(view, hwnd, mpos, &view->cp_bytes);
 			if(newcursor < 0)	{
-				newcursor = viewmem_mouse_to_cursor(view, hwnd, mpos, char_left, char_cell, char_right);
+				newcursor = viewmem_mouse_to_cursor(view, hwnd, mpos, &view->cp_chars);
 			}
 			break;
 	}
 	if(newcursor != oldcursor && newcursor != -1)	{
-		viewer_scroll_fit_line(view, (newcursor / bytesperline));
+		viewer_scroll_fit_line(view, (newcursor / view->bytesperline));
 		view->cursor = newcursor + seg4;
 		viewstat_update(view);
 		InvalidateRect(hwnd, NULL, TRUE);
@@ -443,15 +458,16 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 void viewmem_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 
-	bytes_left = 12*np2viewfontwidth;
-	bytes_cell = 2*CHAR_SPACING*np2viewfontwidth;
-	bytes_right = bytes_left + bytes_cell*bytesperline;
+	dst->cp_bytes.left = 12*np2viewfontwidth;
+	dst->cp_bytes.cell = 2*CHAR_SPACING*np2viewfontwidth;
+	dst->cp_bytes.right = dst->cp_bytes.left + dst->cp_bytes.cell*dst->bytesperline;
 
-	char_left = bytes_right + 3*np2viewfontwidth;
-	char_cell = np2viewfontwidth;
-	char_right = char_left + char_cell*bytesperline;
+	dst->cp_chars.left = dst->cp_bytes.right + 3*np2viewfontwidth;
+	dst->cp_chars.cell = np2viewfontwidth;
+	dst->cp_chars.right = dst->cp_chars.left + dst->cp_chars.cell*dst->bytesperline;
 	
 	if (!src) {
 		dst->pos = 0;
 	}
+	dst->maxline = dst->memsize / dst->bytesperline;
 }

@@ -20,7 +20,7 @@ static void set_viewseg(HWND hwnd, NP2VIEW_T *view, UINT16 seg) {
 
 static void viewseg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 
-	viewmem_paint(view, rc, hdc, ALLOCTYPE_SEG, 0x10000, true);
+	viewmem_paint(view, rc, hdc, ALLOCTYPE_SEG, true);
 }
 
 
@@ -48,20 +48,12 @@ LRESULT CALLBACK viewseg_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 				case IDM_SEGTEXT:
 					set_viewseg(hwnd, view, 0xa000);
 					break;
-
-				case IDM_VIEWMODELOCK:
-					view->lock ^= 1;
-					viewmenu_lock(view);
-					viewcmn_putcaption(view);
-					InvalidateRect(hwnd, NULL, TRUE);
-					break;
 			}
 			break;
 
 		case WM_PAINT:
 			viewcmn_paint(view, viewseg_paint);
 			break;
-
 	}
 	return(viewmem_proc(view, hwnd, msg, wp, lp));
 }
@@ -71,6 +63,11 @@ LRESULT CALLBACK viewseg_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 void viewseg_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 
+	dst->type = VIEWMODE_SEG;
+	dst->bytesperline = 16;
+	dst->mul = 1;
+	dst->pos = 0;
+	dst->memsize = 0x10000;
 	viewmem_init(dst, src);
 	if (src) {
 		switch(src->type) {
@@ -79,11 +76,11 @@ void viewseg_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 				break;
 
 			case VIEWMODE_1MB:
-				if (dst->pos < 0x10000) {
+				if (dst->pos < dst->memsize) {
 					dst->seg = (UINT16)dst->pos;
 				}
 				else {
-					dst->seg = 0xffff;
+					dst->seg = dst->memsize - 1;
 				}
 				break;
 
@@ -96,9 +93,5 @@ void viewseg_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 				break;
 		}
 	}
-	dst->type = VIEWMODE_SEG;
-	dst->maxline = 0x1000;
-	dst->mul = 1;
-	dst->pos = 0;
 }
 

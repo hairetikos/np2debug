@@ -139,21 +139,9 @@ const UINT8	*p;
 LRESULT CALLBACK viewsnd_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	switch (msg) {
-		case WM_COMMAND:
-			switch(LOWORD(wp)) {
-				case IDM_VIEWMODELOCK:
-					view->lock ^= 1;
-					viewmenu_lock(view);
-					viewcmn_putcaption(view);
-					InvalidateRect(hwnd, NULL, TRUE);
-					break;
-			}
-			break;
-
 		case WM_PAINT:
 			viewcmn_paint(view, viewsnd_paint);
 			break;
-
 	}
 	return(0L);
 }

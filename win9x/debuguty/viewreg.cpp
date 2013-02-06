@@ -9,6 +9,22 @@
 #include	"viewreg.h"
 #include	"cpucore.h"
 
+static void viewreg_lock_alloc(NP2VIEW_T *view, void *src)	{
+
+	if (view->lock) {
+		if (view->buf1.type != ALLOCTYPE_REG) {
+			if (viewcmn_alloc(&view->buf1, view->memsize)) {
+				view->lock = FALSE;
+				viewmenu_lock(view);
+			}
+			else {
+				view->buf1.type = ALLOCTYPE_REG;
+				CopyMemory(view->buf1.ptr, src, view->memsize);
+			}
+			viewcmn_putcaption(view);
+		}
+	}
+}
 
 #if defined(CPUCORE_IA32)
 static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
@@ -18,19 +34,7 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	TCHAR		str[128];
 	I386STAT	*r;
 
-	if (view->lock) {
-		if (view->buf1.type != ALLOCTYPE_REG) {
-			if (viewcmn_alloc(&view->buf1, sizeof(i386core.s))) {
-				view->lock = FALSE;
-				viewmenu_lock(view);
-			}
-			else {
-				view->buf1.type = ALLOCTYPE_REG;
-				CopyMemory(view->buf1.ptr, &i386core.s, sizeof(i386core.s));
-			}
-			viewcmn_putcaption(view);
-		}
-	}
+	viewreg_lock_alloc(view, &i386core.s);
 
 	pos = view->pos;
 	if (view->lock) {
@@ -40,7 +44,7 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 		r = &i386core.s;
 	}
 
-	for (y=0; y<rc->bottom && pos<4; y+=viewcfg.font_height, pos++) {
+	for (y=0; y<rc->bottom && pos<view->maxline; y+=viewcfg.font_height, pos++) {
 		switch(pos) {
 			case 0:
 				wsprintf(str, _T("EAX=%.8x EBX=%.8x ECX=%.8x EDX=%.8x"),
@@ -85,19 +89,7 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	TCHAR		str[128];
 	V30STAT		*r;
 
-	if (view->lock) {
-		if (view->buf1.type != ALLOCTYPE_REG) {
-			if (viewcmn_alloc(&view->buf1, sizeof(v30core.s))) {
-				view->lock = FALSE;
-				viewmenu_lock(view);
-			}
-			else {
-				view->buf1.type = ALLOCTYPE_REG;
-				CopyMemory(view->buf1.ptr, &v30core.s, sizeof(v30core.s));
-			}
-			viewcmn_putcaption(view);
-		}
-	}
+	viewreg_lock_alloc(view, &v30core.s);
 
 	pos = view->pos;
 	if (view->lock) {
@@ -107,7 +99,7 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 		r = &v30core.s;
 	}
 
-	for (y=0; y<rc->bottom && pos<4; y+=16, pos++) {
+	for (y=0; y<rc->bottom && pos<view->maxline; y+=viewcfg.font_height, pos++) {
 		switch(pos) {
 			case 0:
 				wsprintf(str, _T("AW=%.4x  BW=%.4x  CW=%.4x  DW=%.4x"),
@@ -140,19 +132,7 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	TCHAR		str[128];
 	I286STAT	*r;
 
-	if (view->lock) {
-		if (view->buf1.type != ALLOCTYPE_REG) {
-			if (viewcmn_alloc(&view->buf1, sizeof(i286core.s))) {
-				view->lock = FALSE;
-				viewmenu_lock(view);
-			}
-			else {
-				view->buf1.type = ALLOCTYPE_REG;
-				CopyMemory(view->buf1.ptr, &i286core.s, sizeof(i286core.s));
-			}
-			viewcmn_putcaption(view);
-		}
-	}
+	viewreg_lock_alloc(view, &i286core.s);
 
 	pos = view->pos;
 	if (view->lock) {
@@ -162,7 +142,7 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 		r = &i286core.s;
 	}
 
-	for (y=0; y<rc->bottom && pos<4; y+=16, pos++) {
+	for (y=0; y<rc->bottom && pos<view->maxline; y+=viewcfg.font_height, pos++) {
 		switch(pos) {
 			case 0:
 				wsprintf(str, _T("AX=%.4x  BX=%.4x  CX=%.4x  DX=%.4x"),
@@ -192,25 +172,12 @@ static void viewreg_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 LRESULT CALLBACK viewreg_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
 	switch (msg) {
-
-		case WM_COMMAND:
-			switch(LOWORD(wp)) {
-				case IDM_VIEWMODELOCK:
-					view->lock ^= 1;
-					viewmenu_lock(view);
-					viewcmn_putcaption(view);
-					InvalidateRect(hwnd, NULL, TRUE);
-					break;
-			}
-			break;
-
 		case WM_PAINT:
 			viewcmn_paint(view, viewreg_paint);
 			break;
 
 		default:
 			return(DefWindowProc(hwnd, msg, wp, lp));
-
 	}
 	return(0L);
 }
@@ -221,6 +188,13 @@ LRESULT CALLBACK viewreg_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 void viewreg_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 
 	dst->type = VIEWMODE_REG;
+#if defined(CPUCORE_IA32)
+	dst->memsize = sizeof(i386core.s);
+#elif defined(CPUCORE_V30)
+	dst->memsize = sizeof(v30core.s);
+#else
+	dst->memsize = sizeof(i286core.s);
+#endif
 	dst->maxline = 4;
 	dst->mul = 1;
 	dst->pos = 0;

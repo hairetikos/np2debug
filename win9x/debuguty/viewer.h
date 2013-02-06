@@ -34,6 +34,12 @@ typedef struct {
 } VIEWMEMBUF;
 
 typedef struct {
+	LONG	left;
+	LONG	cell;
+	LONG	right;
+} VIEWCELLPOS;
+
+typedef struct {
 	HWND		hwnd;
 	HWND		clientwnd;
 	HWND		helpwnd;
@@ -41,6 +47,8 @@ typedef struct {
 	VIEWMEMBUF	buf1;
 	VIEWMEMBUF	buf2;
 	UINT32		pos;
+	UINT32		memsize;
+	UINT16		bytesperline;
 	UINT32		maxline;
 	UINT16		step;
 	UINT16		mul;
@@ -54,6 +62,8 @@ typedef struct {
 	UINT16		seg;
 	UINT16		off;
 	VIEWMEM_T	dmem;
+	VIEWCELLPOS	cp_bytes;
+	VIEWCELLPOS	cp_chars;
 	SCROLLINFO	si;
 } NP2VIEW_T;
 

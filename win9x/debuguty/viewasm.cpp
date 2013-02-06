@@ -7,6 +7,7 @@
 #include	"viewmem.h"
 #include	"viewasm.h"
 #include	"viewstat.h"
+#include	"viewpaint.h"
 #include	"unasm.h"
 #include	"cpucore.h"
 #include	"break.h"
@@ -62,18 +63,6 @@ static void viewasm_toggle_breakpoint(NP2VIEW_T *view)
 	}
 }
 
-static void viewasm_fill_line(DWORD top, DWORD height, COLORREF col, RECT *rc, HDC hdc)	{
-
-	HBRUSH hbrush = CreateSolidBrush(col);
-	RECT rect;
-	rect.left = 0;
-	rect.top = top;
-	rect.right = rc->right;
-	rect.bottom = top + height;
-	FillRect(hdc, &rect, hbrush);
-	DeleteObject(hbrush);
-}
-
 static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 
 	LONG	x, y, i;
@@ -93,15 +82,14 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 	if (view->lock) {
 		if ((view->buf1.type != ALLOCTYPE_SEG) ||
 			(view->buf1.arg != view->seg)) {
-			if (viewcmn_alloc(&view->buf1, 0x10000)) {
+			if (viewcmn_alloc(&view->buf1, view->memsize)) {
 				view->lock = FALSE;
 				viewmenu_lock(view);
 			}
 			else {
 				view->buf1.type = ALLOCTYPE_SEG;
 				view->buf1.arg = view->seg;
-				viewmem_read(&view->dmem, view->buf1.arg << 4,
-											(BYTE *)view->buf1.ptr, 0x10000);
+				viewmem_read(&view->dmem, view->buf1.arg << 4, (BYTE *)view->buf1.ptr, view->memsize);
 				view->buf2.type = ALLOCTYPE_NONE;
 			}
 			viewcmn_putcaption(view);
@@ -139,35 +127,12 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 		x = 0;
 		// Emphasize wrapping
 		if(prevoff > off)	{
-			viewasm_fill_line(y, 2, viewcfg.color_hilite, rc, hdc);
+			viewpaint_line_fill(rc, hdc, y, 2, viewcfg.color_hilite);
 		}
 		
-		bkcol = viewcfg.color_back;
-		// IP?
-		if(view->seg == CPU_CS && off == CPU_IP)	{
-			viewasm_fill_line(y, viewcfg.font_height, viewcfg.color_text, rc, hdc);
-			bkcol = viewcfg.color_text;
-			SetTextColor(hdc, viewcfg.color_active);
-		}
-		else		{
-			SetTextColor(hdc, viewcfg.color_text);
-		}
-		// Cursor?
-		if((view->seg << 4) + off == view->cursor)	{
-			viewasm_fill_line(y, viewcfg.font_height, viewcfg.color_cursor, rc, hdc);
-			bkcol = viewcfg.color_cursor;
-		}
+		bkcol = viewpaint_line_set_colors(view, rc, hdc, y, off, CPU_CS, CPU_IP);
 
-		// Breakpoint?
-		if(np2break_is_set(view->seg, off))	{
-			SetBkColor(hdc, viewcfg.color_hilite);
-		}
-		else {
-			SetBkColor(hdc, bkcol);
-		}
-
-		wsprintf(str, _T("%04x:%04x"), view->seg, off);
-		TextOut(hdc, x, y, str, 9);
+		viewpaint_print_addr(hdc, x, y, view->seg, off, TRUE);
 
 		SetBkColor(hdc, bkcol);
 		step = viewasm_unasm_next(&una, buf, view, off);
@@ -175,20 +140,20 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 		if (!step) {
 			break;
 		}
-		x += 11 * 8;
+		x += 11 * np2viewfontwidth;
 		for(i = 0; i < step; i++)	{
 			wsprintf(str + (i*2), _T("%02x"), *p);
 			p++;
 		}
 		TextOut(hdc, x, y, str, i * 2);
-		x += 13 * 8;
+		x += 13 * np2viewfontwidth;
 #if defined(UNICODE)
 		TextOut(hdc, x, y, cnv, MultiByteToWideChar(CP_ACP, 
 					MB_PRECOMPOSED, una.mnemonic, -1, cnv, NELEMENTS(cnv)));
 #else
 		TextOut(hdc,x, y, una.mnemonic, lstrlen(una.mnemonic));
 #endif
-		x += 7 * 8;
+		x += 7 * np2viewfontwidth;
 		if (una.operand[0]) {
 #if defined(UNICODE)
 			TextOut(hdc, x, y, cnv, MultiByteToWideChar(CP_ACP,
@@ -325,6 +290,7 @@ void viewasm_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 		dst->off = CPU_IP;
 	}
 	dst->type = VIEWMODE_ASM;
+	dst->memsize = 0x10000;
 	dst->maxline = MAX_UNASM;
 	dst->mul = 1;
 	dst->pos = 0;
