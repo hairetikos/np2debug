@@ -198,6 +198,10 @@ static UINT32 np2break_memory_write_naive()	{
 	}
 	for(i = 0; i < bp_num; i++)	{
 		BREAKPOINT* bp = (BREAKPOINT*)listarray_getitem(np2breakpoints, i);
+		if(!bp)	{
+			bp_num = i;
+			return 0;
+		}
 		if(bp->addr && bp->flag & NP2BP_WRITE)	{
 			UINT8 cur_val = mem[bp->addr];
 			if(probe[i] != cur_val)	{
