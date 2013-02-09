@@ -574,22 +574,7 @@ static UINT32	last = 0;
 		view = np2view;
 		for (i=0; i<NP2VIEW_MAX; i++, view++) {
 			if ((view->alive) && (!view->lock)) {
-				switch(view->type)	{
-					case VIEWMODE_ASM:
-						view->seg = CPU_CS;
-						view->off = CPU_IP;
-						view->cursor = (view->seg << 4) + view->off;
-						view->pos = 0;
-						viewcmn_setvscroll(view);
-						break;
-					case VIEWMODE_STK:
-						view->seg = CPU_SS;
-						view->off = 0;
-						view->pos = CPU_SP / view->bytesperline;
-						view->cursor = (view->seg << 4) + CPU_SP;
-						viewcmn_setvscroll(view);
-						break;
-				}
+				viewcmn_reload(view);
 				viewcmn_setbank(view);
 				InvalidateRect(view->clientwnd, NULL, TRUE);
 			}

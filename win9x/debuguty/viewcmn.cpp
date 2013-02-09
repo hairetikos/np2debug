@@ -177,6 +177,18 @@ void viewcmn_setbank(NP2VIEW_T *view) {
 	dmem->A20 = (UINT8)((CPU_ADRSMASK >> 20) & 1);
 }
 
+void viewcmn_reload(NP2VIEW_T *view) {
+
+	switch(view->type)	{
+		case VIEWMODE_ASM:
+			viewasm_reload(view);
+			break;
+		case VIEWMODE_STK:
+			viewstk_reload(view);
+			break;
+	}
+}
+
 
 // ----
 

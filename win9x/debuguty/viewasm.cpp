@@ -63,6 +63,15 @@ static void viewasm_toggle_breakpoint(NP2VIEW_T *view)
 	}
 }
 
+void viewasm_reload(NP2VIEW_T *view)	{
+
+	view->seg = CPU_CS;
+	view->off = CPU_IP;
+	view->cursor = (view->seg << 4) + view->off;
+	view->pos = 0;
+	viewcmn_setvscroll(view);
+}
+
 static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 
 	LONG	x, y, i;

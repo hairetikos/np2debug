@@ -1,4 +1,6 @@
 
+void viewasm_reload(NP2VIEW_T *view);
+
 LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view,
 								HWND hwnd, UINT msg, WPARAM wp, LPARAM lp);
 

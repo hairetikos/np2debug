@@ -10,6 +10,15 @@
 #include	"cpucore.h"
 
 
+void viewstk_reload(NP2VIEW_T *view)	{
+
+	view->seg = CPU_SS;
+	view->off = 0;
+	view->pos = CPU_SP / view->bytesperline;
+	view->cursor = (view->seg << 4) + CPU_SP;
+	viewcmn_setvscroll(view);
+}
+
 void viewstk_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 
 	UINT32	x;
@@ -66,11 +75,10 @@ void viewstk_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 	dst->type = VIEWMODE_STK;
 	dst->bytesperline = 2;
 	dst->mul = 1;
-	dst->seg = CPU_SS;
-	dst->off = 0;
-	dst->pos = CPU_SP / dst->bytesperline;
 	dst->memsize = 0x10000;
 	dst->maxline = dst->memsize / dst->bytesperline;
+
+	viewstk_reload(dst);
 
 	ZeroMemory(&dst->cp_bytes, sizeof(VIEWCELLPOS));
 	ZeroMemory(&dst->cp_chars, sizeof(VIEWCELLPOS));
