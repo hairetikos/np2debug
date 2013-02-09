@@ -447,7 +447,6 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 	if(newcursor != oldcursor && newcursor != -1)	{
 		viewer_scroll_fit_line(view, (newcursor / view->bytesperline));
 		view->cursor = newcursor + seg4;
-		viewstat_update(view);
 		InvalidateRect(hwnd, NULL, TRUE);
 	}
 	return(0L);

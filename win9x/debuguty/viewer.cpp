@@ -58,7 +58,6 @@ static void viewer_segmode(NP2VIEW_T *view, UINT8 type) {
 		viewcmn_setmode(view, view, type);
 		viewcmn_setbank(view);
 		viewcmn_setvscroll(view);
-		viewstat_update(view);
 		InvalidateRect(view->clientwnd, NULL, TRUE);
 	}
 }
@@ -171,13 +170,6 @@ LRESULT CALLBACK ViewParentProc(HWND hParentWnd, UINT msg, WPARAM wp, LPARAM lp)
 			switch(LOWORD(wp)) {
 				case IDM_VIEWWINNEW:
 					viewer_open(g_hInstance);
-					break;
-
-				case IDM_VIEWMODELOCK:
-					view->lock ^= 1;
-					viewmenu_lock(view);
-					viewcmn_putcaption(view);
-					InvalidateRect(view->clientwnd, NULL, TRUE);
 					break;
 
 				case IDM_VIEWWINCLOSE:
@@ -402,6 +394,7 @@ LRESULT CALLBACK ViewClientProc(HWND hClientWnd, UINT msg, WPARAM wp, LPARAM lp)
 			break;
 
 		case WM_PAINT:
+			viewstat_update(view);
 			return(viewcmn_dispat(hClientWnd, msg, wp, lp));
 
 		case WM_VSCROLL:

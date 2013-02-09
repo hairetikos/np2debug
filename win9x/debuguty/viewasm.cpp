@@ -254,7 +254,6 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 			break;
 
 		case WM_PAINT:
-			viewstat_update(view);
 			viewcmn_paint(view, viewasm_paint);
 			break;
 
