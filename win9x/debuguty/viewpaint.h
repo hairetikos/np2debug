@@ -6,5 +6,5 @@ COLORREF viewpaint_line_set_colors(NP2VIEW_T *view, RECT *rc, HDC hdc, DWORD y, 
 
 /// Common stuff
 /// ------------
-void viewpaint_print_addr(HDC hdc, int x, int y, UINT16 seg, UINT16 off, BOOL segmented);
+void viewpaint_print_addr(HDC hdc, int x, int y, UINT16 seg, UINT32 off, BOOL segmented);
 /// ------------
