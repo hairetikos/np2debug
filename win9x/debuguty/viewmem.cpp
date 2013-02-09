@@ -322,10 +322,10 @@ static LONG viewmem_find(NP2VIEW_T *view, EDITDATA *_fd)	{
 	if(!fd)	{
 		return -1;
 	}
-	needle = memmem(mem + view->cursor + 1, (view->maxline << 4) - newcursor - 1, fd->bytes, fd->bytes_len);
+	needle = memmem(mem + seg4 + newcursor + 1, (view->maxline << 4) - newcursor - 1, fd->bytes, fd->bytes_len);
 	if(!needle)	{
 		// Wrap
-		needle = memmem(mem, view->cursor, fd->bytes, fd->bytes_len);
+		needle = memmem(mem + seg4, view->cursor, fd->bytes, fd->bytes_len);
 	}
 	
 	if(needle)	{
@@ -356,9 +356,11 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 				case IDM_FIND:
 					winuienter();
 					ed = (EDITDATA*)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_EDIT), view->clientwnd, (DLGPROC)FindDialogProc);
-					newcursor = viewmem_find(view, ed);
-					if(newcursor != -1)	{
-						EnableMenuItem(GetMenu(view->hwnd), IDM_FINDAGAIN, MF_BYCOMMAND | MF_ENABLED);
+					if(ed)	{
+						newcursor = viewmem_find(view, ed);
+						if(newcursor != -1)	{
+							EnableMenuItem(GetMenu(view->hwnd), IDM_FINDAGAIN, MF_BYCOMMAND | MF_ENABLED);
+						}
 					}
 					winuileave();
 					break;
@@ -374,6 +376,7 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 						if(view->type == VIEWMODE_1MB)	{
 							newcursor += seg << 4;
 						} else {
+							seg4 = seg << 4;
 							view->seg = seg;
 						}
 					}
