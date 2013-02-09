@@ -83,7 +83,10 @@ void np2active_step_over()	{
 		return;
 	}
 	step = unasm_next(&una);
-	if(!strcmp(una.mnemonic, "call"))	{
+	if(
+		!strcmp(una.mnemonic, "call") ||
+		!strcmp(una.mnemonic, "int")
+	)	{
 		np2break_toggle(CPU_CS, CPU_IP + step, NP2BP_EXECUTE | NP2BP_ONESHOT);
 		np2active_set(1);
 	} else {
