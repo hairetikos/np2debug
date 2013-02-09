@@ -63,16 +63,10 @@ LRESULT CALLBACK viewseg_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 void viewseg_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 
-	dst->type = VIEWMODE_SEG;
-	dst->bytesperline = 16;
-	dst->mul = 1;
-	dst->pos = 0;
-	dst->memsize = 0x10000;
-	viewmem_init(dst, src);
 	if (src) {
 		switch(src->type) {
-			case VIEWMODE_SEG:
-				dst->seg = dst->seg;
+			case VIEWMODE_ASM:
+				dst->pos = src->off;
 				break;
 
 			case VIEWMODE_1MB:
@@ -82,16 +76,24 @@ void viewseg_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 				else {
 					dst->seg = dst->memsize - 1;
 				}
+				dst->pos = 0;
 				break;
 
-			case VIEWMODE_ASM:
-				dst->seg = src->seg;
+			case VIEWMODE_STK:
+				dst->pos *= src->bytesperline;
 				break;
 
 			default:
-				src = NULL;
+				dst->pos = 0;
 				break;
 		}
 	}
+	dst->type = VIEWMODE_SEG;
+	dst->bytesperline = 16;
+	dst->mul = 1;
+	dst->memsize = 0x10000;
+
+	dst->pos /= dst->bytesperline;
+	viewmem_init(dst, src);
 }
 

@@ -52,13 +52,6 @@ LRESULT CALLBACK view1mb_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 				case IDM_SEGTEXT:
 					set_viewseg(hwnd, view, 0xa000);
 					break;
-
-				case IDM_VIEWMODELOCK:
-					view->lock ^= 1;
-					viewmenu_lock(view);
-					viewcmn_putcaption(view);
-					InvalidateRect(hwnd, NULL, TRUE);
-					break;
 			}
 			break;
 
@@ -73,29 +66,29 @@ LRESULT CALLBACK view1mb_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 
 void view1mb_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 
+	if (src) {
+		UINT32 seg4 = src->seg << 4;
+		switch(src->type) {
+			case VIEWMODE_SEG:
+			case VIEWMODE_STK:
+				dst->pos = seg4 + src->pos * src->bytesperline;
+				break;
+
+			case VIEWMODE_ASM:
+				dst->pos = seg4 + src->off;
+				break;
+
+			default:
+				dst->pos = 0;
+				break;
+		}
+	}
 	dst->type = VIEWMODE_1MB;
 	dst->memsize = 0x10fff0;
 	dst->bytesperline = 16;
 	dst->mul = 2;
 	dst->seg = 0;
+
+	dst->pos /= dst->bytesperline;
 	viewmem_init(dst, src);
-	if (src) {
-		switch(src->type) {
-			case VIEWMODE_SEG:
-				dst->pos = src->seg + src->pos;
-				break;
-
-			case VIEWMODE_1MB:
-				dst->pos = src->pos;
-				break;
-
-			case VIEWMODE_ASM:
-				dst->pos = src->seg;
-				break;
-
-			default:
-				src = NULL;
-				break;
-		}
-	}
 }

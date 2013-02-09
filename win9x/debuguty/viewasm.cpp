@@ -283,9 +283,19 @@ void viewasm_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 
 	if (src) {
 		switch(src->type) {
-			case VIEWMODE_ASM:
-				dst->seg = src->seg;
-				dst->off = src->off;
+			case VIEWMODE_SEG:
+				dst->off = src->cursor - (src->seg << 4);
+				break;
+
+			case VIEWMODE_1MB:
+				if (dst->pos < 0x10000) {
+					dst->seg = (UINT16)dst->pos;
+					dst->off = src->cursor - (src->seg << 4);
+				}
+				else {
+					dst->seg = 0xffff;
+					dst->off = (UINT16)((dst->pos - 0xffff) << 4);
+				}
 				break;
 
 			default:
@@ -296,13 +306,14 @@ void viewasm_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 	if (!src) {
 		dst->seg = CPU_CS;
 		dst->off = CPU_IP;
+		dst->cursor = (dst->seg << 4) + dst->off;
 	}
 	dst->type = VIEWMODE_ASM;
 	dst->memsize = 0x10000;
 	dst->maxline = MAX_UNASM;
+	dst->buf2.type = NULL;
 	dst->mul = 1;
 	dst->pos = 0;
-	dst->cursor = 0;
-	dst->cursorline = -1;
+	dst->cursorline = 0;
 }
 
