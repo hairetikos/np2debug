@@ -183,6 +183,7 @@ static UINT8 is_mem_type(const UNASM_MEMINFO *mi)	{
 		case OP_MEM:
 		case OP_EA:
 		case OP_PEA:
+		case OP1_STR:
 			return TRUE;
 	}
 	return FALSE;

@@ -440,7 +440,27 @@ opeana_ea:
 			*p++ = '3';
 			break;
 
+		case OP1_STR_SRC:
+			mi = &r->meminf[MI_READ];
+			mi->seg = CPU_DS;
+			mi->off = CPU_SI;
+			mi->type = OP1_STR;
+			goto opeana_str;
+
+		case OP1_STR_DST:
+			mi->seg = CPU_ES;
+			mi->off = CPU_DI;
+			mi->type = OP1_STR;
+			goto opeana_str;
+
 		case OP1_STR:
+			r->meminf[MI_READ].seg = CPU_DS;
+			r->meminf[MI_READ].off = CPU_SI;
+			r->meminf[MI_READ].type = OP1_STR;
+			r->meminf[MI_WRITE].seg = CPU_ES;
+			r->meminf[MI_WRITE].off = CPU_DI;
+			r->meminf[MI_WRITE].type = OP1_STR;
+opeana_str:
 			mnemonic += (regtype >> 3);
 			f = (flag >> UAFLAG_REP) & UAFLAG_REPMASK;
 			if (f) {
