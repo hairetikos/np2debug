@@ -111,6 +111,7 @@ const UINT8	*term;
 	UINT8 tmp8;
 	UINT16 tmp16;
 	UINT32 tmp32;
+	UNASM_MEMINFO *mi;
 
 	if (r == NULL) {
 		r = &una;
@@ -198,10 +199,11 @@ const UINT8	*term;
 	ctl >>= 22;
 	p = r->operand;
 
-	r->type_targ = type;
-	r->type_oper = ctl;
-	r->off = 0;
-	r->seg = CPU_DS;
+	r->meminf[MI_WRITE].type = type;
+	r->meminf[MI_READ].type = ctl;
+	r->meminf[MI_READ].off = r->meminf[MI_WRITE].off = 0;
+	r->meminf[MI_READ].seg = r->meminf[MI_WRITE].seg = CPU_DS;
+	mi = &r->meminf[MI_WRITE];
 
 opeana_st:
 	switch(type) {
@@ -271,10 +273,10 @@ opeana_st:
 opeana_ea:
 			f = (flag >> UAFLAG_SOR) & UAFLAG_SOMASK;
 			if (((ope & 7) - 1) == CPU_EBP_INDEX)	{
-				r->seg = CPU_SS;
+				mi->seg = CPU_SS;
 			}
 			if (f) {
-				r->seg = CPU_REGS_SREG(f - 1);
+				mi->seg = CPU_REGS_SREG(f - 1);
 				p[0] = rstr.reg[RSTR_SEG][f - 1][0];
 				p[1] = rstr.reg[RSTR_SEG][f - 1][1];
 				p[2] = ':';
@@ -284,14 +286,14 @@ opeana_ea:
 			if (!(flag & (1 << UAFLAG_ADDR))) {
 				if ((ope & 0xc7) != 0x06) {
 					p = set_str(p, rstr.lea[ope & 7]);
-					r->off += lea_var(ope & 7);
+					mi->off += lea_var(ope & 7);
 					switch(ope & 0xc0) {
 						case 0x40:
 							if (ptr >= term) {
 								return(0);
 							}
 							stmp8 = *ptr++;
-							r->off += stmp8;
+							mi->off += stmp8;
 							p = set_shex(p, stmp8, 8);
 							break;
 
@@ -302,7 +304,7 @@ opeana_ea:
 							}
 							*p++ = '+';
 							tmp16 = LOADINTELWORD(ptr - 2);
-							r->off += tmp16;
+							mi->off += tmp16;
 							p = set_hex(p, tmp16, 16);
 							break;
 					}
@@ -313,7 +315,7 @@ opeana_ea:
 						return(0);
 					}
 					tmp16 = LOADINTELWORD(ptr - 2);
-					r->off += tmp16;
+					mi->off += tmp16;
 					p = set_hex(p, tmp16, 16);
 				}
 			}
@@ -388,7 +390,7 @@ opeana_ea:
 		case OP_MEM:
 			f = (flag >> UAFLAG_SOR) & UAFLAG_SOMASK;
 			if (f) {
-				r->seg = CPU_REGS_SREG(f - 1);
+				mi->seg = CPU_REGS_SREG(f - 1);
 				p[0] = rstr.reg[RSTR_SEG][f - 1][0];
 				p[1] = rstr.reg[RSTR_SEG][f - 1][1];
 				p[2] = ':';
@@ -401,7 +403,7 @@ opeana_ea:
 					return(0);
 				}
 				tmp16 = LOADINTELWORD(ptr - 2);
-				r->off += tmp16;
+				mi->off += tmp16;
 				p = set_hex(p, tmp16, 16);
 			}
 			else {
@@ -410,7 +412,7 @@ opeana_ea:
 					return(0);
 				}
 				tmp32 = LOADINTELDWORD(ptr - 4);
-				r->off += tmp32;
+				mi->off += tmp32;
 				p = set_hex(p, tmp32, 32);
 			}
 			*p++ = ']';
@@ -447,9 +449,10 @@ opeana_ea:
 			}
 			f = (flag >> UAFLAG_SOR) & UAFLAG_SOMASK;
 			if (f) {
+				mi->seg = CPU_REGS_SREG(f - 1);
 				p[0] = ' ';
 				p[1] = rstr.reg[RSTR_SEG][f - 1][0];
-				p[1] = rstr.reg[RSTR_SEG][f - 1][1];
+				p[2] = rstr.reg[RSTR_SEG][f - 1][1];
 				p[3] = ':';
 				p += 4;
 			}
@@ -623,6 +626,7 @@ opeana_ea:
 		default:
 			return(0);
 	}
+	mi = &r->meminf[MI_READ];
 	type = ctl & 0x1f;
 	ctl >>= 5;
 	if (type) {

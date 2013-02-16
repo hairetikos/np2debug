@@ -1,12 +1,20 @@
 enum OPTYPE;
 
+enum {
+	MI_WRITE = 0,
+	MI_READ = 1
+};
+
+typedef struct {
+	UINT8 type;
+	UINT16 seg;
+	UINT16 off;
+} UNASM_MEMINFO;
+
 typedef struct _UNASM_t {
 const char	*mnemonic;
 	char	operand[44];
-	UINT8 type_targ;
-	UINT8 type_oper;
-	UINT16 seg;
-	UINT16 off;
+	UNASM_MEMINFO meminf[2];
 } _UNASM, *UNASM;
 
 

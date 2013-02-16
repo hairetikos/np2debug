@@ -174,9 +174,12 @@ BREAKPOINT* np2break_is_write(UINT16 seg, UINT16 off)	{
 	return np2break_is_flag(seg, off, NP2BP_WRITE);
 }
 
-static UINT8 is_mem_type(const UINT8 type)	{
+static UINT8 is_mem_type(const UNASM_MEMINFO *mi)	{
 
-	switch(type)	{
+	if(!mi->off)	{
+		return FALSE;
+	}
+	switch(mi->type)	{
 		case OP_MEM:
 		case OP_EA:
 		case OP_PEA:
@@ -232,16 +235,13 @@ UINT32 np2break_is_next()	{
 	}
 
 	unasm_next(&una);
-	if(
-		una.off && 
-		(stricmp(una.mnemonic, "lea") && stricmp(una.mnemonic, "les"))
-	  )	{
-		if(is_mem_type(una.type_oper))	{
-			bp = np2break_is_read(una.seg, una.off);
+	if(stricmp(una.mnemonic, "lea") && stricmp(una.mnemonic, "les"))	{
+		if(is_mem_type(&una.meminf[MI_READ]))	{
+			bp = np2break_is_read(una.meminf[MI_READ].seg, una.meminf[MI_READ].off);
 			type = NP2BP_READ;
 #ifndef DEBUG
-		} else if(is_mem_type(una.type_targ))	{
-			bp = np2break_is_write(una.seg, una.off);
+		} else if(is_mem_type(&una.meminf[MI_WRITE]))	{
+			bp = np2break_is_write(una.meminf[MI_WRITE].seg, una.meminf[MI_WRITE].off);
 			type = NP2BP_WRITE;
 #endif
 		}
