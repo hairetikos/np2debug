@@ -121,7 +121,6 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 			view->buf2.arg = seg4 + view->off;
 			off = view->off;
 			for (i=0; i<(view->maxline - 1); i++) {
-					
 				*r++ = off;
 				step = viewasm_unasm_next(NULL, buf, view, off);
 				off += (UINT16)step;
@@ -155,7 +154,7 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 			p++;
 		}
 		TextOut(hdc, x, y, str, i * 2);
-		x += 13 * np2viewfontwidth;
+		x += 15 * np2viewfontwidth;
 #if defined(UNICODE)
 		TextOut(hdc, x, y, cnv, MultiByteToWideChar(CP_ACP, 
 					MB_PRECOMPOSED, una.mnemonic, -1, cnv, NELEMENTS(cnv)));

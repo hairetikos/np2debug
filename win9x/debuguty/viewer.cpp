@@ -119,6 +119,9 @@ void viewer_edit_dlg(NP2VIEW_T *view, HWND hWnd)	{
 		if(ed->bytes_len > 0)	{
 			memcpy(mem + view->cursor, ed->bytes, ed->bytes_len);
 			InvalidateRect(view->clientwnd, NULL, TRUE);
+			// Invalidate secondary buffer, too.
+			// Important for Unassemble mode, where the instruction offsets most likely change
+			view->buf2.arg = NULL;
 		}
 	}
 	winuileave();
