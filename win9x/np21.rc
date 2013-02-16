@@ -193,7 +193,7 @@ IDR_MAIN MENU
             MENUITEM "&11.6MB", IDM_MEM116
             MENUITEM "&13.6MB", IDM_MEM136
         }
-        MENUITEM "&Mouse", IDM_MOUSE
+        MENUITEM "&Mouse (toggle with middle button)", IDM_MOUSE
         MENUITEM SEPARATOR
         MENUITEM "Se&rial option...", IDM_SERIAL1
         MENUITEM SEPARATOR
