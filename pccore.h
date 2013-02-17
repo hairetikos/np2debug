@@ -2,6 +2,11 @@
 #include	"nevent.h"
 #include	"statsave.h"
 
+#define MAX_SASI 2
+#define MAX_SCSI 4
+#define MAX_IDE 3
+#define MAX_DIR 3
+
 enum {
 	PCBASECLOCK25		= 2457600,
 	PCBASECLOCK20		= 1996800
@@ -104,9 +109,9 @@ typedef struct {
 	UINT8	PROTECTMEM;
 	UINT8	hdrvacc;
 
-	OEMCHAR	sasihdd[2][MAX_PATH];									// ver0.74
+	OEMCHAR	sasihdd[MAX_SASI][MAX_PATH];									// ver0.74
 #if defined(SUPPORT_SCSI)
-	OEMCHAR	scsihdd[4][MAX_PATH];									// ver0.74
+	OEMCHAR	scsihdd[MAX_SCSI][MAX_PATH];									// ver0.74
 #endif
 	OEMCHAR	fontfile[MAX_PATH];
 	OEMCHAR	biospath[MAX_PATH];

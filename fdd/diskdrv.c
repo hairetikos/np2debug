@@ -30,14 +30,14 @@ void diskdrv_setsxsi(REG8 drv, const OEMCHAR *fname) {
 	p = NULL;
 	leng = 0;
 	if (!(drv & 0x20)) {			// SASI or IDE
-		if (num < 2) {
+		if (num < MAX_SASI) {
 			p = np2cfg.sasihdd[num];
 			leng = NELEMENTS(np2cfg.sasihdd[0]);
 		}
 	}
 #if defined(SUPPORT_SCSI)
 	else {							// SCSI
-		if (num < 4) {
+		if (num < MAX_SCSI) {
 			p = np2cfg.scsihdd[num];
 			leng = NELEMENTS(np2cfg.scsihdd[0]);
 		}
@@ -63,13 +63,13 @@ OEMCHAR *diskdrv_getsxsi(REG8 drv) {
 
 	num = drv & 0x0f;
 	if (!(drv & 0x20)) {			// SASI or IDE
-		if (num < 2) {
+		if (num < MAX_SASI) {
 			return(np2cfg.sasihdd[num]);
 		}
 	}
 #if defined(SUPPORT_SCSI)
 	else {							// SCSI
-		if (num < 4) {
+		if (num < MAX_SCSI) {
 			return(np2cfg.scsihdd[num]);
 		}
 	}
@@ -84,7 +84,7 @@ void diskdrv_hddbind(void) {
 	REG8	drv;
 
 	drv = 0;
-	for (i=0; i<2; i++) {
+	for (i=0; i<MAX_SASI; i++) {
 		sxsi_devclose(drv);
 		sxsi_setdevtype(drv, SXSIDEV_HDD);
 		if (sxsi_devopen(drv, np2cfg.sasihdd[i]) == SUCCESS) {
@@ -96,7 +96,7 @@ void diskdrv_hddbind(void) {
 	}
 #if defined(SUPPORT_SCSI)
 	drv = 0x20;
-	for (i=0; i<4; i++) {
+	for (i=0; i<MAX_SCSI; i++) {
 		sxsi_devclose(drv);
 		sxsi_setdevtype(drv, SXSIDEV_HDD);
 		if (sxsi_devopen(drv, np2cfg.scsihdd[i]) == SUCCESS) {

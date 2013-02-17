@@ -1569,7 +1569,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 #endif
 
 //	リセットしてから… コマンドラインのディスク挿入。
-	for (i=0; i<4; i++) {
+	for (i=0; i<MAX_FDDFILE; i++) {
 		if (np2arg.disk[i]) {
 			diskdrv_readyfdd((REG8)i, np2arg.disk[i], 0);
 		}
