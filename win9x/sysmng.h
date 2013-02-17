@@ -48,6 +48,9 @@ void sysmng_hddaccess(UINT8 drv);
 #define	sysmng_hddaccess(a)												\
 			toolwin_hddaccess((a));
 
+#define	sysmng_update_drives()												\
+			xmenu_update();
+
 #endif
 
 
@@ -59,6 +62,8 @@ void sysmng_updatecaption(UINT8 flag);
 
 void toolwin_fddaccess(UINT8 drv);
 void toolwin_hddaccess(UINT8 drv);
+
+void xmenu_update();
 
 #ifdef __cplusplus
 }

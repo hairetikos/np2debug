@@ -98,6 +98,7 @@ const OEMCHAR	*p;
 			sysmng_update(SYS_UPDATEOSCFG);
 			diskdrv_setfdd(drv, path, readonly);
 			toolwin_setfdd(drv, path);
+			sysmng_update_drives();
 		}
 	}
 }
@@ -148,6 +149,7 @@ const OEMCHAR	*p;
 		file_cpyname(hddfolder, path, NELEMENTS(hddfolder));
 		sysmng_update(SYS_UPDATEOSCFG);
 		diskdrv_sethdd(drv, path);
+		sysmng_update_drives();
 	}
 }
 

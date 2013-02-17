@@ -39,20 +39,14 @@
 #define IDR_SYSDEBUG                    205
 #define IDR_MAIN                        211
 #define IDR_STAT                        212
-#define IDR_FDD1MENU                    221
-#define IDR_FDD2MENU                    222
-#define IDR_FDD3MENU                    223
-#define IDR_FDD4MENU                    224
-#define IDR_IDEMENU                     231
-#define IDR_SASIMENU                    232
-#define IDR_SCSIMENU                    233
-#define IDR_PXMENU                      241
-#define IDR_WAVEREC                     251
+#define IDR_PXMENU                      221
+#define IDR_WAVEREC                     231
 #define IDR_CLOSE                       301
 #define IDR_TOOLWIN                     311
 #define IDR_KEYDISP                     321
 #define IDR_VIEW                        331
 #define IDR_TRACE                       341
+#define IDR_NEWDISK                     351
 #define IDC_BASECLOCK                   11101
 #define IDC_MULTIPLE                    11102
 #define IDC_CLOCKMSG                    11103
@@ -433,6 +427,7 @@
 #define IDM_FLAGLOAD7                   40258
 #define IDM_FLAGLOAD8                   40259
 #define IDM_FLAGLOAD9                   40260
+
 #define IDM_FDD1OPEN                    40301
 #define IDM_FDD2OPEN                    40302
 #define IDM_FDD3OPEN                    40303
@@ -441,6 +436,7 @@
 #define IDM_FDD2EJECT                   40312
 #define IDM_FDD3EJECT                   40313
 #define IDM_FDD4EJECT                   40314
+
 #define IDM_IDE0OPEN                    40401
 #define IDM_IDE1OPEN                    40402
 #define IDM_IDE2OPEN                    40403
@@ -449,6 +445,7 @@
 #define IDM_IDE1EJECT                   40412
 #define IDM_IDE2EJECT                   40413
 #define IDM_IDE3EJECT                   40414
+
 #define IDM_SCSI0OPEN                   40421
 #define IDM_SCSI1OPEN                   40422
 #define IDM_SCSI2OPEN                   40423
@@ -465,7 +462,25 @@
 #define IDM_SCSI5EJECT                  40436
 #define IDM_SCSI6EJECT                  40437
 #define IDM_SCSI7EJECT                  40438
-#define IDM_SXSIOPTION                  40441
+
+#define IDM_FDD1CUR                     40461
+#define IDM_FDD2CUR                     40462
+#define IDM_FDD3CUR                     40463
+#define IDM_FDD4CUR                     40464
+
+#define IDM_IDE0CUR                     40471
+#define IDM_IDE1CUR                     40472
+#define IDM_IDE2CUR                     40473
+#define IDM_IDE3CUR                     40474
+#define IDM_SCSI0CUR                    40481
+#define IDM_SCSI1CUR                    40482
+#define IDM_SCSI2CUR                    40483
+#define IDM_SCSI3CUR                    40484
+#define IDM_SCSI4CUR                    40485
+#define IDM_SCSI5CUR                    40486
+#define IDM_SCSI6CUR                    40487
+#define IDM_SCSI7CUR                    40488
+
 #define IDM_WINDOW                      40501
 #define IDM_FULLSCREEN                  40502
 #define IDM_ROLNORMAL                   40503

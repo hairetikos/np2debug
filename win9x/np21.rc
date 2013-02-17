@@ -28,66 +28,9 @@ IDR_CLOSE MENU
     MENUITEM "&Close", IDM_CLOSE
 }
 
-IDR_FDD1MENU MENU
+IDR_NEWDISK MENU
 {
-    POPUP "FDD1"
-    {
-        MENUITEM "&Open...", IDM_FDD1OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Eject", IDM_FDD1EJECT
-    }
-}
-
-IDR_FDD2MENU MENU
-{
-    POPUP "FDD&2"
-    {
-        MENUITEM "&Open...", IDM_FDD2OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Eject", IDM_FDD2EJECT
-    }
-}
-
-IDR_FDD3MENU MENU
-{
-    POPUP "FDD&3"
-    {
-        MENUITEM "&Open...", IDM_FDD3OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Eject", IDM_FDD3EJECT
-    }
-}
-
-IDR_FDD4MENU MENU
-{
-    POPUP "FDD&4"
-    {
-        MENUITEM "&Open...", IDM_FDD4OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Eject", IDM_FDD4EJECT
-    }
-}
-
-IDR_IDEMENU MENU
-{
-    POPUP "IDE #0"
-    {
-        MENUITEM "&Open...", IDM_IDE0OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Remove", IDM_IDE0EJECT
-    }
-    POPUP "IDE #1"
-    {
-        MENUITEM "&Open...", IDM_IDE1OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Remove", IDM_IDE1EJECT
-    }
-    POPUP "IDE #2"
-    {
-        MENUITEM "&Open...", IDM_IDE2OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Eject", IDM_IDE2EJECT
-    }
+    MENUITEM "&New disk...", IDM_NEWDISK
 }
 
 IDR_KEYDISP MENU
@@ -106,7 +49,6 @@ IDR_MAIN MENU
         MENUITEM "&Reset", IDM_RESET
         MENUITEM SEPARATOR
         MENUITEM "&Configure...", IDM_CONFIG
-        MENUITEM "&New disk...", IDM_NEWDISK
         MENUITEM "&Font...", IDM_CHANGEFONT
         MENUITEM SEPARATOR
         MENUITEM "&Centering", IDM_SCREENCENTER
@@ -239,50 +181,6 @@ IDR_PXMENU MENU
     MENUITEM "Otomi x2 + 86", IDM_PX2
 }
 
-IDR_SASIMENU MENU
-{
-    POPUP "SASI #0"
-    {
-        MENUITEM "&Open...", IDM_IDE0OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Remove", IDM_IDE0EJECT
-    }
-    POPUP "SASI #1"
-    {
-        MENUITEM "&Open...", IDM_IDE1OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Remove", IDM_IDE1EJECT
-    }
-}
-
-IDR_SCSIMENU MENU
-{
-    POPUP "SCSI #0"
-    {
-        MENUITEM "&Open...", IDM_SCSI0OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Remove", IDM_SCSI0EJECT
-    }
-    POPUP "SCSI #1"
-    {
-        MENUITEM "&Open...", IDM_SCSI1OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Remove", IDM_SCSI1EJECT
-    }
-    POPUP "SCSI #2"
-    {
-        MENUITEM "&Open...", IDM_SCSI2OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Remove", IDM_SCSI2EJECT
-    }
-    POPUP "SCSI #3"
-    {
-        MENUITEM "&Open...", IDM_SCSI3OPEN
-        MENUITEM SEPARATOR
-        MENUITEM "&Remove", IDM_SCSI3EJECT
-    }
-}
-
 IDR_STAT MENU
 {
     POPUP "S&tat"
@@ -359,11 +257,11 @@ IDR_VIEW MENU
     }
     POPUP "&Edit"
     {
-		MENUITEM "&Edit memory at current position\tE", IDM_EDIT_MEMORY
-		MENUITEM SEPARATOR
+        MENUITEM "&Edit memory at current position\tE", IDM_EDIT_MEMORY
+        MENUITEM SEPARATOR
         MENUITEM "&Go to...\tCtrl+G", IDM_SETSEG
         MENUITEM "&Find...\tCtrl+F", IDM_FIND
-		MENUITEM "Find Again\tF3", IDM_FINDAGAIN, GRAYED
+        MENUITEM "Find Again\tF3", IDM_FINDAGAIN, GRAYED
         MENUITEM SEPARATOR
         MENUITEM "Seg = &CS", IDM_SEGCS
         MENUITEM "Seg = &DS", IDM_SEGDS
@@ -444,7 +342,7 @@ FONT 8, "MS Shell Dlg"
     EDITTEXT        IDC_ADDR_OFF, 47, 19, 24, 12, ES_RIGHT
     GROUPBOX        "Real address", -1, 83, 7, 50, 30
     EDITTEXT        IDC_ADDR_REAL, 90, 19, 37, 12, WS_DISABLED | ES_RIGHT
-	LTEXT           "You can enter 16- and 32-bit CPU register names\n(e.g. ip, eax) to apply the current value in that register.", -1, 10, 43, 170, 16, SS_LEFT
+    LTEXT           "You can enter 16- and 32-bit CPU register names\n(e.g. ip, eax) to apply the current value in that register.", -1, 10, 43, 170, 16, SS_LEFT
 }
 
 IDD_CALENDAR DIALOGEX 0, 0, 164, 80
@@ -945,7 +843,7 @@ STRINGTABLE
     IDS_CAPTION_TOOL              "NP2 tool"
     IDS_CAPTION_KEYDISP           "Note display"
     IDS_CAPTION_SOFTKEY           "Soft keyboard"
-    IDS_HDD                       "&Harddisk"
+    IDS_HDD                       "&Disks"
     IDS_SCREENOPTION              "Screen option"
     IDS_SOUNDOPTION               "Sound board option"
     IDS_SERIALOPTION              "Serial option"

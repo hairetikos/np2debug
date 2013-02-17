@@ -6,6 +6,8 @@
 #include	"menu.h"
 #include	"np2class.h"
 #include	"pccore.h"
+#include	"fddfile.h"
+#include	"dosio.h"
 
 
 BOOL menu_searchmenu(HMENU hMenu, UINT uID, HMENU *phmenuRet, int *pnPos)
@@ -231,6 +233,29 @@ void xmenu_setscrnmul(UINT8 value) {
 	CheckMenuItem(hmenu, IDM_SCRNMUL16, MFCHECK(value == 16));
 }
 
+static BOOL xmenu_drive_add(HMENU hMenu, int nPos, UINT id_drive, UINT id_open, UINT id_remove) {
+
+	HMENU drive_menu = CreateMenu();
+	MENUITEMINFO mii;
+	UINT pos = 0;
+
+	// Drive menu
+	InsertMenu(drive_menu, pos++, MF_BYPOSITION | MF_STRING	, id_open, _T("&Open..."));
+	InsertMenu(drive_menu, pos++, MF_SEPARATOR, 0, NULL);
+	InsertMenu(drive_menu, pos++, MF_BYPOSITION | MF_STRING	, id_remove, _T("&Remove"));
+	SetMenuDefaultItem(drive_menu, 0, MF_BYPOSITION);
+
+	// Drive item
+	ZeroMemory(&mii, sizeof(MENUITEMINFO));
+	mii.cbSize = sizeof(MENUITEMINFO);
+	mii.fMask = MIIM_ID | MIIM_SUBMENU | MIIM_TYPE;
+	mii.wID = id_drive;
+	mii.hSubMenu = drive_menu;
+	// Yes, this is necessary for the menu item to appear
+	mii.fType = MFT_STRING;
+	mii.dwTypeData = _T(" ");
+	return InsertMenuItem(hMenu, nPos, MF_BYPOSITION, &mii);
+}
 
 // ----
 
@@ -249,28 +274,35 @@ void xmenu_initialize(void)
 	nPos += menu_addmenures(hMenu, nPos, IDR_STAT, FALSE);
 #endif
 
-	for (i=0; i<4; i++)
-	{
-		if (np2cfg.fddequip & (1 << i))
-		{
-			nPos += menu_addmenures(hMenu, nPos, IDR_FDD1MENU + i, FALSE);
-		}
-	}
-
 	hmenuSub = CreatePopupMenu();
-	if (hmenuSub)
-	{
+	if (hmenuSub)	{
 		nSubPos = 0;
+		for (i=0; i<MAX_FDDFILE; i++)	{
+			if (np2cfg.fddequip & (1 << i))	{
+				nSubPos += xmenu_drive_add(hmenuSub, nSubPos, IDM_FDD1CUR + i, IDM_FDD1OPEN + i, IDM_FDD1EJECT + i);
+			}
+		}
+		InsertMenu(hmenuSub, nSubPos++, MF_SEPARATOR, 0, NULL);
 #if defined(SUPPORT_IDEIO)
-		nSubPos += menu_addmenures(hmenuSub, nSubPos, IDR_IDEMENU, FALSE);
+		for (i=0; i<MAX_IDE; i++)	{
+			nSubPos += xmenu_drive_add(hmenuSub, nSubPos, IDM_IDE0CUR + i, IDM_IDE0OPEN + i, IDM_IDE0EJECT + i);
+		}
 #else
-		nSubPos += menu_addmenures(hmenuSub, nSubPos, IDR_SASIMENU, FALSE);
+		for (i=0; i<MAX_SASI; i++)	{
+			nSubPos += xmenu_drive_add(hmenuSub, nSubPos, IDM_IDE0CUR + i, IDM_IDE0OPEN + i, IDM_IDE0EJECT + i);
+		}
 #endif
+		InsertMenu(hmenuSub, nSubPos++, MF_SEPARATOR, 0, NULL);
 #if defined(SUPPORT_SCSI)
-		nSubPos += menu_addmenures(hmenuSub, nSubPos, IDR_SCSIMENU, TRUE);
+		for (i=0; i<MAX_SCSI; i++)	{
+			nSubPos += xmenu_drive_add(hmenuSub, nSubPos, IDM_SCSI0CUR + i, IDM_SCSI0OPEN + i, IDM_SCSI0EJECT + i);
+		}
 #endif
-		menu_insertmenures(hMenu, nPos, MF_BYPOSITION | MF_POPUP,
-												(UINT_PTR)hmenuSub, IDS_HDD);
+
+		nSubPos += menu_addmenures(hmenuSub, nSubPos, IDR_NEWDISK, TRUE);
+
+		menu_insertmenures(hMenu, nPos, MF_BYPOSITION | MF_POPUP, (UINT_PTR)hmenuSub, IDS_HDD);
+		xmenu_update();
 	}
 
 #if defined(SUPPORT_PX)
@@ -535,3 +567,60 @@ void xmenu_setsstp(UINT8 value) {
 	CheckMenuItem(np2class_gethmenu(g_hWndMain), IDM_SSTP, MFCHECK(value));
 }
 
+static BOOL xmenu_drive_update(HMENU hMenu, UINT item, OEMCHAR *prefix, OEMCHAR *image_fn) {
+
+	BOOL ret;
+	MENUITEMINFO mii;
+	OEMCHAR *str;
+	BOOL check = image_fn[0] != '\0';
+	const OEMCHAR *none_str = _T("");
+
+	// A good lesson for life. Don't make assumptions.
+	str = (OEMCHAR *)alloca( (lstrlen(prefix) + lstrlen(none_str) + lstrlen(image_fn) + 1) * sizeof(OEMCHAR));
+
+	ZeroMemory(&mii, sizeof(mii));
+	mii.cbSize = sizeof(mii);
+	mii.fMask = MIIM_ID | MIIM_STATE | MIIM_DATA | MIIM_TYPE | MIIM_SUBMENU;
+
+	ret = GetMenuItemInfo(hMenu, item, FALSE, &mii);
+	if(!ret)	{
+		return FALSE;
+	}
+	lstrcpy(str, prefix);
+	lstrcat(str, check ? image_fn : none_str);
+
+	mii.fType |= MFT_RADIOCHECK | MFT_STRING;
+	mii.fState = (check ? MFS_CHECKED : MFS_UNCHECKED);
+	mii.dwTypeData = str;
+	return SetMenuItemInfo(hMenu, item, FALSE, &mii);
+}
+
+void xmenu_update() {
+
+	HMENU hMenu = np2class_gethmenu(g_hWndMain);
+	int i;
+	OEMCHAR prefix[32];
+
+	for(i = 0; i < MAX_FDDFILE; i++)	{
+		wsprintf(prefix, _T("FDD%d: "), i+1);
+		xmenu_drive_update(hMenu, IDM_FDD1CUR + i, prefix, file_getname(fdd_diskname(i)));
+	}
+#if defined(SUPPORT_IDEIO)
+	for(i = 0; i < MAX_IDE; i++)	{
+		wsprintf(prefix, _T("IDE #%d: "), i);
+		xmenu_drive_update(hMenu, IDM_IDE0CUR + i, prefix, file_getname(np2cfg.sasihdd[i]));
+	}
+#else
+	for(i = 0; i < MAX_SASI; i++)	{
+		wsprintf(prefix, _T("SASI #%d: "), i);
+		xmenu_drive_update(hMenu, IDM_IDE0CUR + i, prefix, file_getname(np2cfg.sasihdd[i]));
+	}
+#endif
+#if defined(SUPPORT_SCSI)
+	for(i = 0; i < MAX_SCSI; i++)	{
+		wsprintf(prefix, _T("SCSI #%d: "), i);
+		xmenu_drive_update(hMenu, IDM_SCSI0CUR + i, prefix, file_getname(np2cfg.scsihdd[i]));
+	}
+#endif
+	DrawMenuBar(g_hWndMain);
+}

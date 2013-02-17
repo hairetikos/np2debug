@@ -486,6 +486,7 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 		case IDM_FDD4EJECT:
 			diskdrv_setfdd(uID - IDM_FDD1EJECT, NULL, 0);
 			toolwin_setfdd(uID - IDM_FDD1EJECT, NULL);
+			sysmng_update_drives();
 			break;
 
 		case IDM_IDE0OPEN:
@@ -500,6 +501,7 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 		case IDM_IDE1EJECT:
 		case IDM_IDE2EJECT:
 			diskdrv_sethdd(uID - IDM_IDE0EJECT, NULL);
+			sysmng_update_drives();
 			break;
 
 #if defined(SUPPORT_SCSI)
@@ -517,6 +519,7 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 		case IDM_SCSI2EJECT:
 		case IDM_SCSI3EJECT:
 			diskdrv_sethdd((uID - IDM_SCSI0EJECT) + 0x20, NULL);
+			sysmng_update_drives();
 			break;
 #endif
 

@@ -40,4 +40,4 @@ void xmenu_setbtnmode(UINT8 value);
 void xmenu_setbtnrapid(UINT8 value);
 void xmenu_setmsrapid(UINT8 value);
 void xmenu_setsstp(UINT8 value);
-
+void xmenu_update();
