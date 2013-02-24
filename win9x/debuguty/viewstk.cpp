@@ -78,9 +78,6 @@ void viewstk_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 	dst->memsize = 0x10000;
 	dst->maxline = dst->memsize / dst->bytesperline;
 
-	viewstk_reload(dst);
-
 	ZeroMemory(&dst->cp_bytes, sizeof(VIEWCELLPOS));
-	ZeroMemory(&dst->cp_chars, sizeof(VIEWCELLPOS));
-	
+	ZeroMemory(&dst->cp_chars, sizeof(VIEWCELLPOS));	
 }
