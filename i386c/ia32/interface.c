@@ -139,7 +139,7 @@ ia32(void)
 		if(np2break_is_next())	{
 			return FALSE;
 		}
-	} while (CPU_REMCLOCK > 0);
+	} while (CPU_REMCLOCK > 0 && !np2stopemulate);
 	return TRUE;
 }
 
