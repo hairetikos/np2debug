@@ -184,6 +184,10 @@ typedef struct {
 int CPUCALL parse_selector(selector_t *ssp, UINT16 selector);
 int CPUCALL selector_is_not_present(const selector_t *ssp);
 
+// Converts a segment register value into the real address.
+// Also takes Protected Mode into account!
+UINT32 CPUCALL seg_to_real(UINT16 seg);
+
 #ifdef __cplusplus
 }
 #endif

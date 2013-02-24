@@ -44,7 +44,7 @@ static UINT viewasm_unasm_next(UNASM una, UINT8* hexbuf, NP2VIEW_T *view, UINT16
 	}
 	else {
 		p = hexbuf;
-		viewmem_read(&(view->dmem), (view->seg << 4) + off, hexbuf, 16);
+		viewmem_read(&(view->dmem), seg_to_real(view->seg) + off, hexbuf, 16);
 	}
 	return unasm(una, p, 16, FALSE, off);
 }
@@ -57,8 +57,8 @@ static UINT16 viewasm_line_to_off(NP2VIEW_T *view, UINT16 line)
 static void viewasm_toggle_breakpoint(NP2VIEW_T *view)
 {
 	if(view->cursorline < 0)	return;
-
-	if(np2break_toggle_real(view->cursor, NP2BP_EXECUTE))	{
+	// Protected Mode...
+	if(np2break_toggle(view->seg, view->cursor - seg_to_real(view->seg), NP2BP_EXECUTE))	{
 		InvalidateRect(view->clientwnd, NULL, TRUE);
 	}
 }
@@ -67,7 +67,7 @@ void viewasm_reload(NP2VIEW_T *view)	{
 
 	view->seg = CPU_CS;
 	view->off = CPU_IP;
-	view->cursor = (view->seg << 4) + view->off;
+	view->cursor = seg_to_real(view->seg) + view->off;
 	view->pos = 0;
 	viewcmn_setvscroll(view);
 }
@@ -98,14 +98,14 @@ static void viewasm_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 			else {
 				view->buf1.type = ALLOCTYPE_SEG;
 				view->buf1.arg = view->seg;
-				viewmem_read(&view->dmem, view->buf1.arg << 4, (BYTE *)view->buf1.ptr, view->memsize);
+				viewmem_read(&view->dmem, seg_to_real(view->buf1.arg), (BYTE *)view->buf1.ptr, view->memsize);
 				view->buf2.type = ALLOCTYPE_NONE;
 			}
 			viewcmn_putcaption(view);
 		}
 	}
 
-	seg4 = view->seg << 4;
+	seg4 = seg_to_real(view->seg);
 	pos = view->pos;
 	
 	if ((view->buf2.type != ALLOCTYPE_ASM) ||
@@ -269,7 +269,7 @@ LRESULT CALLBACK viewasm_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 			return(DefWindowProc(hwnd, msg, wp, lp));
 	}
 	if(newcursor != view->cursor)	{
-		view->cursor = newcursor + (view->seg << 4);
+		view->cursor = newcursor + seg_to_real(view->seg);
 		InvalidateRect(hwnd, NULL, TRUE);
 	}
 	return(0L);
@@ -305,7 +305,7 @@ void viewasm_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 	if (!src) {
 		dst->seg = CPU_CS;
 		dst->off = CPU_IP;
-		dst->cursor = (dst->seg << 4) + dst->off;
+		dst->cursor = seg_to_real(dst->seg) + dst->off;
 	}
 	dst->type = VIEWMODE_ASM;
 	dst->memsize = 0x10000;

@@ -376,6 +376,18 @@ selector_is_not_present(const selector_t *ssp)
 	return 0;
 }
 
+UINT32 CPUCALL
+seg_to_real(UINT16 seg)
+{
+	if(CPU_STAT_PM)	{
+		selector_t test;
+		if(parse_selector(&test, seg) == 0)	{
+			return test.desc.u.seg.segbase;
+		}
+	}
+	return seg << 4;
+}
+
 void CPUCALL
 segdesc_init(int idx, UINT16 sreg, descriptor_t *sdp)
 {

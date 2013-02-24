@@ -15,7 +15,7 @@ void viewstk_reload(NP2VIEW_T *view)	{
 	view->seg = CPU_SS;
 	view->off = 0;
 	view->pos = CPU_SP / view->bytesperline;
-	view->cursor = (view->seg << 4) + CPU_SP;
+	view->cursor = seg_to_real(view->seg) + CPU_SP;
 	viewcmn_setvscroll(view);
 }
 
@@ -50,7 +50,7 @@ void viewstk_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 			val = *(UINT16 *)p;
 		}
 		else {
-			viewmem_read(&view->dmem, (view->seg << 4) + off, (UINT8 *)&val, sizeof(UINT16));
+			viewmem_read(&view->dmem, seg_to_real(view->seg) + off, (UINT8 *)&val, sizeof(UINT16));
 		}
 		wsprintf(str, _T("%04x"), val);
 		TextOut(hdc, x, y, str, 4);

@@ -19,159 +19,10 @@ void viewmem_read(VIEWMEM_T *cfg, UINT32 adrs, UINT8 *buf, UINT32 size) {
 	if (!size) {
 		return;
 	}
-
-	// Main Memory
-	if (adrs < 0xa4000) {
-		if ((adrs + size) <= 0xa4000) {
-			CopyMemory(buf, mem + adrs, size);
-			return;
-		}
-		else {
-			UINT32 len;
-			len = 0xa4000 - adrs;
-			CopyMemory(buf, mem + adrs, len);
-			buf += len;
-			size -= len;
-			adrs = 0xa4000;
-		}
-	}
-
-	// CG-Windowは無視
-	if (adrs < 0xa5000) {
-		if ((adrs + size) <= 0xa5000) {
-			ZeroMemory(buf, size);
-			return;
-		}
-		else {
-			UINT32 len;
-			len = 0xa5000 - adrs;
-			ZeroMemory(buf, len);
-			buf += len;
-			size -= len;
-			adrs = 0xa5000;
-		}
-	}
-
-	// Main Memory
-	if (adrs < 0xa8000) {
-		if ((adrs + size) <= 0xa8000) {
-			CopyMemory(buf, mem + adrs, size);
-			return;
-		}
-		else {
-			UINT32 len;
-			len = 0xa8000 - adrs;
-			CopyMemory(buf, mem + adrs, len);
-			buf += len;
-			size -= len;
-			adrs = 0xa8000;
-		}
-	}
-
-	// Video Memory
-	if (adrs < 0xc0000) {
-		UINT32 page;
-		page = ((cfg->vram)?VRAM_STEP:0);
-		if ((adrs + size) <= 0xc0000) {
-			CopyMemory(buf, mem + page + adrs, size);
-			return;
-		}
-		else {
-			UINT32 len;
-			len = 0xc0000 - adrs;
-			CopyMemory(buf, mem + page + adrs, len);
-			buf += len;
-			size -= len;
-			adrs = 0xc0000;
-		}
-	}
-
-	// Main Memory
-	if (adrs < 0xe0000) {
-		if ((adrs + size) <= 0xe0000) {
-			CopyMemory(buf, mem + adrs, size);
-			return;
-		}
-		else {
-			UINT32 len;
-			len = 0xe0000 - adrs;
-			CopyMemory(buf, mem + adrs, len);
-			buf += len;
-			size -= len;
-			adrs = 0xe0000;
-		}
-	}
-
-	// Video Memory
-	if (adrs < 0xe8000) {
-		UINT32 page;
-		page = ((cfg->vram)?VRAM_STEP:0);
-		if ((adrs + size) <= 0xe8000) {
-			CopyMemory(buf, mem + page + adrs, size);
-			return;
-		}
-		else {
-			UINT32 len;
-			len = 0xe8000 - adrs;
-			CopyMemory(buf, mem + page + adrs, len);
-			buf += len;
-			size -= len;
-			adrs = 0xe8000;
-		}
-	}
-
-	// BIOS
-	if (adrs < 0x0f8000) {
-		if ((adrs + size) <= 0x0f8000) {
-			CopyMemory(buf, mem + adrs, size);
-			return;
-		}
-		else {
-			UINT32 len;
-			len = 0x0f8000 - adrs;
-			CopyMemory(buf, mem + adrs, len);
-			buf += len;
-			size -= len;
-			adrs = 0x0f8000;
-		}
-	}
-
-	// BIOS/ITF
-	if (adrs < 0x100000) {
-		UINT32 page;
-		page = ((cfg->itf)?VRAM_STEP:0);
-		if ((adrs + size) <= 0x100000) {
-			CopyMemory(buf, mem + page + adrs, size);
-			return;
-		}
-		else {
-			UINT32 len;
-			len = 0x100000 - adrs;
-			CopyMemory(buf, mem + page + adrs, len);
-			buf += len;
-			size -= len;
-			adrs = 0x100000;
-		}
-	}
-
-	// HMA
-	if (adrs < 0x10fff0) {
-		UINT32 adrs2;
-		adrs2 = adrs & 0xffff;
-		adrs2 += ((cfg->A20)?VRAM_STEP:0);
-		if ((adrs + size) <= 0x10fff0) {
-			CopyMemory(buf, mem + adrs2, size);
-			return;
-		}
-		else {
-			UINT32 len;
-			len = 0x10fff0 - adrs;
-			CopyMemory(buf, mem + adrs2, len);
-			buf += len;
-			size -= len;
-			adrs = 0x10fff0;
-		}
-	}
+	// There used to be lots of checks of [adrs] against various boundaries here.
+	// I've deleted those - we really don't need *yet another* memory abstraction layer
+	// ~ Nmlgc
+	MEML_READS(adrs, buf, size);
 }
 
 void viewmem_lock_alloc(NP2VIEW_T *view, UINT32 alloctype)	{
@@ -186,7 +37,7 @@ void viewmem_lock_alloc(NP2VIEW_T *view, UINT32 alloctype)	{
 			else {
 				view->buf1.type = alloctype;
 				view->buf1.arg = view->seg;
-				viewmem_read(&view->dmem, view->buf1.arg << 4, (UINT8 *)view->buf1.ptr, view->memsize);
+				viewmem_read(&view->dmem, seg_to_real(view->buf1.arg), (UINT8 *)view->buf1.ptr, view->memsize);
 			}
 			viewcmn_putcaption(view);
 		}
@@ -228,7 +79,7 @@ void viewmem_paint(NP2VIEW_T *view, RECT *rc, HDC hdc, UINT32 alloctype, BOOL se
 	off = (view->pos) * view->bytesperline;
 	mad = off;
 	if(segmented)	{
-		mad += (((UINT32)view->seg) << 4);
+		mad += seg_to_real(view->seg);
 	}
 
 	viewmem_lock_alloc(view, alloctype);
@@ -311,7 +162,7 @@ LONG viewmem_mouse_to_cursor(NP2VIEW_T *view, HWND hwnd, POINTS mpos, VIEWCELLPO
 static LONG viewmem_find(NP2VIEW_T *view, EDITDATA *_fd)	{
 
 	void *needle;
-	UINT32 seg4 = view->seg << 4;
+	UINT32 seg4 = seg_to_real(view->seg);
 	LONG newcursor = view->cursor - seg4;
 
 	static EDITDATA* fd = NULL;
@@ -340,7 +191,7 @@ static LONG viewmem_find(NP2VIEW_T *view, EDITDATA *_fd)	{
 
 LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
 
-	UINT32 seg4 = view->seg << 4;
+	UINT32 seg4 = seg_to_real(view->seg);
 	LONG oldcursor = view->cursor - seg4;
 	LONG newcursor = oldcursor;
 	EDITDATA *ed;

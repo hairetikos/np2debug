@@ -115,9 +115,9 @@ void viewer_edit_dlg(NP2VIEW_T *view, HWND hWnd)	{
 	winuienter();
 	ed = (EDITDATA*)DialogBox(g_hInstance, MAKEINTRESOURCE(IDD_EDIT), view->clientwnd, (DLGPROC)EditDialogProc);
 	if(ed)	{
-		viewstat_memory_edit(view, ed);
 		if(ed->bytes_len > 0)	{
-			memcpy(mem + view->cursor, ed->bytes, ed->bytes_len);
+			viewstat_memory_edit(view, ed);
+			MEML_WRITES(view->cursor, ed->bytes, ed->bytes_len);
 			InvalidateRect(view->clientwnd, NULL, TRUE);
 			// Invalidate secondary buffer, too.
 			// Important for Unassemble mode, where the instruction offsets most likely change

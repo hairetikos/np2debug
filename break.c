@@ -279,7 +279,7 @@ UINT unasm_next(UNASM una)	{
 	UINT32 addr;
 	UINT8 ins[16];
 
-	addr = (CPU_CS<<4)+CPU_IP;
+	addr = (CPU_STAT_PM ? CS_BASE : (CPU_CS<<4))+CPU_IP;
 	memp_reads(addr, ins, 16);
 	return unasm(una, ins, 16, FALSE, addr);
 }

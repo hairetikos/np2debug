@@ -4,6 +4,7 @@
 #include	"dialogs.h"
 #include	"viewer.h"
 #include	"viewstat.h"
+#include	"cpucore.h"
 #include	"break.h"
 
 /// -------
@@ -41,7 +42,7 @@ static void viewstat_edit_base(NP2VIEW_T *view, EDITDATA *fd, WCHAR *msg)	{
 
 	print_addr(str_addr, view->seg, view->cursor, view->type != VIEWMODE_1MB);
 	wsprintfW(str_msg, msg, fd->str, edit_type_str(fd), str_addr);
-	SendMessage(view->statwnd, SB_SETTEXT, 1, (LPARAM)str_msg);
+	SendMessage(view->statwnd, SB_SETTEXT, 2, (LPARAM)str_msg);
 }
 
 void viewstat_found(NP2VIEW_T *view, EDITDATA *fd)	{
@@ -74,7 +75,7 @@ void viewstat_breakpoint(NP2VIEW_T *view, UINT8 type, UINT32 addr)	{
 
 	print_addr(str_addr, 0, addr, FALSE);
 	wsprintf(str_msg, L"Hit %s breakpoint at %s", str_type, str_addr);
-	SendMessage(view->statwnd, SB_SETTEXT, 1, (LPARAM)str_msg);
+	SendMessage(view->statwnd, SB_SETTEXT, 2, (LPARAM)str_msg);
 }
 
 void viewstat_all_breakpoint(UINT8 type, UINT32 addr) {
@@ -108,6 +109,7 @@ void viewstat_update(NP2VIEW_T *view)	{
 	WCHAR str[32];
 	print_addr(str, view->seg, view->cursor, view->type != VIEWMODE_1MB);
 	SendMessage(view->statwnd, SB_SETTEXT, 0, (LPARAM)str);
+	SendMessage(view->statwnd, SB_SETTEXT, 1, (LPARAM)(CPU_STAT_PM ? _T("Protected Mode") : _T("Real Mode")));
 }
 /// ---------------
 
@@ -116,7 +118,7 @@ void viewstat_update(NP2VIEW_T *view)	{
 
 void viewstat_open(NP2VIEW_T *view, HINSTANCE hInstance)	{
 
-	int widths[] = {64, -1};
+	int widths[] = {64, 160, -1};
 
 	view->statwnd = CreateWindowEx(0, 
 				STATUSCLASSNAME, _T(""),
@@ -125,7 +127,7 @@ void viewstat_open(NP2VIEW_T *view, HINSTANCE hInstance)	{
 				0, 0,
 				view->hwnd, NULL, hInstance, NULL);
 
-	SendMessage(view->statwnd, SB_SETPARTS, (WPARAM)(sizeof(widths)/sizeof(int)), (LPARAM)widths);
+	SendMessage(view->statwnd, SB_SETPARTS, (WPARAM)NELEMENTS(widths), (LPARAM)widths);
 }
 
 void viewstat_close(NP2VIEW_T *view)	{
