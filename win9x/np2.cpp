@@ -303,7 +303,8 @@ static void wincentering(HWND hWnd) {
 static void getstatfilename(OEMCHAR *path, const OEMCHAR *ext, int size) {
 
 	file_cpyname(path, modulefile, size);
-	file_cutext(path);
+	file_cutname(path);
+	file_catname(path, SHORTNAME, size);
 	file_catname(path, str_dot, size);
 	file_catname(path, ext, size);
 }
