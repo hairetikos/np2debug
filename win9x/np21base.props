@@ -4,7 +4,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <IncludePath>$(WindowsSdkDir)include;$(DXSDK_DIR)\Include;$(IncludePath)</IncludePath>
-    <IntDir>..\obj\$(ProjectName)\$(Configuration)\</IntDir>
+    <IntDir>..\obj\$(ProjectName)\$(Configuration) $(Platform)\</IntDir>
     <OutDir>..\bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup>
