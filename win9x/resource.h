@@ -463,6 +463,18 @@
 #define IDM_SCSI6EJECT                  40437
 #define IDM_SCSI7EJECT                  40438
 
+#define IDM_DIR_START_OPEN              40441
+#define IDM_DIR_A_OPEN                  40441
+#define IDM_DIR_B_OPEN                  40442
+#define IDM_DIR_C_OPEN                  40443
+#define IDM_DIR_END_OPEN                40443
+
+#define IDM_DIR_START_EJECT             40451
+#define IDM_DIR_A_EJECT                 40451
+#define IDM_DIR_B_EJECT                 40452
+#define IDM_DIR_C_EJECT                 40453
+#define IDM_DIR_END_EJECT               40453
+
 #define IDM_FDD1CUR                     40461
 #define IDM_FDD2CUR                     40462
 #define IDM_FDD3CUR                     40463
@@ -480,6 +492,12 @@
 #define IDM_SCSI5CUR                    40486
 #define IDM_SCSI6CUR                    40487
 #define IDM_SCSI7CUR                    40488
+
+#define IDM_DIR_START_CUR               40491
+#define IDM_DIR_A_CUR                   40491
+#define IDM_DIR_B_CUR                   40492
+#define IDM_DIR_C_CUR                   40493
+#define IDM_DIR_END_CUR                 40493
 
 #define IDM_WINDOW                      40501
 #define IDM_FULLSCREEN                  40502

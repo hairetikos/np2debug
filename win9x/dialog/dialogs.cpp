@@ -7,6 +7,7 @@
  */
 
 #include "compiler.h"
+#include <shlobj.h>
 #include "resource.h"
 #include "strres.h"
 #include "bmpdata.h"
@@ -144,6 +145,42 @@ static BOOL openFileParam(LPOPENFILENAME lpOFN, PCFSPARAM pcParam,
 	}
 
 	return bResult;
+}
+
+static int CALLBACK opendirproc(HWND hWnd, UINT msg, LPARAM lp, LPARAM data) {
+
+	switch(msg) {
+		case BFFM_INITIALIZED:
+			SendMessage(hWnd, BFFM_SETSELECTION, TRUE, data);
+			break;
+		case BFFM_VALIDATEFAILED:
+			return 1;
+	}
+	return 0;
+}
+
+BOOL dlgs_opendir(HWND hWnd, OEMCHAR *pszPath, OEMCHAR *lpszTitle, UINT drive)
+{
+	BROWSEINFO bi;
+	OEMCHAR display_name[MAX_PATH];
+	PIDLIST_ABSOLUTE ret;
+
+	ZeroMemory(&bi, sizeof(bi));
+	bi.hwndOwner = hWnd;
+	bi.pszDisplayName = display_name;
+	bi.lpszTitle = lpszTitle;
+	bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NONEWFOLDERBUTTON | BIF_USENEWUI;
+	bi.lpfn = opendirproc;
+	bi.lParam = (LPARAM)pszPath;
+
+	ret = SHBrowseForFolder(&bi);
+
+	if (ret)
+	{
+		SHGetPathFromIDList(ret, pszPath);
+		CoTaskMemFree(ret);
+	}
+	return ret != NULL;
 }
 
 BOOL dlgs_openfile(HWND hWnd, PCFSPARAM pcParam,

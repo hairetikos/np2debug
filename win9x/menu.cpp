@@ -276,6 +276,9 @@ void xmenu_initialize(void)
 
 	hmenuSub = CreatePopupMenu();
 	if (hmenuSub)	{
+		HMENU hdir;
+		MENUITEMINFO mii;
+
 		nSubPos = 0;
 		for (i=0; i<MAX_FDDFILE; i++)	{
 			if (np2cfg.fddequip & (1 << i))	{
@@ -298,6 +301,20 @@ void xmenu_initialize(void)
 			nSubPos += xmenu_drive_add(hmenuSub, nSubPos, IDM_SCSI0CUR + i, IDM_SCSI0OPEN + i, IDM_SCSI0EJECT + i);
 		}
 #endif
+		InsertMenu(hmenuSub, nSubPos++, MF_SEPARATOR, 0, NULL);
+
+		hdir = CreatePopupMenu();
+		for (i=0; i<MAX_DIR; i++)	{
+			xmenu_drive_add(hdir, i, IDM_DIR_START_CUR + i, IDM_DIR_START_OPEN + i, IDM_DIR_START_EJECT + i);
+		}
+		// Good solution > Hardcoding > Windows resources
+		ZeroMemory(&mii, sizeof(MENUITEMINFO));
+		mii.cbSize = sizeof(MENUITEMINFO);
+		mii.fMask = MIIM_TYPE | MIIM_SUBMENU;
+		mii.fType = MFT_STRING;
+		mii.dwTypeData = _T("Mount directory to DOS drive (experimental)");
+		mii.hSubMenu = hdir;
+		nSubPos += InsertMenuItem(hmenuSub, nSubPos, MF_BYPOSITION | MF_POPUP, &mii);
 
 		nSubPos += menu_addmenures(hmenuSub, nSubPos, IDR_NEWDISK, TRUE);
 
@@ -622,5 +639,9 @@ void xmenu_update() {
 		xmenu_drive_update(hMenu, IDM_SCSI0CUR + i, prefix, file_getname(np2cfg.scsihdd[i]));
 	}
 #endif
+	for(i = 0; i < MAX_DIR; i++) {
+		wsprintf(prefix, _T("Drive %c: "), i + 'A');
+		xmenu_drive_update(hMenu, IDM_DIR_START_CUR + i, prefix, np2cfg.mountdir[i]);
+	}
 	DrawMenuBar(g_hWndMain);
 }

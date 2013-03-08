@@ -113,6 +113,7 @@ typedef struct {
 #if defined(SUPPORT_SCSI)
 	OEMCHAR	scsihdd[MAX_SCSI][MAX_PATH];									// ver0.74
 #endif
+	OEMCHAR	mountdir[MAX_DIR][MAX_PATH];
 	OEMCHAR	fontfile[MAX_PATH];
 	OEMCHAR	biospath[MAX_PATH];
 	OEMCHAR	hdrvroot[MAX_PATH];

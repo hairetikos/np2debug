@@ -17,6 +17,7 @@ void dialog_serial(HWND hWnd);
 void dialog_newdisk(HWND hWnd);
 void dialog_changefdd(HWND hWnd, REG8 drv);
 void dialog_changehdd(HWND hWnd, REG8 drv);
+void dialog_changedir(HWND hWnd, UINT drive);
 void dialog_font(HWND hWnd);
 void dialog_writebmp(HWND hWnd);
 

@@ -64,6 +64,8 @@ typedef const struct tagEditData	*PCEDITDATA;
 void dlgs_enablebyautocheck(HWND hWnd, UINT uID, UINT uCheckID);
 void dlgs_disablebyautocheck(HWND hWnd, UINT uID, UINT uCheckID);
 
+BOOL dlgs_opendir(HWND hWnd, OEMCHAR *pszPath, OEMCHAR *lpszTitle, UINT drive);
+
 BOOL dlgs_openfile(HWND hWnd, PCFSPARAM pcParam,
 									OEMCHAR *pszPath, UINT uSize, int *puRO);
 BOOL dlgs_createfile(HWND hWnd, PCFSPARAM pcParam,

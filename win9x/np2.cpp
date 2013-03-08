@@ -523,6 +523,21 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 			sysmng_update_drives();
 			break;
 #endif
+		case IDM_DIR_A_OPEN:
+		case IDM_DIR_B_OPEN:
+		case IDM_DIR_C_OPEN:
+			winuienter();
+			dialog_changedir(hWnd, uID - IDM_DIR_A_OPEN);
+			winuileave();
+			break;
+
+		case IDM_DIR_A_EJECT:
+		case IDM_DIR_B_EJECT:
+		case IDM_DIR_C_EJECT:
+			np2cfg.mountdir[uID - IDM_DIR_START_EJECT][0] = '\0';
+			sysmng_update(SYS_UPDATEOSCFG);
+			sysmng_update_drives();
+			break;
 
 		case IDM_WINDOW:
 			changescreen(scrnmode & (~SCRNMODE_FULLSCREEN));

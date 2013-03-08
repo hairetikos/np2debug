@@ -153,6 +153,16 @@ const OEMCHAR	*p;
 	}
 }
 
+void dialog_changedir(HWND hWnd, UINT drive) {
+
+	OEMCHAR title[256];
+	wsprintf(title, _T("Select directory to mount to DOS drive %c:\\:"), drive + 'A');
+	if (dlgs_opendir(hWnd, np2cfg.mountdir[drive], title, drive)) {
+		sysmng_update(SYS_UPDATEOSCFG);
+		sysmng_update_drives();
+	}
+}
+
 
 // ---- newdisk
 

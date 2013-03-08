@@ -434,6 +434,9 @@ static const PFTBL iniitem[] = {
 	PFSTR("SCSIHDD2", PFTYPE_STR,		np2cfg.scsihdd[2]),
 	PFSTR("SCSIHDD3", PFTYPE_STR,		np2cfg.scsihdd[3]),
 #endif
+	PFSTR("DirMnt_A", PFTYPE_STR,		np2cfg.mountdir[0]),
+	PFSTR("DirMnt_B", PFTYPE_STR,		np2cfg.mountdir[1]),
+	PFSTR("DirMnt_C", PFTYPE_STR,		np2cfg.mountdir[2]),
 
 	PFVAL("SampleHz", PFTYPE_UINT16,	&np2cfg.samplingrate),
 	PFVAL("Latencys", PFTYPE_UINT16,	&np2cfg.delayms),
