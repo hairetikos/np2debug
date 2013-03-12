@@ -21,10 +21,10 @@ In addition to the assembly, memory and register viewers for emulated code alrea
 * memory modification
 * memory breakpoints
 * stack viewer
+* real-directory-to-DOS-drive mounting (experimental)
 
 What's still missing:
 
-* read emulated files from a directory instead of using .hdi images
 * assembly modification by actually writing assembly mnemonics
 
 As Xnp2 (and, most importantly, its debugging features already present) doesn't come with a cross-platform method for GUI coding, these extended features are currently _exclusive to the Win9x build_. After all that refactoring, it probably doesn't even build on Linux anymore...
@@ -70,6 +70,20 @@ The debugging window can be accessed under `Tools → Debug utility`.
 
 ##### Unassemble
 * Current instruction is always at the top of the window
+
+
+
+Directory mounting
+------------------
+This *very hackish and experimental* feature overrides the DOS system functions called via `INT 21`, providing direct access to "real" files in a directory on your local file system from the emulator, without having to copy them on an image every time.
+
+Doing something like this effectively requires a complete DOS emulation. Thus, the following things are confirmed to be impossible with this method:
+
+* Running programs (.EXE or .COM) from the mounted directory. The DOS EXEC syscall (`INT 21,4B`) would have to call the file opening function via `INT 21` too - which is impossible because `INT 21` is not reentrant.
+* Directory structures need to be replicated on the image. This is necessary because DOS still keeps its own directory state. When using `mkdir` or `rmdir` on the command prompt, directories are created and removed both inside the mounted directory and on the image.
+
+... Really, this is only supposed to work for the few cases we need during the creation of the Touhou PC-98 translation patches. Don't expect it to work for anything else.
+
 
 
 Contributing

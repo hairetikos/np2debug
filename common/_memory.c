@@ -257,3 +257,18 @@ void *memmem(const void *haystack, size_t hlen, const void *needle, size_t nlen)
     return NULL;
 }
 #endif
+
+/*
+ * Like memchr, but returns 'len' when 'chr' is not found.
+ */
+size_t memchr_len(const void* ptr, const char chr, const size_t len)	{
+	
+	size_t ret = 0;
+	char *p = (char *)ptr;
+	while(*p != chr && ret != len)	{
+		ret++;
+		p++;
+	}
+	return ret;
+}
+

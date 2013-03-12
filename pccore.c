@@ -48,6 +48,7 @@
 #include	"keystat.h"
 #include	"debugsub.h"
 #include	"break.h"
+#include	"mountdir.h"
 
 
 const OEMCHAR np2version[] = OEMTEXT(NP2VER_CORE);
@@ -269,6 +270,7 @@ void pccore_init(void) {
 	hostdrv_initialize();
 #endif
 	np2break_create();
+	md_create();
 }
 
 void pccore_term(void) {
@@ -296,6 +298,7 @@ void pccore_term(void) {
 
 	CPU_DEINITIALIZE();
 	np2break_destroy();
+	md_destroy();
 }
 
 
@@ -428,6 +431,7 @@ void pccore_reset(void) {
 	timing_reset();
 	soundmng_play();
 	np2break_reset();
+	md_reset();
 
 #if 0 && defined(SUPPORT_IDEIO)	// Test!
 	sxsi_devopen(0x02, OEMTEXT("e:\\pn\\pn.iso"));

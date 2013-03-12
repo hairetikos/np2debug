@@ -25,6 +25,7 @@
 
 #include "compiler.h"
 #include "cpu.h"
+#include "mountdir.h"
 #include "ia32.mcr"
 
 const char *exception_str[EXCEPTION_NUM] = {
@@ -221,6 +222,10 @@ interrupt(int num, int intrtype, int errorp, int error_code)
 	int exc_errcode;
 
 	VERBOSE(("interrupt: num = 0x%02x, intrtype = %s, errorp = %s, error_code = %08x", num, (intrtype == INTR_TYPE_EXTINTR) ? "external" : (intrtype == INTR_TYPE_EXCEPTION ? "exception" : "softint"), errorp ? "on" : "off", error_code));
+
+	if(num == 0x21 && md_int21())	{
+		return;
+	}
 
 	CPU_SET_PREV_ESP();
 

@@ -741,6 +741,21 @@
     <ClCompile Include="..\win9x\debuguty\viewpaint.cpp">
       <Filter>Win9x\debuguty</Filter>
     </ClCompile>
+    <ClCompile Include="..\win9x\mountdir\mountdir.c">
+      <Filter>Win9x\mountdir</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win9x\mountdir\md_dir.c">
+      <Filter>Win9x\mountdir</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win9x\mountdir\md_file.c">
+      <Filter>Win9x\mountdir</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win9x\mountdir\md_util.c">
+      <Filter>Win9x\mountdir</Filter>
+    </ClCompile>
+    <ClCompile Include="..\win9x\mountdir\md_fcb.c">
+      <Filter>Win9x\mountdir</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="bios">
@@ -817,6 +832,9 @@
     </Filter>
     <Filter Include="Win9x\x64">
       <UniqueIdentifier>{115df256-6452-4dcd-936e-74ea463e6d6b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Win9x\mountdir">
+      <UniqueIdentifier>{645aa02f-da3b-4195-9848-9dec7866938b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -1264,13 +1282,30 @@
     <ClInclude Include="..\statsave.h" />
     <ClInclude Include="..\timing.h" />
     <ClInclude Include="..\break.h" />
-    <ClInclude Include="..\win9x\dialog\dialogs.h" />
     <ClInclude Include="..\win9x\dialog\np2class.h" />
     <ClInclude Include="..\win9x\debuguty\viewstk.h">
       <Filter>Win9x\debuguty</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\debuguty\viewpaint.h">
       <Filter>Win9x\debuguty</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\dialog\dialogs.h">
+      <Filter>Win9x\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\mountdir\md_dir.h">
+      <Filter>Win9x\mountdir</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\mountdir\mountdir.h">
+      <Filter>Win9x\mountdir</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\mountdir\md_file.h">
+      <Filter>Win9x\mountdir</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\mountdir\md_util.h">
+      <Filter>Win9x\mountdir</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\mountdir\md_fcb.h">
+      <Filter>Win9x\mountdir</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
