@@ -106,7 +106,6 @@
 　　・コンフィグ画面からサウンドドライバを変更出切る様に修正
 　　・環境によってサウンドを有効にした場合にプログラムがクラッシュする
 　　　不具合を修正
-　　・GLIB, GTK+ の deprecated なインタフェースを無効化しない様に修正
 　　・ビルド、インストールに Autotools(configure) を使用するように修正
 　　・ファイル保存時に既に同名ファイルが存在した場合、上書き確認ダイアログを
 　　　表示するように修正 (GTK+-2.8 以降のみ有効)
@@ -116,6 +115,8 @@
 　　・Screen Option の LCD のチェックを外しても外れない不具合を修正
 　　・FDD シーク音が鳴らない不具合を修正
 　　・色深度が 8bpp の場合に配列の範囲外にアクセスしていた不具合を修正
+　　・F11 キーにフルスクリーン表示切り替え、フルスクリーン時のメニュー表示
+　　　切り替え機能を割り当て
 
 
 // ----
@@ -429,11 +430,11 @@
 　　　[keyname] = [key1] (key2) (key3)
 　　　[keyname] [TAB] [key1] (key2) (key3)
 　　　userkey[1-2] = [key1] (key2) (key3) ... (key15)
-　　　　フルキー 0～9 A～Z - ^ \ @ [ ] ; : , . / _
+　　　　フルキー 0〜9 A〜Z - ^ \ @ [ ] ; : , . / _
 　　　　         STOP COPY ESC TAB BS RET SPC XFER NFER
                  INS DEL RLUP RLDN HMCL HELP
-　　　　ファンク F1～F10 VF1～VF5
-　　　　テンキー [0]～[9] [-] [/] [*] [+] [=] [,] [.]
+　　　　ファンク F1〜F10 VF1〜VF5
+　　　　テンキー [0]〜[9] [-] [/] [*] [+] [=] [,] [.]
 　　　　シフト   SHIFT CAPS KANA GRPH CTRL
 
 　　　通常キーは3個、userkeyは15個の同時押し設定が可能です。
@@ -529,11 +530,11 @@
 　　出来ます。
 　　書式)
 　　　userkey1 = [key1] (key2) (key3)...
-　　　　フルキー 0～9 A～Z - ^ \ @ [ ] ; : , . / _
+　　　　フルキー 0〜9 A〜Z - ^ \ @ [ ] ; : , . / _
 　　　　         STOP COPY ESC TAB BS RET SPC XFER NFER
                  INS DEL RLUP RLDN HMCL HELP
-　　　　ファンク F1～F10 VF1～VF5
-　　　　テンキー [0]～[9] [-] [/] [*] [+] [=] [,] [.]
+　　　　ファンク F1〜F10 VF1〜VF5
+　　　　テンキー [0]〜[9] [-] [/] [*] [+] [=] [,] [.]
 　　　　シフト   SHIFT CAPS KANA GRPH CTRL
 
 　　　例:
@@ -556,8 +557,8 @@
 
 　　　void diskdrv_sethdd(REG8 drv, const char *fname);
 　　　　drv = BIOSのデバイス番号
-　　　　　0x00～0x01  SASI #0-1
-　　　　　0x20～0x23  SCSI #0-3  (SUPPORT_SCSIを定義した時のみ)
+　　　　　0x00〜0x01  SASI #0-1
+　　　　　0x20〜0x23  SCSI #0-3  (SUPPORT_SCSIを定義した時のみ)
 
 　　　bios/sxsibios.c はリンク必須
 　　　cbus/sasiio.c - SUPPORT_SCSIを定義した時にリンク
@@ -578,7 +579,7 @@
 
 　　　フロッピードライブについて np2cfg.fddequipを見に行くようにしました
 　　　デフォルトで２基
-　　　np2cfg.fddequip = 0x03 (ドライブ1 = ビット0 ～ ドライブ4 = ビット3)
+　　　np2cfg.fddequip = 0x03 (ドライブ1 = ビット0 〜 ドライブ4 = ビット3)
 　　　(実際に動作中の装備状態は fdc.equipで リセット時に更新されます)
 　　　必要によって main()で変える、cfgに書き出す等してください。
 
@@ -622,7 +623,7 @@
 　・Vermouth … Roland GSコマンドの一部に対応
 
 　補足
-　　ver0.73では EPSONモードの時 D000～DFFFがRAM化されます。
+　　ver0.73では EPSONモードの時 D000〜DFFFがRAM化されます。
 　　・SOUND BIOSは D000,D400に配置しないで下さい、もしくはUMB等で破壊されないようにして下さい。
 
 
