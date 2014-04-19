@@ -234,7 +234,6 @@
     <ClCompile Include="..\io\upd4990.c" />
     <ClCompile Include="..\cbus\amd98.c" />
     <ClCompile Include="..\cbus\atapicmd.c" />
-    <ClCompile Include="..\cbus\board118.c" />
     <ClCompile Include="..\cbus\board14.c" />
     <ClCompile Include="..\cbus\board26k.c" />
     <ClCompile Include="..\cbus\board86.c" />
@@ -400,6 +399,7 @@
     <ClCompile Include="..\win9x\mountdir\md_file.c" />
     <ClCompile Include="..\win9x\mountdir\md_util.c" />
     <ClCompile Include="..\win9x\mountdir\mountdir.c" />
+    <ClCompile Include="..\win9x\board118.cpp" />
   </ItemGroup>
   <ItemGroup>
     <YASM Include="..\win9x\x86\PARTS.X86">
@@ -579,7 +579,6 @@
     <ClInclude Include="..\win9x\np2.h" />
     <ClInclude Include="..\win9x\np2arg.h" />
     <ClInclude Include="..\win9x\oemtext.h" />
-    <ClInclude Include="..\win9x\pcifunc.h" />
     <ClInclude Include="..\win9x\resource.h" />
     <ClInclude Include="..\win9x\romeo.h" />
     <ClInclude Include="..\win9x\scrnmng.h" />

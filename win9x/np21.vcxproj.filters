@@ -53,9 +53,6 @@
     <ClCompile Include="..\CBUS\BOARDX2.C">
       <Filter>cbus</Filter>
     </ClCompile>
-    <ClCompile Include="..\CBUS\BOARD118.C">
-      <Filter>cbus</Filter>
-    </ClCompile>
     <ClCompile Include="..\CBUS\BOARD14.C">
       <Filter>cbus</Filter>
     </ClCompile>
@@ -756,6 +753,9 @@
     <ClCompile Include="..\win9x\mountdir\md_fcb.c">
       <Filter>Win9x\mountdir</Filter>
     </ClCompile>
+    <ClCompile Include="..\win9x\board118.cpp">
+      <Filter>Win9x</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="bios">
@@ -1214,9 +1214,6 @@
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\oemtext.h">
-      <Filter>Win9x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\pcifunc.h">
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\resource.h">

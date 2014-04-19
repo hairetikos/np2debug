@@ -32,7 +32,6 @@
 #include "sstp.h"
 #include "sstpmsg.h"
 #include "toolwin.h"
-#include "juliet.h"
 #include "np2class.h"
 #include "dialog.h"
 #include "cpucore.h"
@@ -59,6 +58,9 @@
 #endif
 #include "np2ver.h"
 #include "break.h"
+#if defined(SUPPORT_ROMEO)
+#include "juliet.h"
+#endif
 
 #ifdef BETA_RELEASE
 #define		OPENING_WAIT		1500
@@ -430,7 +432,6 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 			if (b)
 			{
 				sstpmsg_reset();
-				juliet_YMF288Reset();
 				pccore_cfgupdate();
 				pccore_reset();
 			}
@@ -1278,7 +1279,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 					break;
 
 				case NP2CMD_RESET:
-					juliet_YMF288Reset();
 					pccore_cfgupdate();
 					pccore_reset();
 					break;
@@ -1532,9 +1532,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 		soundmng_pcmvolume(SOUND_PCMSEEK1, np2cfg.MOTORVOL);
 	}
 
-	if (np2oscfg.useromeo) {
-		juliet_initialize();
+#if defined(SUPPORT_ROMEO)
+	if (np2oscfg.useromeo)
+	{
+		CJuliet::GetInstance()->Initialize();
 	}
+#endif
 
 	if (np2oscfg.MOUSE_SW) {										// ver0.30
 		mousemng_enable(MOUSEPROC_SYSTEM);
@@ -1722,12 +1725,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 	}
 #endif
 
-	juliet_YMF288Reset();
+#if defined(SUPPORT_ROMEO)
+	CJuliet::GetInstance()->Reset();
+	CJuliet::GetInstance()->Deinitialize();
+#endif
 	pccore_term();
 
 	sstp_destruct();
-
-	juliet_deinitialize();
 
 	soundmng_deinitialize();
 	scrnmng_destroy();
