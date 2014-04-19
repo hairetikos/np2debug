@@ -1258,11 +1258,6 @@ const UINT16	*t;
 		if (stringmode) {
 			*dst = '\0';
 		}
-#if 1	// 一応互換の為に NULLつける
-		else if (dcnt) {
-			*dst = '\0';
-		}
-#endif
 	}
 	return((UINT)(orgdcnt - dcnt));
 }
