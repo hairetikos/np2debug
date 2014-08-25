@@ -20,7 +20,7 @@ static	const TCHAR		np2viewclientclass[] = _T("NP2-ViewClient");
 		NP2VIEW_T		np2view[NP2VIEW_MAX];
 
 		VIEWCFG	viewcfg = {
-			 _T("MS Gothic"), 14,
+			 _T("MS Gothic"), 16,
 
 			 // Colors
 			 0xffffff, 0x909090, 0x400000, 0xff8000, 0x0000ff, 0x000000,
@@ -30,7 +30,6 @@ static	const TCHAR		np2viewclientclass[] = _T("NP2-ViewClient");
 
 static	const PFTBL viewerini[] = {
 	PFSTR("fontname", PFTYPE_STR,	viewcfg.font_name),
-	PFVAL("fontsize", PFTYPE_UINT32,	&viewcfg.font_height),
 	PFVAL("col_text", PFTYPE_HEX32, &viewcfg.color_text),
 	PFVAL("col_dimm", PFTYPE_HEX32, &viewcfg.color_dim),
 	PFVAL("col_back", PFTYPE_HEX32, &viewcfg.color_back),
