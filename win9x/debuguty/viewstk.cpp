@@ -10,12 +10,17 @@
 #include	"cpucore.h"
 
 
-void viewstk_reload(NP2VIEW_T *view)	{
+void viewstk_scroll_stack(NP2VIEW_T *view)	{
 
 	view->seg = CPU_SS;
 	view->off = 0;
 	view->pos = CPU_SP / view->bytesperline;
 	view->cursor = seg_to_real(view->seg) + CPU_SP;
+}
+
+void viewstk_reload(NP2VIEW_T *view)	{
+
+	viewstk_scroll_stack(view);
 	viewcmn_setvscroll(view);
 }
 
@@ -77,6 +82,7 @@ void viewstk_init(NP2VIEW_T *dst, NP2VIEW_T *src) {
 	dst->mul = 1;
 	dst->memsize = 0x10000;
 	dst->maxline = dst->memsize / dst->bytesperline;
+	viewstk_scroll_stack(dst);
 
 	ZeroMemory(&dst->cp_bytes, sizeof(VIEWCELLPOS));
 	ZeroMemory(&dst->cp_chars, sizeof(VIEWCELLPOS));	

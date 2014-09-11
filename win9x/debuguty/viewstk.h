@@ -1,4 +1,4 @@
-
+void viewstk_scroll_stack(NP2VIEW_T *view);
 void viewstk_reload(NP2VIEW_T *view);
 
 LRESULT CALLBACK viewstk_proc(NP2VIEW_T *view,
