@@ -1371,7 +1371,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 	GetModuleFileName(NULL, modulefile, NELEMENTS(modulefile));
 	dosio_init();
 	file_setcd(modulefile);
-	np2arg_analize();
+	Np2Arg::GetInstance()->Parse();
 	initload();
 	toolwin_readini();
 	kdispwin_readini();
@@ -1503,7 +1503,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 	xmenu_setscrnmul(8);
 
 	scrnmode = 0;
-	if (np2arg.fullscreen) {
+	if (Np2Arg::GetInstance()->fullscreen())
+	{
 		scrnmode |= SCRNMODE_FULLSCREEN;
 	}
 	if (np2cfg.RASTER) {
@@ -1567,10 +1568,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 		int		id;
 
 		id = flagload(hWnd, str_sav, _T("Resume"), FALSE);
-		if (id == IDYES) {
-			for (i=0; i<4; i++) {
-				np2arg.disk[i] = NULL;
-			}
+		if (id == IDYES)
+		{
+			Np2Arg::GetInstance()->ClearDisk();
 		}
 		else if (id == IDCANCEL) {
 			DestroyWindow(hWnd);
@@ -1590,9 +1590,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 #endif
 
 //	リセットしてから… コマンドラインのディスク挿入。
-	for (i=0; i<MAX_FDDFILE; i++) {
-		if (np2arg.disk[i]) {
-			diskdrv_readyfdd((REG8)i, np2arg.disk[i], 0);
+	for (i = 0; i < MAX_FDDFILE; i++)
+	{
+		LPCTSTR lpDisk = Np2Arg::GetInstance()->disk(i);
+		if (lpDisk)
+		{
+			diskdrv_readyfdd((REG8)i, lpDisk, 0);
 		}
 	}
 
