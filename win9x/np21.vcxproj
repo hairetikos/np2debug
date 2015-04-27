@@ -339,7 +339,6 @@
     <ClCompile Include="..\win9x\dclock.cpp" />
     <ClCompile Include="..\win9x\dd2.cpp" />
     <ClCompile Include="..\win9x\dosio.cpp" />
-    <ClCompile Include="..\win9x\extromio.cpp" />
     <ClCompile Include="..\win9x\fontmng.cpp" />
     <ClCompile Include="..\win9x\ini.cpp" />
     <ClCompile Include="..\win9x\joymng.cpp" />
@@ -388,6 +387,8 @@
     <ClCompile Include="..\win9x\debuguty\viewsnd.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewstat.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewstk.cpp" />
+    <ClCompile Include="..\win9x\misc\extrom.cpp" />
+    <ClCompile Include="..\win9x\misc\tickcounter.cpp" />
     <ClCompile Include="..\zlib\adler32.c" />
     <ClCompile Include="..\zlib\crc32.c" />
     <ClCompile Include="..\zlib\inffast.c" />
@@ -568,7 +569,6 @@
     <ClInclude Include="..\win9x\dialog\dialogs.h" />
     <ClInclude Include="..\win9x\dialog\np2class.h" />
     <ClInclude Include="..\win9x\dosio.h" />
-    <ClInclude Include="..\win9x\extromio.h" />
     <ClInclude Include="..\win9x\fontmng.h" />
     <ClInclude Include="..\win9x\ini.h" />
     <ClInclude Include="..\win9x\joymng.h" />
@@ -596,6 +596,9 @@
     <ClInclude Include="..\win9x\win32sub.h" />
     <ClInclude Include="..\win9x\winkbd.h" />
     <ClInclude Include="..\win9x\winloc.h" />
+    <ClInclude Include="..\win9x\misc\extrom.h" />
+    <ClInclude Include="..\win9x\misc\tickcounter.h" />
+    <ClInclude Include="..\win9x\misc\vc6macros.h" />
     <ClInclude Include="..\win9x\mountdir\md_dir.h" />
     <ClInclude Include="..\win9x\mountdir\md_fcb.h" />
     <ClInclude Include="..\win9x\mountdir\md_file.h" />

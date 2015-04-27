@@ -377,7 +377,10 @@
     <ClCompile Include="..\WIN9X\FONTMNG.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
-    <ClCompile Include="..\WIN9X\EXTROMIO.CPP">
+    <ClCompile Include="..\WIN9X\MISC\EXTROM.CPP">
+      <Filter>Win9x</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WIN9X\MISC\TICKCOUNTER.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
     <ClCompile Include="..\I386C\ia32\instructions\dec_arith.c">
@@ -1156,9 +1159,6 @@
     <ClInclude Include="..\win9x\dosio.h">
       <Filter>Win9x</Filter>
     </ClInclude>
-    <ClInclude Include="..\win9x\extromio.h">
-      <Filter>Win9x</Filter>
-    </ClInclude>
     <ClInclude Include="..\win9x\fontmng.h">
       <Filter>Win9x</Filter>
     </ClInclude>
@@ -1270,6 +1270,12 @@
     <ClInclude Include="..\win9x\dialog\dialog.h">
       <Filter>Win9x\dialog</Filter>
     </ClInclude>
+    <ClInclude Include="..\win9x\misc\extrom.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\misc\tickcounter.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
     <ClInclude Include="..\common.h" />
     <ClInclude Include="..\debugsub.h" />
     <ClInclude Include="..\keystat.h" />
@@ -1304,6 +1310,7 @@
     <ClInclude Include="..\win9x\mountdir\md_fcb.h">
       <Filter>Win9x\mountdir</Filter>
     </ClInclude>
+    <ClInclude Include="..\win9x\misc\vc6macros.h" />
   </ItemGroup>
   <ItemGroup>
     <YASM Include="..\win9x\DCLOCKD.X86" />

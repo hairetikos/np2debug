@@ -38,7 +38,7 @@ void soundmng_disable(UINT proc);
 BRESULT soundmng_initialize(void);
 void soundmng_deinitialize(void);
 
-void soundmng_pcmload(UINT num, const OEMCHAR *filename, UINT type);
+void soundmng_pcmload(UINT num, LPCTSTR lpFilename);
 void soundmng_pcmvolume(UINT num, int volume);
 
 #ifdef __cplusplus
