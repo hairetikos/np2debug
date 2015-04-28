@@ -12,7 +12,7 @@
 #include "np2.h"
 #include "scrnmng.h"
 #include "sstp.h"
-#if defined(OSLANG_UTF8) || defined(OSLANG_UCS2)
+#if defined(OSLANG_UCS2)
 #include "oemtext.h"
 #endif
 #include "np2ver.h"
@@ -67,7 +67,7 @@ BOOL sstp_send(const OEMCHAR *msg, void (*proc)(HWND hWnd, char *msg)) {
 		return(FAILURE);
 	}
 
-#if defined(OSLANG_UTF8) || defined(OSLANG_UCS2)
+#if defined(OSLANG_UCS2)
 	OEMCHAR	oem[0x1000];
 	OEMSPRINTF(oem, sendermes, msg);
 	oemtext_oemtosjis(sstpstr, NELEMENTS(sstpstr), oem, -1);
@@ -210,7 +210,7 @@ BOOL sstp_sendonly(const OEMCHAR *msg) {
 			s_in.sin_port = htons(np2oscfg.sstpport);
 			if (connect(lSocket, (sockaddr *)&s_in, sizeof(s_in))
 															!= SOCKET_ERROR) {
-#if defined(OSLANG_UTF8) || defined(OSLANG_UCS2)
+#if defined(OSLANG_UCS2)
 				OEMCHAR	oem[0x1000];
 				OEMSPRINTF(oem, sendermes, msg);
 				oemtext_oemtosjis(msgstr, NELEMENTS(msgstr), oem, -1);

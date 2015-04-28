@@ -1,6 +1,5 @@
 #include	"compiler.h"
 #include	"np2.h"
-#include	"oemtext.h"
 #include	"dosio.h"
 #include	"sysmng.h"
 #include	"cpucore.h"
@@ -94,11 +93,5 @@ void sysmng_updatecaption(UINT8 flag) {
 	{
 		milstr_ncat(work, OEMTEXT(" (paused)"), NELEMENTS(work));
 	}
-#if defined(OSLANG_UTF8)
-	TCHAR tchr[512];
-	oemtotchar(tchr, NELEMENTS(tchr), work, -1);
-	SetWindowText(g_hWndMain, tchr);
-#else
 	SetWindowText(g_hWndMain, work);
-#endif
 }
