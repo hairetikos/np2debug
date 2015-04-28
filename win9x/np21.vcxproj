@@ -342,7 +342,6 @@
     <ClCompile Include="..\win9x\fontmng.cpp" />
     <ClCompile Include="..\win9x\ini.cpp" />
     <ClCompile Include="..\win9x\joymng.cpp" />
-    <ClCompile Include="..\win9x\juliet.cpp" />
     <ClCompile Include="..\win9x\menu.cpp" />
     <ClCompile Include="..\win9x\mousemng.cpp" />
     <ClCompile Include="..\win9x\mt32snd.cpp" />
@@ -388,6 +387,9 @@
     <ClCompile Include="..\win9x\debuguty\viewsnd.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewstat.cpp" />
     <ClCompile Include="..\win9x\debuguty\viewstk.cpp" />
+    <ClCompile Include="..\win9x\ext\externalopna.cpp" />
+    <ClCompile Include="..\win9x\ext\c86ctl\c86ctlif.cpp" />
+    <ClCompile Include="..\win9x\ext\romeo\juliet.cpp" />
     <ClCompile Include="..\win9x\misc\extrom.cpp" />
     <ClCompile Include="..\win9x\misc\tickcounter.cpp" />
     <ClCompile Include="..\zlib\adler32.c" />
@@ -573,7 +575,6 @@
     <ClInclude Include="..\win9x\fontmng.h" />
     <ClInclude Include="..\win9x\ini.h" />
     <ClInclude Include="..\win9x\joymng.h" />
-    <ClInclude Include="..\win9x\juliet.h" />
     <ClInclude Include="..\win9x\menu.h" />
     <ClInclude Include="..\win9x\mousemng.h" />
     <ClInclude Include="..\win9x\mt32snd.h" />
@@ -582,7 +583,6 @@
     <ClInclude Include="..\win9x\oemtext.h" />
     <ClInclude Include="..\win9x\recvideo.h" />
     <ClInclude Include="..\win9x\resource.h" />
-    <ClInclude Include="..\win9x\romeo.h" />
     <ClInclude Include="..\win9x\scrnmng.h" />
     <ClInclude Include="..\win9x\soundmng.h" />
     <ClInclude Include="..\win9x\sstp.h" />
@@ -598,6 +598,12 @@
     <ClInclude Include="..\win9x\win32sub.h" />
     <ClInclude Include="..\win9x\winkbd.h" />
     <ClInclude Include="..\win9x\winloc.h" />
+    <ClInclude Include="..\win9x\ext\c86ctl\c86ctl.h" />
+    <ClInclude Include="..\win9x\ext\c86ctl\c86ctlif.h" />
+    <ClInclude Include="..\win9x\ext\externalopna.h" />
+    <ClInclude Include="..\win9x\ext\extendmodule.h" />
+    <ClInclude Include="..\win9x\ext\juliet.h" />
+    <ClInclude Include="..\win9x\ext\romeo.h" />
     <ClInclude Include="..\win9x\misc\extrom.h" />
     <ClInclude Include="..\win9x\misc\tickcounter.h" />
     <ClInclude Include="..\win9x\misc\vc6macros.h" />

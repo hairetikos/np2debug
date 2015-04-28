@@ -58,7 +58,7 @@
 #include "np2ver.h"
 #include "break.h"
 #if defined(SUPPORT_ROMEO)
-#include "juliet.h"
+#include "ext\externalopna.h"
 #endif
 #include "recvideo.h"
 
@@ -1541,7 +1541,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 #if defined(SUPPORT_ROMEO)
 	if (np2oscfg.useromeo)
 	{
-		CJuliet::GetInstance()->Initialize();
+		CExternalOpna::GetInstance()->Initialize();
 	}
 #endif
 
@@ -1719,8 +1719,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 #endif
 
 #if defined(SUPPORT_ROMEO)
-	CJuliet::GetInstance()->Reset();
-	CJuliet::GetInstance()->Deinitialize();
+	CExternalOpna::GetInstance()->Reset();
+	CExternalOpna::GetInstance()->Deinitialize();
 #endif
 	pccore_term();
 

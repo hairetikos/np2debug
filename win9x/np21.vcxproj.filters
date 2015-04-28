@@ -368,9 +368,6 @@
     <ClCompile Include="..\WIN9X\MENU.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
-    <ClCompile Include="..\WIN9X\JULIET.CPP">
-      <Filter>Win9x</Filter>
-    </ClCompile>
     <ClCompile Include="..\WIN9X\JOYMNG.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
@@ -378,6 +375,15 @@
       <Filter>Win9x</Filter>
     </ClCompile>
     <ClCompile Include="..\WIN9X\FONTMNG.CPP">
+      <Filter>Win9x</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WIN9X\EXT\EXTERNALOPNA.CPP">
+      <Filter>Win9x</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WIN9X\EXT\C86CTL\C86CTLIF.CPP">
+      <Filter>Win9x</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WIN9X\EXT\ROMEO\JULIET.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
     <ClCompile Include="..\WIN9X\MISC\EXTROM.CPP">
@@ -1171,9 +1177,6 @@
     <ClInclude Include="..\win9x\joymng.h">
       <Filter>Win9x</Filter>
     </ClInclude>
-    <ClInclude Include="..\win9x\juliet.h">
-      <Filter>Win9x</Filter>
-    </ClInclude>
     <ClInclude Include="..\win9x\menu.h">
       <Filter>Win9x</Filter>
     </ClInclude>
@@ -1225,9 +1228,6 @@
     <ClInclude Include="..\win9x\resource.h">
       <Filter>Win9x</Filter>
     </ClInclude>
-    <ClInclude Include="..\win9x\romeo.h">
-      <Filter>Win9x</Filter>
-    </ClInclude>
     <ClInclude Include="..\win9x\scrnmng.h">
       <Filter>Win9x</Filter>
     </ClInclude>
@@ -1275,6 +1275,24 @@
     </ClInclude>
     <ClInclude Include="..\win9x\dialog\dialog.h">
       <Filter>Win9x\dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\extendmodule.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\externalopna.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\c86ctl\c86ctl.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\c86ctl\c86ctlif.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\romeo\juliet.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\romeo\romeo.h">
+      <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\misc\extrom.h">
       <Filter>Win9x</Filter>
