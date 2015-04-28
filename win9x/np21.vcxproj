@@ -350,6 +350,7 @@
     <ClCompile Include="..\win9x\np2.cpp" />
     <ClCompile Include="..\win9x\np2arg.cpp" />
     <ClCompile Include="..\win9x\oemtext.cpp" />
+    <ClCompile Include="..\win9x\recvideo.cpp" />
     <ClCompile Include="..\win9x\scrnmng.cpp" />
     <ClCompile Include="..\win9x\soundmng.cpp" />
     <ClCompile Include="..\win9x\sstp.cpp" />
@@ -579,6 +580,7 @@
     <ClInclude Include="..\win9x\np2.h" />
     <ClInclude Include="..\win9x\np2arg.h" />
     <ClInclude Include="..\win9x\oemtext.h" />
+    <ClInclude Include="..\win9x\recvideo.h" />
     <ClInclude Include="..\win9x\resource.h" />
     <ClInclude Include="..\win9x\romeo.h" />
     <ClInclude Include="..\win9x\scrnmng.h" />

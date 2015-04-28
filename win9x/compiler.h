@@ -174,6 +174,7 @@ typedef	signed __int64		SINT64;
 
 #define	SUPPORT_TEXTCNV
 #define	SUPPORT_WAVEREC
+#define	SUPPORT_RECVIDEO /* Requires SUPPORT_WAVEREC */
 
 #if defined(CPUCORE_IA32)
 #pragma warning(disable: 4819)

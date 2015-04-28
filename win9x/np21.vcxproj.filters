@@ -353,6 +353,9 @@
     <ClCompile Include="..\WIN9X\OEMTEXT.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
+    <ClCompile Include="..\WIN9X\RECVIDEO.CPP">
+      <Filter>Win9x</Filter>
+    </ClCompile>
     <ClCompile Include="..\WIN9X\NP2ARG.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
@@ -1214,6 +1217,9 @@
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\oemtext.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\recvideo.h">
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\resource.h">

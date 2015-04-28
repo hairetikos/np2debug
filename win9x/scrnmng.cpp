@@ -26,6 +26,7 @@
 #if defined(SUPPORT_DCLOCK)
 #include "dclock.h"
 #endif
+#include "recvideo.h"
 
 extern WINLOCEX np2_winlocexallwin(HWND base);
 
@@ -806,6 +807,7 @@ void scrnmng_surfunlock(const SCRNSURF *surf) {
 
 	ddraw.backsurf->Unlock(NULL);
 	scrnmng_update();
+	recvideo_update();
 }
 
 void scrnmng_update(void) {
