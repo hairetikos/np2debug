@@ -383,6 +383,9 @@
     <ClCompile Include="..\WIN9X\EXT\C86CTL\C86CTLIF.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
+    <ClCompile Include="..\WIN9X\EXT\REBIRTH\REBIRTH.CPP">
+      <Filter>Win9x</Filter>
+    </ClCompile>
     <ClCompile Include="..\WIN9X\EXT\ROMEO\JULIET.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
@@ -1286,6 +1289,15 @@
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\ext\c86ctl\c86ctlif.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\rebirth\rebirth.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\rebirth\scci.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\rebirth\SCCIDefines.h">
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\ext\romeo\juliet.h">

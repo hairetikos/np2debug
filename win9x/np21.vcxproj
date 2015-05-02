@@ -389,6 +389,7 @@
     <ClCompile Include="..\win9x\debuguty\viewstk.cpp" />
     <ClCompile Include="..\win9x\ext\externalopna.cpp" />
     <ClCompile Include="..\win9x\ext\c86ctl\c86ctlif.cpp" />
+    <ClCompile Include="..\win9x\ext\rebirth\rebirth.cpp" />
     <ClCompile Include="..\win9x\ext\romeo\juliet.cpp" />
     <ClCompile Include="..\win9x\misc\extrom.cpp" />
     <ClCompile Include="..\win9x\misc\tickcounter.cpp" />
@@ -600,6 +601,9 @@
     <ClInclude Include="..\win9x\winloc.h" />
     <ClInclude Include="..\win9x\ext\c86ctl\c86ctl.h" />
     <ClInclude Include="..\win9x\ext\c86ctl\c86ctlif.h" />
+    <ClInclude Include="..\win9x\ext\rebirth\rebirth.h" />
+    <ClInclude Include="..\win9x\ext\rebirth\scci.h" />
+    <ClInclude Include="..\win9x\ext\rebirth\SCCIDefines.h" />
     <ClInclude Include="..\win9x\ext\externalopna.h" />
     <ClInclude Include="..\win9x\ext\extendmodule.h" />
     <ClInclude Include="..\win9x\ext\juliet.h" />
