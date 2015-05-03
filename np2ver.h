@@ -1,3 +1,8 @@
+/**
+ * @file	np2ver.h
+ * @brief	The version
+ */
+
 #if !defined(SUPPORT_PC9821)
 #define PROJECTNAME			TEXT("Neko Project II - Debug Edition")
 #define SHORTNAME			TEXT("np2")
@@ -11,7 +16,7 @@
 #define PROJECTSUBNAME		TEXT(" x64")
 #endif
 
-#define	NP2VER_CORE			"ver.0.83"
+#define	NP2VER_CORE			"ver.0.84"
 
 // #define	NP2VER_WIN9X
 // #define	NP2VER_MACOS9
