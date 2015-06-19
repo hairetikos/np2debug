@@ -352,8 +352,6 @@
     <ClCompile Include="..\win9x\recvideo.cpp" />
     <ClCompile Include="..\win9x\scrnmng.cpp" />
     <ClCompile Include="..\win9x\soundmng.cpp" />
-    <ClCompile Include="..\win9x\sstp.cpp" />
-    <ClCompile Include="..\win9x\sstpmsg.cpp" />
     <ClCompile Include="..\win9x\subwind.cpp" />
     <ClCompile Include="..\win9x\sysmng.cpp" />
     <ClCompile Include="..\win9x\taskmng.cpp" />
@@ -586,9 +584,6 @@
     <ClInclude Include="..\win9x\resource.h" />
     <ClInclude Include="..\win9x\scrnmng.h" />
     <ClInclude Include="..\win9x\soundmng.h" />
-    <ClInclude Include="..\win9x\sstp.h" />
-    <ClInclude Include="..\win9x\sstpmsg.h" />
-    <ClInclude Include="..\win9x\sstpres.h" />
     <ClInclude Include="..\win9x\subwind.h" />
     <ClInclude Include="..\win9x\sysmng.h" />
     <ClInclude Include="..\win9x\targetver.h" />

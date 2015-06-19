@@ -329,9 +329,6 @@
     <ClCompile Include="..\IO\FDD320.C">
       <Filter>io</Filter>
     </ClCompile>
-    <ClCompile Include="..\WIN9X\SSTPMSG.CPP">
-      <Filter>Win9x</Filter>
-    </ClCompile>
     <ClCompile Include="..\WIN9X\SYSMNG.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
@@ -694,9 +691,6 @@
     </ClCompile>
     <ClCompile Include="..\SOUND\PCM86C.C">
       <Filter>sound</Filter>
-    </ClCompile>
-    <ClCompile Include="..\WIN9X\SSTP.CPP">
-      <Filter>Win9x</Filter>
     </ClCompile>
     <ClCompile Include="..\CODECNV\UCS2UTF8.C">
       <Filter>codecnv</Filter>
@@ -1235,15 +1229,6 @@
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\soundmng.h">
-      <Filter>Win9x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\sstp.h">
-      <Filter>Win9x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\sstpmsg.h">
-      <Filter>Win9x</Filter>
-    </ClInclude>
-    <ClInclude Include="..\win9x\sstpres.h">
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\DEBUGUTY\view1mb.h">

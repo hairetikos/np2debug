@@ -577,13 +577,6 @@ void xmenu_setmsrapid(UINT8 value) {
 	CheckMenuItem(np2class_gethmenu(g_hWndMain), IDM_MSRAPID, MFCHECK(value));
 }
 
-void xmenu_setsstp(UINT8 value) {
-
-	value &= 1;
-	np2oscfg.sstp = value;
-	CheckMenuItem(np2class_gethmenu(g_hWndMain), IDM_SSTP, MFCHECK(value));
-}
-
 static BOOL xmenu_drive_update(HMENU hMenu, UINT item, OEMCHAR *prefix, OEMCHAR *image_fn) {
 
 	BOOL ret;
