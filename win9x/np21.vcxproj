@@ -168,7 +168,7 @@
     <ClCompile Include="..\codecnv\ucs2utf8.c" />
     <ClCompile Include="..\codecnv\utf8ucs2.c" />
     <ClCompile Include="..\i386c\cpucore.c" />
-    <ClCompile Include="..\i386c\memory.c" />
+    <ClCompile Include="..\i386c\cpumem.c" />
     <ClCompile Include="..\i386c\ia32\cpu.c" />
     <ClCompile Include="..\i386c\ia32\cpu_io.c" />
     <ClCompile Include="..\i386c\ia32\cpu_mem.c" />
