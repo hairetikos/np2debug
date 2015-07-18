@@ -1,6 +1,6 @@
 /**
  * @file	main.c
- * @brief	ƒƒCƒ“
+ * @brief	ãƒ¡ã‚¤ãƒ³
  */
 
 #include "compiler.h"
@@ -14,20 +14,28 @@
 #pragma comment(lib, "SDL2_ttf.lib")
 #endif
 
+/** ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ— */
+void board118_deinitialize(void);
+
 /**
- * ƒƒCƒ“
- * @param[in] argc ˆø”
- * @param[in] argv ˆø”
- * @return ƒŠƒUƒ‹ƒg ƒR[ƒh
+ * ãƒ¡ã‚¤ãƒ³
+ * @param[in] argc å¼•æ•°
+ * @param[in] argv å¼•æ•°
+ * @return ãƒªã‚¶ãƒ«ãƒˆ ã‚³ãƒ¼ãƒ‰
  */
 int main(int argc, char *argv[])
 {
 	UINT nLength;
 	TCHAR szFont[MAX_PATH];
+	int ret;
 
 	nLength = GetWindowsDirectory(szFont, SDL_arraysize(szFont));
 	lstrcpy(szFont + nLength, TEXT("\\Fonts\\msgothic.ttc"));
 	fontmng_setdeffontname(szFont);
 
-	return np2_main(argc, argv);
+	ret = np2_main(argc, argv);
+
+	board118_deinitialize();
+
+	return ret;
 }
