@@ -25,6 +25,7 @@
 #include "sound.h"
 #include "fmboard.h"
 #include "s98.h"
+#include "tms3631.h"
 #include "dipswbmp.h"
 #include "recvideo.h"
 
