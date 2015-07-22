@@ -22,8 +22,8 @@ enum {
 	SNDPROC_SUBWIND
 };
 
-BYTE snddrv_drv2num(const char *);
-const char *snddrv_num2drv(BYTE);
+UINT8 snddrv_drv2num(const char *);
+const char *snddrv_num2drv(UINT8);
 
 #if !defined(NOSOUND)
 UINT soundmng_create(UINT rate, UINT ms);
