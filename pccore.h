@@ -6,7 +6,6 @@
 #pragma once
 
 #include "nevent.h"
-#include "statsave.h"
 
 #define MAX_SASI 2
 #define MAX_SCSI 4
