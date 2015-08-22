@@ -680,6 +680,9 @@
     <ClCompile Include="..\SOUND\RHYTHMC.C">
       <Filter>sound</Filter>
     </ClCompile>
+    <ClCompile Include="..\SOUND\PCMMIX.C">
+      <Filter>sound</Filter>
+    </ClCompile>
     <ClCompile Include="..\SOUND\PSGGENG.C">
       <Filter>sound</Filter>
     </ClCompile>
@@ -1077,6 +1080,9 @@
     </ClInclude>
     <ClInclude Include="..\LIO\lio.h">
       <Filter>lio</Filter>
+    </ClInclude>
+    <ClInclude Include="..\SOUND\pcmmix.h">
+      <Filter>sound</Filter>
     </ClInclude>
     <ClInclude Include="..\SOUND\VERMOUTH\midinst.h">
       <Filter>sound\vermouth</Filter>

@@ -286,6 +286,7 @@
     <ClCompile Include="..\sound\opngenc.c" />
     <ClCompile Include="..\sound\pcm86c.c" />
     <ClCompile Include="..\sound\pcm86g.c" />
+    <ClCompile Include="..\sound\pcmmix.c" />
     <ClCompile Include="..\sound\psggenc.c" />
     <ClCompile Include="..\sound\psggeng.c" />
     <ClCompile Include="..\sound\rhythmc.c" />
@@ -521,6 +522,7 @@
     <ClInclude Include="..\nevent.h" />
     <ClInclude Include="..\np2ver.h" />
     <ClInclude Include="..\pccore.h" />
+    <ClInclude Include="..\sound\pcmmix.h" />
     <ClInclude Include="..\sound\vermouth\midimod.h" />
     <ClInclude Include="..\sound\vermouth\midinst.h" />
     <ClInclude Include="..\sound\vermouth\midiout.h" />
