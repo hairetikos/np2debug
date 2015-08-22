@@ -1039,9 +1039,6 @@
     <ClInclude Include="..\VRAM\palettes.h">
       <Filter>vram</Filter>
     </ClInclude>
-    <ClInclude Include="..\VRAM\scrnbmp.h">
-      <Filter>vram</Filter>
-    </ClInclude>
     <ClInclude Include="..\i386c\ia32\cpu_io.h">
       <Filter>i386c\ia32</Filter>
     </ClInclude>

@@ -537,7 +537,6 @@
     <ClInclude Include="..\vram\maketext.h" />
     <ClInclude Include="..\vram\maketgrp.h" />
     <ClInclude Include="..\vram\palettes.h" />
-    <ClInclude Include="..\vram\scrnbmp.h" />
     <ClInclude Include="..\vram\scrndraw.h" />
     <ClInclude Include="..\vram\scrnsave.h" />
     <ClInclude Include="..\vram\sdraw.h" />
