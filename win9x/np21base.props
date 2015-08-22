@@ -9,7 +9,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>..\win9x;..\win9x\dialog;..\win9x\mountdir;..\win9x\debuguty;..\;..\common;..\i386c;..\i386c\ia32;..\i386c\ia32\instructions;..\i386c\ia32\instructions\fpu;..\mem;..\io;..\cbus;..\vram;..\sound;..\fdd;..\generic;..\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\win9x;..\win9x\dialog;..\win9x\mountdir;..\win9x\debuguty;..\;..\common;..\i386c;..\i386c\ia32;..\i386c\ia32\instructions;..\i386c\ia32\instructions\fpu;..\mem;..\io;..\cbus;..\vram;..\sound;..\generic;..\zlib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4819;4996</DisableSpecificWarnings>
       <PreprocessorDefinitions>WIN32;_WINDOWS;SUPPORT_PC9821;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>

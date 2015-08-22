@@ -6,7 +6,7 @@
 #include	"menu.h"
 #include	"np2class.h"
 #include	"pccore.h"
-#include	"fddfile.h"
+#include	"fdd/fddfile.h"
 #include	"dosio.h"
 
 
