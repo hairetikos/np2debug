@@ -68,7 +68,6 @@ static const FMSNDTBL fmsndtbl[] = {
 		{NULL, 0x02a0, 0x7777},
 		{NULL, 0x02b0, 0x0077}};
 
-
 static void viewsnd_paint(NP2VIEW_T *view, RECT *rc, HDC hdc) {
 
 	int		x;
@@ -87,7 +86,7 @@ const UINT8	*p;
 			}
 			else {
 				view->buf1.type = ALLOCTYPE_SND;
-				CopyMemory(view->buf1.ptr, g_opn.reg, 0x400);
+				CopyMemory(view->buf1.ptr, g_opn.s.reg, 0x400);
 				CopyMemory(view->buf1.ptr, &g_psg1.reg, 0x10);
 				CopyMemory(((UINT8 *)view->buf1.ptr) + 0x200, &g_psg2.reg, 0x10);
 			}
@@ -112,7 +111,7 @@ const UINT8	*p;
 				p += reg;
 			}
 			else if (reg & 0x1ff) {
-				p = g_opn.reg + reg;
+				p = g_opn.s.reg + reg;
 			}
 			else if (reg & 0x200) {
 				p = (UINT8 *)&g_psg2.reg;

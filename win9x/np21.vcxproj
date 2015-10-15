@@ -234,6 +234,7 @@
     <ClCompile Include="..\io\upd4990.c" />
     <ClCompile Include="..\cbus\amd98.c" />
     <ClCompile Include="..\cbus\atapicmd.c" />
+    <ClCompile Include="..\cbus\board118.c" />
     <ClCompile Include="..\cbus\board14.c" />
     <ClCompile Include="..\cbus\board26k.c" />
     <ClCompile Include="..\cbus\board86.c" />
@@ -390,6 +391,7 @@
     <ClCompile Include="..\win9x\ext\c86ctl\c86ctlif.cpp" />
     <ClCompile Include="..\win9x\ext\rebirth\rebirth.cpp" />
     <ClCompile Include="..\win9x\ext\romeo\juliet.cpp" />
+    <ClCompile Include="..\win9x\ext\opna.cpp" />
     <ClCompile Include="..\win9x\misc\extrom.cpp" />
     <ClCompile Include="..\win9x\misc\tickcounter.cpp" />
     <ClCompile Include="..\zlib\adler32.c" />
@@ -403,7 +405,6 @@
     <ClCompile Include="..\win9x\mountdir\md_file.c" />
     <ClCompile Include="..\win9x\mountdir\md_util.c" />
     <ClCompile Include="..\win9x\mountdir\mountdir.c" />
-    <ClCompile Include="..\win9x\board118.cpp" />
   </ItemGroup>
   <ItemGroup>
     <YASM Include="..\win9x\x86\PARTS.X86">
@@ -522,6 +523,7 @@
     <ClInclude Include="..\nevent.h" />
     <ClInclude Include="..\np2ver.h" />
     <ClInclude Include="..\pccore.h" />
+    <ClInclude Include="..\sound\opna.h" />
     <ClInclude Include="..\sound\pcmmix.h" />
     <ClInclude Include="..\sound\vermouth\midimod.h" />
     <ClInclude Include="..\sound\vermouth\midinst.h" />
@@ -601,7 +603,7 @@
     <ClInclude Include="..\win9x\ext\rebirth\scci.h" />
     <ClInclude Include="..\win9x\ext\rebirth\SCCIDefines.h" />
     <ClInclude Include="..\win9x\ext\externalopna.h" />
-    <ClInclude Include="..\win9x\ext\extendmodule.h" />
+    <ClInclude Include="..\win9x\ext\externalchip.h" />
     <ClInclude Include="..\win9x\ext\juliet.h" />
     <ClInclude Include="..\win9x\ext\romeo.h" />
     <ClInclude Include="..\win9x\misc\extrom.h" />

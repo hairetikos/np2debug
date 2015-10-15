@@ -53,6 +53,9 @@
     <ClCompile Include="..\CBUS\BOARDX2.C">
       <Filter>cbus</Filter>
     </ClCompile>
+    <ClCompile Include="..\CBUS\BOARD118.C">
+      <Filter>cbus</Filter>
+    </ClCompile>
     <ClCompile Include="..\CBUS\BOARD14.C">
       <Filter>cbus</Filter>
     </ClCompile>
@@ -384,6 +387,9 @@
       <Filter>Win9x</Filter>
     </ClCompile>
     <ClCompile Include="..\WIN9X\EXT\ROMEO\JULIET.CPP">
+      <Filter>Win9x</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WIN9X\MISC\OPNA.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
     <ClCompile Include="..\WIN9X\MISC\EXTROM.CPP">
@@ -765,9 +771,6 @@
     <ClCompile Include="..\win9x\mountdir\md_fcb.c">
       <Filter>Win9x\mountdir</Filter>
     </ClCompile>
-    <ClCompile Include="..\win9x\board118.cpp">
-      <Filter>Win9x</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="bios">
@@ -1078,6 +1081,9 @@
     <ClInclude Include="..\LIO\lio.h">
       <Filter>lio</Filter>
     </ClInclude>
+    <ClInclude Include="..\SOUND\opna.h">
+      <Filter>sound</Filter>
+    </ClInclude>
     <ClInclude Include="..\SOUND\pcmmix.h">
       <Filter>sound</Filter>
     </ClInclude>
@@ -1267,7 +1273,7 @@
     <ClInclude Include="..\win9x\dialog\dialog.h">
       <Filter>Win9x\dialog</Filter>
     </ClInclude>
-    <ClInclude Include="..\win9x\ext\extendmodule.h">
+    <ClInclude Include="..\win9x\ext\externalchip.h">
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\ext\externalopna.h">

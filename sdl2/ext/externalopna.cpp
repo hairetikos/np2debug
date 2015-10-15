@@ -1,23 +1,20 @@
 /**
  * @file	externalopna.cpp
- * @brief	å¤–éƒ¨ OPNA æ¼”å¥ã‚¯ãƒ©ã‚¹ã®å‹•ä½œã®å®šç¾©ã‚’è¡Œã„ã¾ã™
+ * @brief	ŠO•” OPNA ‰‰‘tƒNƒ‰ƒX‚Ì“®ì‚Ì’è‹`‚ğs‚¢‚Ü‚·
  */
 
 #include "compiler.h"
 #include "externalopna.h"
-#include "np2.h"
-#include "c86ctl\c86ctlif.h"
-#include "rebirth\rebirth.h"
-#include "romeo\juliet.h"
+#include "gimic/gimic.h"
+#include "spfm/spfmlight.h"
 
 CExternalOpna CExternalOpna::sm_instance;
 
 /**
- * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+ * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
  */
 CExternalOpna::CExternalOpna()
 	: m_module(NULL)
-	, m_bHasADPCM(false)
 	, m_cPsgMix(0x3f)
 {
 	memset(m_cAlgorithm, 0, sizeof(m_cAlgorithm));
@@ -25,54 +22,36 @@ CExternalOpna::CExternalOpna()
 }
 
 /**
- * åˆæœŸåŒ–
+ * ‰Šú‰»
  */
 void CExternalOpna::Initialize()
 {
-	IExternalChip* pModule;
-
-	// ROMEO
-	if (np2oscfg.useromeo)
-	{
-		pModule = new CJuliet;
-		if (pModule->Initialize())
-		{
-			m_module = pModule;
-//			m_bHasADPCM = pModule->HasADPCM();
-			return;
-		}
-		delete pModule;
-	}
-
 	// G.I.M.I.C / C86BOX
-	pModule = new C86CtlIf;
+	IExternalChip* pModule = new CGimic;
 	if (pModule->Initialize())
 	{
 		m_module = pModule;
-		m_bHasADPCM = pModule->HasADPCM();
 		return;
 	}
 	delete pModule;
 
-	// RE:birth
-	pModule = new CRebirth;
+	// SPFM Light
+	pModule = new CSpfmLight;
 	if (pModule->Initialize())
 	{
 		m_module = pModule;
-		m_bHasADPCM = pModule->HasADPCM();
 		return;
 	}
 	delete pModule;
 }
 
 /**
- * è§£æ”¾
+ * ‰ğ•ú
  */
 void CExternalOpna::Deinitialize()
 {
 	IExternalChip* pModule = m_module;
 	m_module = NULL;
-	m_bHasADPCM = false;
 	if (pModule)
 	{
 		pModule->Deinitialize();
@@ -81,9 +60,9 @@ void CExternalOpna::Deinitialize()
 }
 
 /**
- * ãƒ“ã‚¸ãƒ¼?
- * @retval true ãƒ“ã‚¸ãƒ¼
- * @retval false ãƒ¬ãƒ‡ã‚£
+ * ƒrƒW[?
+ * @retval true ƒrƒW[
+ * @retval false ƒŒƒfƒB
  */
 bool CExternalOpna::IsBusy() const
 {
@@ -96,7 +75,7 @@ bool CExternalOpna::IsBusy() const
 }
 
 /**
- * éŸ³æºãƒªã‚»ãƒƒãƒˆ
+ * ‰¹Œ¹ƒŠƒZƒbƒg
  */
 void CExternalOpna::Reset() const
 {
@@ -107,9 +86,9 @@ void CExternalOpna::Reset() const
 }
 
 /**
- * ãƒ¬ã‚¸ã‚¹ã‚¿æ›¸ãè¾¼ã¿
- * @param[in] nAddr ã‚¢ãƒ‰ãƒ¬ã‚¹
- * @param[in] cData ãƒ‡ãƒ¼ã‚¿
+ * ƒŒƒWƒXƒ^‘‚«‚İ
+ * @param[in] nAddr ƒAƒhƒŒƒX
+ * @param[in] cData ƒf[ƒ^
  */
 void CExternalOpna::WriteRegister(UINT nAddr, UINT8 cData)
 {
@@ -132,8 +111,8 @@ void CExternalOpna::WriteRegister(UINT nAddr, UINT8 cData)
 }
 
 /**
- * ãƒŸãƒ¥ãƒ¼ãƒˆ
- * @param[in] bMute ãƒŸãƒ¥ãƒ¼ãƒˆ
+ * ƒ~ƒ…[ƒg
+ * @param[in] bMute ƒ~ƒ…[ƒg
  */
 void CExternalOpna::Mute(bool bMute) const
 {
@@ -148,9 +127,9 @@ void CExternalOpna::Mute(bool bMute) const
 }
 
 /**
- * ãƒ¬ã‚¸ã‚¹ã‚¿æ›¸ãè¾¼ã¿(å†…éƒ¨)
- * @param[in] nAddr ã‚¢ãƒ‰ãƒ¬ã‚¹
- * @param[in] cData ãƒ‡ãƒ¼ã‚¿
+ * ƒŒƒWƒXƒ^‘‚«‚İ(“à•”)
+ * @param[in] nAddr ƒAƒhƒŒƒX
+ * @param[in] cData ƒf[ƒ^
  */
 void CExternalOpna::WriteRegisterInner(UINT nAddr, UINT8 cData) const
 {
@@ -161,15 +140,15 @@ void CExternalOpna::WriteRegisterInner(UINT nAddr, UINT8 cData) const
 }
 
 /**
- * ãƒ´ã‚©ãƒªãƒ¥ãƒ¼ãƒ è¨­å®š
- * @param[in] nChannel ãƒãƒ£ãƒ³ãƒãƒ«
- * @param[in] nVolume ãƒ´ã‚©ãƒªãƒ¥ãƒ¼ãƒ å€¤
+ * ƒ”ƒHƒŠƒ…[ƒ€İ’è
+ * @param[in] nChannel ƒ`ƒƒƒ“ƒlƒ‹
+ * @param[in] nVolume ƒ”ƒHƒŠƒ…[ƒ€’l
  */
 void CExternalOpna::SetVolume(UINT nChannel, int nVolume) const
 {
 	const UINT nBaseReg = (nChannel & 4) ? 0x140 : 0x40;
 
-	//! ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ  ã‚¹ãƒ­ãƒƒãƒˆ ãƒã‚¹ã‚¯
+	//! ƒAƒ‹ƒSƒŠƒYƒ€ ƒXƒƒbƒg ƒ}ƒXƒN
 	static const UINT8 s_opmask[] = {0x08, 0x08, 0x08, 0x08, 0x0c, 0x0e, 0x0e, 0x0f};
 	UINT8 cMask = s_opmask[m_cAlgorithm[nChannel & 7] & 7];
 	const UINT8* pTtl = m_cTtl + ((nChannel & 4) << 2);
@@ -196,9 +175,9 @@ void CExternalOpna::SetVolume(UINT nChannel, int nVolume) const
 }
 
 /**
- * ãƒ¬ã‚¸ã‚¹ã‚¿ã‚’ãƒªã‚¹ãƒˆã‚¢ã™ã‚‹
- * @param[in] data ãƒ‡ãƒ¼ã‚¿
- * @param[in] bOpna OPNA ãƒ¬ã‚¸ã‚¹ã‚¿ã‚‚ãƒªã‚¹ãƒˆã‚¢ã™ã‚‹
+ * ƒŒƒWƒXƒ^‚ğƒŠƒXƒgƒA‚·‚é
+ * @param[in] data ƒf[ƒ^
+ * @param[in] bOpna OPNA ƒŒƒWƒXƒ^‚àƒŠƒXƒgƒA‚·‚é
  */
 void CExternalOpna::Restore(const UINT8* data, bool bOpna)
 {

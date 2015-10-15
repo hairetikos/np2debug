@@ -1,6 +1,6 @@
 /**
  * @file	externalopna.h
- * @brief	å¤–éƒ¨ OPNA æ¼”å¥ã‚¯ãƒ©ã‚¹ã®å®£è¨€ãŠã‚ˆã³ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã®å®šç¾©ã‚’ã—ã¾ã™
+ * @brief	ŠO•” OPNA ‰‰‘tƒNƒ‰ƒX‚ÌéŒ¾‚¨‚æ‚ÑƒCƒ“ƒ^[ƒtƒFƒCƒX‚Ì’è‹`‚ğ‚µ‚Ü‚·
  */
 
 #pragma once
@@ -8,7 +8,7 @@
 class IExternalChip;
 
 /**
- * @brief å¤–éƒ¨ OPNA æ¼”å¥ã‚¯ãƒ©ã‚¹
+ * @brief ŠO•” OPNA ‰‰‘tƒNƒ‰ƒX
  */
 class CExternalOpna
 {
@@ -27,20 +27,19 @@ public:
 	void Restore(const UINT8* data, bool bOpna);
 
 private:
-	static CExternalOpna sm_instance;	//!< å”¯ä¸€ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã§ã™
-	IExternalChip* m_module;			//!< ãƒ¢ã‚¸ãƒ¥ãƒ¼ãƒ«
-	bool m_bHasADPCM;					//!< ADPCM
-	UINT8 m_cPsgMix;					//!< PSG ãƒŸã‚­ã‚µãƒ¼
-	UINT8 m_cAlgorithm[8];				//!< ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ  ãƒ†ãƒ¼ãƒ–ãƒ«
-	UINT8 m_cTtl[8 * 4];				//!< TTL ãƒ†ãƒ¼ãƒ–ãƒ«
+	static CExternalOpna sm_instance;	//!< —Bˆê‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚·
+	IExternalChip* m_module;			//!< ƒ‚ƒWƒ…[ƒ‹
+	UINT8 m_cPsgMix;					//!< PSG ƒ~ƒLƒT[
+	UINT8 m_cAlgorithm[8];				//!< ƒAƒ‹ƒSƒŠƒYƒ€ ƒe[ƒuƒ‹
+	UINT8 m_cTtl[8 * 4];				//!< TTL ƒe[ƒuƒ‹
 
 	void WriteRegisterInner(UINT nAddr, UINT8 cData) const;
 	void SetVolume(UINT nChannel, int nVolume) const;
 };
 
 /**
- * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’å¾—ã‚‹
- * @return ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
+ * ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ“¾‚é
+ * @return ƒCƒ“ƒXƒ^ƒ“ƒX
  */
 inline CExternalOpna* CExternalOpna::GetInstance()
 {
@@ -48,9 +47,9 @@ inline CExternalOpna* CExternalOpna::GetInstance()
 }
 
 /**
- * ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯æœ‰åŠ¹?
- * @retval true æœ‰åŠ¹
- * @retval false ç„¡åŠ¹
+ * ƒCƒ“ƒXƒ^ƒ“ƒX‚Í—LŒø?
+ * @retval true —LŒø
+ * @retval false –³Œø
  */
 inline bool CExternalOpna::IsEnabled() const
 {
@@ -58,11 +57,11 @@ inline bool CExternalOpna::IsEnabled() const
 }
 
 /**
- * ADPCM ï¿½Ìƒoï¿½bï¿½tï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½?
- * @retval true ï¿½Lï¿½ï¿½
- * @retval false ï¿½ï¿½ï¿½ï¿½
+ * ADPCM ‚Ìƒoƒbƒtƒ@‚ğ‚Á‚Ä‚¢‚é?
+ * @retval true —LŒø
+ * @retval false –³Œø
  */
 inline bool CExternalOpna::HasADPCM() const
 {
-	return m_bHasADPCM;
+	return (m_module != NULL);
 }
