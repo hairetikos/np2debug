@@ -1,67 +1,68 @@
 /**
  * @file	externalopna.h
- * @brief	ŠO•” OPNA ‰‰‘tƒNƒ‰ƒX‚ÌéŒ¾‚¨‚æ‚ÑƒCƒ“ƒ^[ƒtƒFƒCƒX‚Ì’è‹`‚ğ‚µ‚Ü‚·
+ * @brief	å¤–éƒ¨ OPNA æ¼”å¥ã‚¯ãƒ©ã‚¹ã®å®£è¨€ãŠã‚ˆã³ã‚¤ãƒ³ã‚¿ãƒ¼ãƒ•ã‚§ã‚¤ã‚¹ã®å®šç¾©ã‚’ã—ã¾ã™
  */
 
 #pragma once
 
-class IExternalChip;
+#include "externalchip.h"
 
 /**
- * @brief ŠO•” OPNA ‰‰‘tƒNƒ‰ƒX
+ * @brief å¤–éƒ¨ OPNA æ¼”å¥ã‚¯ãƒ©ã‚¹
  */
-class CExternalOpna
+class CExternalOpna : public IExternalChip
 {
 public:
-	static CExternalOpna* GetInstance();
-
-	CExternalOpna();
-	void Initialize();
-	void Deinitialize();
-	bool IsEnabled() const;
+	CExternalOpna(IExternalChip* pChip);
+	virtual ~CExternalOpna();
+	bool HasPsg() const;
+	bool HasRhythm() const;
 	bool HasADPCM() const;
-	bool IsBusy() const;
-	void Reset() const;
-	void WriteRegister(UINT nAddr, UINT8 cData);
+	virtual ChipType GetChipType();
+	virtual void Reset();
+	virtual void WriteRegister(UINT nAddr, UINT8 cData);
+	virtual INTPTR Message(UINT nMessage, INTPTR nParameter);
+
+protected:
+	IExternalChip* m_pChip;				//!< ãƒãƒƒãƒ—
+	bool m_bHasPsg;						//!< PSG
+	bool m_bHasRhythm;					//!< Rhythm
+	bool m_bHasADPCM;					//!< ADPCM
+	UINT8 m_cPsgMix;					//!< PSG ãƒŸã‚­ã‚µãƒ¼
+	UINT8 m_cAlgorithm[8];				//!< ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ  ãƒ†ãƒ¼ãƒ–ãƒ«
+	UINT8 m_cTtl[8 * 4];				//!< TTL ãƒ†ãƒ¼ãƒ–ãƒ«
+
 	void Mute(bool bMute) const;
-	void Restore(const UINT8* data, bool bOpna);
-
-private:
-	static CExternalOpna sm_instance;	//!< —Bˆê‚ÌƒCƒ“ƒXƒ^ƒ“ƒX‚Å‚·
-	IExternalChip* m_module;			//!< ƒ‚ƒWƒ…[ƒ‹
-	UINT8 m_cPsgMix;					//!< PSG ƒ~ƒLƒT[
-	UINT8 m_cAlgorithm[8];				//!< ƒAƒ‹ƒSƒŠƒYƒ€ ƒe[ƒuƒ‹
-	UINT8 m_cTtl[8 * 4];				//!< TTL ƒe[ƒuƒ‹
-
 	void WriteRegisterInner(UINT nAddr, UINT8 cData) const;
 	void SetVolume(UINT nChannel, int nVolume) const;
 };
 
 /**
- * ƒCƒ“ƒXƒ^ƒ“ƒX‚ğ“¾‚é
- * @return ƒCƒ“ƒXƒ^ƒ“ƒX
+ * PSG ã‚’æŒã£ã¦ã„ã‚‹?
+ * @retval true æœ‰åŠ¹
+ * @retval false ç„¡åŠ¹
  */
-inline CExternalOpna* CExternalOpna::GetInstance()
+inline bool CExternalOpna::HasPsg() const
 {
-	return &sm_instance;
+	return m_bHasPsg;
 }
 
 /**
- * ƒCƒ“ƒXƒ^ƒ“ƒX‚Í—LŒø?
- * @retval true —LŒø
- * @retval false –³Œø
+ * Rhythm ã‚’æŒã£ã¦ã„ã‚‹?
+ * @retval true æœ‰åŠ¹
+ * @retval false ç„¡åŠ¹
  */
-inline bool CExternalOpna::IsEnabled() const
+inline bool CExternalOpna::HasRhythm() const
 {
-	return (m_module != NULL);
+	return m_bHasRhythm;
 }
 
 /**
- * ADPCM ‚Ìƒoƒbƒtƒ@‚ğ‚Á‚Ä‚¢‚é?
- * @retval true —LŒø
- * @retval false –³Œø
+ * ADPCM ã®ãƒãƒƒãƒ•ã‚¡ã‚’æŒã£ã¦ã„ã‚‹?
+ * @retval true æœ‰åŠ¹
+ * @retval false ç„¡åŠ¹
  */
 inline bool CExternalOpna::HasADPCM() const
 {
-	return (m_module != NULL);
+	return m_bHasADPCM;
 }

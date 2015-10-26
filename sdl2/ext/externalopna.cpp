@@ -1,94 +1,72 @@
 /**
  * @file	externalopna.cpp
- * @brief	ŠO•” OPNA ‰‰‘tƒNƒ‰ƒX‚Ì“®ì‚Ì’è‹`‚ğs‚¢‚Ü‚·
+ * @brief	å¤–éƒ¨ OPNA æ¼”å¥ã‚¯ãƒ©ã‚¹ã®å‹•ä½œã®å®šç¾©ã‚’è¡Œã„ã¾ã™
  */
 
 #include "compiler.h"
 #include "externalopna.h"
-#include "gimic/gimic.h"
-#include "spfm/spfmlight.h"
-
-CExternalOpna CExternalOpna::sm_instance;
 
 /**
- * ƒRƒ“ƒXƒgƒ‰ƒNƒ^
+ * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
+ * @param[in] pChip ãƒãƒƒãƒ—
  */
-CExternalOpna::CExternalOpna()
-	: m_module(NULL)
+CExternalOpna::CExternalOpna(IExternalChip* pChip)
+	: m_pChip(pChip)
+	, m_bHasPsg(false)
+	, m_bHasRhythm(false)
+	, m_bHasADPCM(false)
 	, m_cPsgMix(0x3f)
 {
 	memset(m_cAlgorithm, 0, sizeof(m_cAlgorithm));
 	memset(m_cTtl, 0x7f, sizeof(m_cTtl));
+
+	switch (GetChipType())
+	{
+		case IExternalChip::kYM2608:
+			m_bHasPsg = true;
+			m_bHasRhythm = true;
+			m_bHasADPCM = true;
+			break;
+
+		case IExternalChip::kYMF288:
+			m_bHasPsg = true;
+			m_bHasRhythm = true;
+			break;
+
+		default:
+			break;
+	}
 }
 
 /**
- * ‰Šú‰»
+ * ãƒ‡ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
  */
-void CExternalOpna::Initialize()
+CExternalOpna::~CExternalOpna()
 {
-	// G.I.M.I.C / C86BOX
-	IExternalChip* pModule = new CGimic;
-	if (pModule->Initialize())
-	{
-		m_module = pModule;
-		return;
-	}
-	delete pModule;
-
-	// SPFM Light
-	pModule = new CSpfmLight;
-	if (pModule->Initialize())
-	{
-		m_module = pModule;
-		return;
-	}
-	delete pModule;
+	delete m_pChip;
 }
 
 /**
- * ‰ğ•ú
+ * ãƒãƒƒãƒ— ã‚¿ã‚¤ãƒ—ã‚’å¾—ã‚‹
+ * @return ãƒãƒƒãƒ— ã‚¿ã‚¤ãƒ—
  */
-void CExternalOpna::Deinitialize()
+IExternalChip::ChipType CExternalOpna::GetChipType()
 {
-	IExternalChip* pModule = m_module;
-	m_module = NULL;
-	if (pModule)
-	{
-		pModule->Deinitialize();
-		delete pModule;
-	}
+	return m_pChip->GetChipType();
 }
 
 /**
- * ƒrƒW[?
- * @retval true ƒrƒW[
- * @retval false ƒŒƒfƒB
+ * éŸ³æºãƒªã‚»ãƒƒãƒˆ
  */
-bool CExternalOpna::IsBusy() const
+void CExternalOpna::Reset()
 {
-	if (m_module)
-	{
-		return m_module->IsBusy();
-	}
-	return false;
-
+	m_pChip->Reset();
 }
 
 /**
- * ‰¹Œ¹ƒŠƒZƒbƒg
- */
-void CExternalOpna::Reset() const
-{
-	if (m_module)
-	{
-		m_module->Reset();
-	}
-}
-
-/**
- * ƒŒƒWƒXƒ^‘‚«‚İ
- * @param[in] nAddr ƒAƒhƒŒƒX
- * @param[in] cData ƒf[ƒ^
+ * ãƒ¬ã‚¸ã‚¹ã‚¿æ›¸ãè¾¼ã¿
+ * @param[in] nAddr ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[in] cData ãƒ‡ãƒ¼ã‚¿
  */
 void CExternalOpna::WriteRegister(UINT nAddr, UINT8 cData)
 {
@@ -111,8 +89,25 @@ void CExternalOpna::WriteRegister(UINT nAddr, UINT8 cData)
 }
 
 /**
- * ƒ~ƒ…[ƒg
- * @param[in] bMute ƒ~ƒ…[ƒg
+ * ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+ * @param[in] nMessage ãƒ¡ãƒƒã‚»ãƒ¼ã‚¸
+ * @param[in] nParameter ãƒ‘ãƒ©ãƒ¡ãƒ¼ã‚¿
+ * @return çµæœ
+ */
+INTPTR CExternalOpna::Message(UINT nMessage, INTPTR nParameter)
+{
+	switch (nMessage)
+	{
+		case kMute:
+			Mute(nParameter != 0);
+			break;
+	}
+	return 0;
+}
+
+/**
+ * ãƒŸãƒ¥ãƒ¼ãƒˆ
+ * @param[in] bMute ãƒŸãƒ¥ãƒ¼ãƒˆ
  */
 void CExternalOpna::Mute(bool bMute) const
 {
@@ -127,28 +122,25 @@ void CExternalOpna::Mute(bool bMute) const
 }
 
 /**
- * ƒŒƒWƒXƒ^‘‚«‚İ(“à•”)
- * @param[in] nAddr ƒAƒhƒŒƒX
- * @param[in] cData ƒf[ƒ^
+ * ãƒ¬ã‚¸ã‚¹ã‚¿æ›¸ãè¾¼ã¿(å†…éƒ¨)
+ * @param[in] nAddr ã‚¢ãƒ‰ãƒ¬ã‚¹
+ * @param[in] cData ãƒ‡ãƒ¼ã‚¿
  */
 void CExternalOpna::WriteRegisterInner(UINT nAddr, UINT8 cData) const
 {
-	if (m_module)
-	{
-		m_module->WriteRegister(nAddr, cData);
-	}
+	m_pChip->WriteRegister(nAddr, cData);
 }
 
 /**
- * ƒ”ƒHƒŠƒ…[ƒ€İ’è
- * @param[in] nChannel ƒ`ƒƒƒ“ƒlƒ‹
- * @param[in] nVolume ƒ”ƒHƒŠƒ…[ƒ€’l
+ * ãƒ´ã‚©ãƒªãƒ¥ãƒ¼ãƒ è¨­å®š
+ * @param[in] nChannel ãƒãƒ£ãƒ³ãƒãƒ«
+ * @param[in] nVolume ãƒ´ã‚©ãƒªãƒ¥ãƒ¼ãƒ å€¤
  */
 void CExternalOpna::SetVolume(UINT nChannel, int nVolume) const
 {
 	const UINT nBaseReg = (nChannel & 4) ? 0x140 : 0x40;
 
-	//! ƒAƒ‹ƒSƒŠƒYƒ€ ƒXƒƒbƒg ƒ}ƒXƒN
+	//! ã‚¢ãƒ«ã‚´ãƒªã‚ºãƒ  ã‚¹ãƒ­ãƒƒãƒˆ ãƒã‚¹ã‚¯
 	static const UINT8 s_opmask[] = {0x08, 0x08, 0x08, 0x08, 0x0c, 0x0e, 0x0e, 0x0f};
 	UINT8 cMask = s_opmask[m_cAlgorithm[nChannel & 7] & 7];
 	const UINT8* pTtl = m_cTtl + ((nChannel & 4) << 2);
@@ -172,51 +164,4 @@ void CExternalOpna::SetVolume(UINT nChannel, int nVolume) const
 		nOffset += 4;
 		cMask >>= 1;
 	} while (cMask != 0);
-}
-
-/**
- * ƒŒƒWƒXƒ^‚ğƒŠƒXƒgƒA‚·‚é
- * @param[in] data ƒf[ƒ^
- * @param[in] bOpna OPNA ƒŒƒWƒXƒ^‚àƒŠƒXƒgƒA‚·‚é
- */
-void CExternalOpna::Restore(const UINT8* data, bool bOpna)
-{
-	for (UINT i = 0x30; i < 0xa0; i++)
-	{
-		WriteRegister(i, data[i]);
-	}
-	for (UINT ch = 0; ch < 3; ch++)
-	{
-		WriteRegister(ch + 0xa4, data[ch + 0x0a4]);
-		WriteRegister(ch + 0xa0, data[ch + 0x0a0]);
-		WriteRegister(ch + 0xb4, data[ch + 0x0b4]);
-		WriteRegister(ch + 0xb0, data[ch + 0x0b0]);
-	}
-
-	if (bOpna)
-	{
-		for (UINT i = 0x130; i < 0x1a0; i++)
-		{
-			WriteRegister(i, data[i]);
-		}
-		for (UINT ch = 0; ch < 3; ch++)
-		{
-			WriteRegister(ch + 0x1a4, data[ch + 0x1a4]);
-			WriteRegister(ch + 0x1a0, data[ch + 0x1a0]);
-			WriteRegister(ch + 0x1b4, data[ch + 0x1b4]);
-			WriteRegister(ch + 0x1b0, data[ch + 0x1b0]);
-		}
-		WriteRegister(0x11, data[0x11]);
-		WriteRegister(0x18, data[0x18]);
-		WriteRegister(0x19, data[0x19]);
-		WriteRegister(0x1a, data[0x1a]);
-		WriteRegister(0x1b, data[0x1b]);
-		WriteRegister(0x1c, data[0x1c]);
-		WriteRegister(0x1d, data[0x1d]);
-	}
-
-	for (UINT i = 0; i < 0x0e; i++)
-	{
-		WriteRegister(i, data[i]);
-	}
 }
