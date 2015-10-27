@@ -359,9 +359,6 @@
     <ClCompile Include="..\WIN9X\NP2ARG.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
-    <ClCompile Include="..\WIN9X\MT32SND.CPP">
-      <Filter>Win9x</Filter>
-    </ClCompile>
     <ClCompile Include="..\WIN9X\MOUSEMNG.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
@@ -381,6 +378,9 @@
       <Filter>Win9x</Filter>
     </ClCompile>
     <ClCompile Include="..\WIN9X\EXT\EXTERNALOPNA.CPP">
+      <Filter>Win9x</Filter>
+    </ClCompile>
+    <ClCompile Include="..\WIN9X\EXT\MT32SND.CPP">
       <Filter>Win9x</Filter>
     </ClCompile>
     <ClCompile Include="..\WIN9X\EXT\C86CTL\C86CTLIF.CPP">
@@ -1195,9 +1195,6 @@
     <ClInclude Include="..\win9x\mousemng.h">
       <Filter>Win9x</Filter>
     </ClInclude>
-    <ClInclude Include="..\win9x\mt32snd.h">
-      <Filter>Win9x</Filter>
-    </ClInclude>
     <ClInclude Include="..\win9x\winloc.h">
       <Filter>Win9x</Filter>
     </ClInclude>
@@ -1283,6 +1280,9 @@
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\ext\externalopna.h">
+      <Filter>Win9x</Filter>
+    </ClInclude>
+    <ClInclude Include="..\win9x\ext\mt32snd.h">
       <Filter>Win9x</Filter>
     </ClInclude>
     <ClInclude Include="..\win9x\ext\c86ctl\c86ctl.h">

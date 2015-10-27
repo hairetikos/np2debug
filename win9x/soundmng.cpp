@@ -22,7 +22,7 @@
 #include "sound\vermouth\vermouth.h"
 #endif
 #if defined(MT32SOUND_DLL)
-#include "mt32snd.h"
+#include "ext\mt32snd.h"
 #endif
 
 #if defined(_M_IA64) || defined(_M_AMD64)
@@ -164,7 +164,7 @@ bool CDSound3::Initialize(HWND hWnd)
 	m_lpDSound = lpDSound;
 
 #if defined(MT32SOUND_DLL)
-	mt32sound_initialize();
+	MT32Sound::GetInstance()->Initialize();
 #endif
 	return true;
 }
@@ -175,7 +175,7 @@ bool CDSound3::Initialize(HWND hWnd)
 void CDSound3::Deinitialize()
 {
 #if defined(MT32SOUND_DLL)
-	mt32sound_deinitialize();
+	MT32Sound::GetInstance()->Deinitialize();
 #endif
 	DestroyAllPCM();
 	DestroyStream();
@@ -280,7 +280,7 @@ UINT CDSound3::CreateStream(UINT rate, UINT ms)
 #endif
 
 #if defined(MT32SOUND_DLL)
-	mt32sound_setrate(rate);
+	MT32Sound::GetInstance()->SetRate(rate);
 #endif
 
 	m_nStreamEvent = -1;
@@ -324,7 +324,7 @@ void CDSound3::DestroyStream()
 		vermouth_module = NULL;
 #endif
 #if defined(MT32SOUND_DLL)
-		mt32sound_setrate(0);
+		MT32Sound::GetInstance()->SetRate(0);
 #endif
 		m_lpDSStream->Stop();
 		m_lpDSStream->Release();
