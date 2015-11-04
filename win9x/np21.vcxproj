@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|Win32">
-      <Configuration>Debug</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
     <ProjectConfiguration Include="Debug NT|Win32">
       <Configuration>Debug NT</Configuration>
       <Platform>Win32</Platform>
@@ -23,14 +15,6 @@
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release NT|x64">
       <Configuration>Release NT</Configuration>
-      <Platform>x64</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|Win32">
-      <Configuration>Release</Configuration>
-      <Platform>Win32</Platform>
-    </ProjectConfiguration>
-    <ProjectConfiguration Include="Release|x64">
-      <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Trace|Win32">
@@ -95,41 +79,19 @@
   <ImportGroup Condition="'$(Platform)'=='x64'" Label="PropertySheets">
     <Import Project="np21x64.props" />
   </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)'=='Debug'" Label="PropertySheets">
-    <Import Project="np21debug.props" />
-  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)'=='Debug NT'" Label="PropertySheets">
     <Import Project="np21debug.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
-    <LinkIncremental Condition="'$(Configuration)'=='Debug'">true</LinkIncremental>
     <LinkIncremental Condition="'$(Configuration)'=='Debug NT'">true</LinkIncremental>
-    <TargetName Condition="'$(Configuration)'=='Debug'">$(ProjectName)d</TargetName>
     <TargetName Condition="'$(Configuration)'=='Debug NT'">$(ProjectName)dnt</TargetName>
-    <TargetName Condition="'$(Configuration)'=='Release'">$(ProjectName)</TargetName>
     <TargetName Condition="'$(Configuration)'=='Release NT'">$(ProjectName)nt</TargetName>
     <TargetName Condition="'$(Configuration)'=='Trace'">$(ProjectName)t</TargetName>
     <TargetName Condition="'$(Configuration)'=='Trap'">$(ProjectName)tr</TargetName>
     <TargetName Condition="'$(Platform)'=='x64'">$(TargetName)_x64</TargetName>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
-    <ClCompile>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
-      <WarningLevel>Level3</WarningLevel>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
-    </ClCompile>
-    <Link>
-      <OptimizeReferences>true</OptimizeReferences>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-    </Link>
-    <ResourceCompile>
-      <Culture>0x0411</Culture>
-    </ResourceCompile>
-  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release NT'">
     <ClCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
