@@ -21,7 +21,8 @@
 /// =======
 UINT8	np2stopemulate = 0;
 BOOL 	np2singlestep = 0;
-LISTARRAY np2breakpoints = NULL;
+np2break_t	np2breakflags[sizeof(mem)];
+LISTARRAY	np2breakaddrs = NULL;
 /// =======
 
 void np2active_renewal(UINT8 breakflag) {										// ver0.30
@@ -96,82 +97,98 @@ void np2active_step_over()	{
 
 /// Breakpoints
 /// -----------
-LISTARRAY np2break_create()
+void np2break_create()
 {
-	if(!np2breakpoints)	{
-		np2breakpoints = listarray_new(sizeof(BREAKPOINT), 16);
+	if(!np2breakaddrs) {
+		np2breakaddrs = listarray_new(sizeof(UINT32), 16);
 	}
-	return np2breakpoints;
 }
 
-static BOOL np2break_lookup(void *vpItem, void *vpArg) {
-	BREAKPOINT *seek = (BREAKPOINT*)vpArg;
-	BREAKPOINT *cur = (BREAKPOINT*)vpItem;
-	return seek->addr == cur->addr;
+static BOOL np2breakaddr_lookup_callback(void *vpItem, void *vpArg)
+{
+	return *((UINT32*)vpArg) == *((UINT32*)vpItem);
+}
+
+UINT32* np2breakaddr_lookup(UINT32 addr)
+{
+	return (UINT32*)listarray_enum(
+		np2breakaddrs, np2breakaddr_lookup_callback, &addr
+	);
+}
+
+np2break_t* np2break_lookup_real(UINT32 addr)
+{
+	if(addr > NELEMENTS(np2breakflags)) {
+		// TODO: What do we even want to happen in this case?
+		static np2break_t null_bp = NP2BP_NONE;
+		return &null_bp;
+	}
+	return &np2breakflags[addr];
+}
+
+np2break_t* np2break_lookup(UINT32 *addr_if_hit, UINT16 seg, UINT16 off)
+{
+	UINT32 addr = (seg << 4) + off;
+	np2break_t *ret = np2break_lookup_real(addr);
+	if(*ret != NP2BP_NONE && addr_if_hit) {
+		*addr_if_hit = addr;
+	}
+	return ret;
 }
 
 BOOL np2break_toggle_real(UINT32 addr, UINT8 flag)
 {
-	BREAKPOINT* found;
-
 	// LISTARRAY doesn't support element deletion.
 	// We work around that here by zeroing out the elements that should be deleted.
 	// Once a new element should be appended, we check for these zeroed entries
 	// in order to keep the list from becoming larger and larger over time.
-	found = np2break_is_set_real(addr);
-	if(found)	{
+	UINT32* addr_slot = np2breakaddr_lookup(addr);
+	np2break_t *flag_slot = np2break_lookup_real(addr);
+	if(addr_slot && *flag_slot != NP2BP_NONE) {
 		// Disable
-		ZeroMemory(found, sizeof(BREAKPOINT));
+		memset(addr_slot, 0, sizeof(*addr_slot));
+		*flag_slot = NP2BP_NONE;
 		return(TRUE);
 	}
 	
 	// Look for a zeroed element
-	found = np2break_is_set_real(0);
-	if(!found)	{
+	addr_slot = np2breakaddr_lookup(0);
+	if(!addr_slot) {
 		// Nothing found, append a new one
-		found = (BREAKPOINT*)listarray_append(np2breakpoints, NULL);
-		if(!found)	{
+		addr_slot = (UINT32*)listarray_append(np2breakaddrs, NULL);
+		if(!addr_slot) {
 			return(FALSE);
 		}
 	}
 	// Set this element
-	found->addr = addr;
-	found->flag = flag;
+	*addr_slot = addr;
+	*flag_slot |= flag;
 	return(TRUE);
 }
 
-BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flag)	{
+BOOL np2break_toggle(UINT16 seg, UINT16 off, np2break_t flag)
+{
 	return np2break_toggle_real((seg << 4) + off, flag);
 }
 
-BREAKPOINT* np2break_is_set_real(UINT32 addr)
+static BOOL np2break_is_flag(UINT32 *addr_if_hit, UINT16 seg, UINT16 off, np2break_t flag)
 {
-	BREAKPOINT lookup;
-	lookup.addr = addr;
-	return (BREAKPOINT*)listarray_enum(np2breakpoints, np2break_lookup, &lookup);
+	return (*np2break_lookup(addr_if_hit, seg, off) & flag) != 0;
 }
 
-BREAKPOINT* np2break_is_set(UINT16 seg, UINT16 off)	{
-	return np2break_is_set_real((seg << 4) + off);
-}
-
-static BREAKPOINT* np2break_is_flag(UINT16 seg, UINT16 off, UINT8 flag)
+BOOL np2break_is_exec(UINT32 *addr_if_hit, UINT16 seg, UINT16 off)
 {
-	BREAKPOINT* lookup = np2break_is_set(seg, off);
-	if(lookup && lookup->flag & flag)	{
-		return lookup;
-	}
-	return NULL;
+	return np2break_is_flag(addr_if_hit, seg, off, NP2BP_EXECUTE);
 }
 
-BREAKPOINT* np2break_is_exec(UINT16 seg, UINT16 off)	{
-	return np2break_is_flag(seg, off, NP2BP_EXECUTE);
+BOOL np2break_is_read(UINT32 *addr_if_hit, UINT16 seg, UINT16 off)
+{
+	return np2break_is_flag(addr_if_hit, seg, off, NP2BP_READ);
 }
-BREAKPOINT* np2break_is_read(UINT16 seg, UINT16 off)	{
-	return np2break_is_flag(seg, off, NP2BP_READ);
-}
-BREAKPOINT* np2break_is_write(UINT16 seg, UINT16 off)	{
-	return np2break_is_flag(seg, off, NP2BP_WRITE);
+
+BOOL np2break_is_write(UINT32 *addr_if_hit, UINT16 seg, UINT16 off)
+{
+	return np2break_is_flag(addr_if_hit, seg, off, NP2BP_WRITE);
 }
 
 static UINT8 is_mem_type(const UNASM_MEMINFO *mi)	{
@@ -194,23 +211,23 @@ static UINT32 np2break_memory_write_naive()	{
 
 	static UINT bp_num = 0;
 	static UINT8* probe = NULL;
-	UINT bp_num_new = listarray_getitems(np2breakpoints);
+	UINT bp_num_new = listarray_getitems(np2breakaddrs);
 	UINT i;
 	if(bp_num_new > bp_num)	{
 		probe = (UINT8*)realloc(probe, bp_num_new);
 		bp_num = bp_num_new;
 	}
 	for(i = 0; i < bp_num; i++)	{
-		BREAKPOINT* bp = (BREAKPOINT*)listarray_getitem(np2breakpoints, i);
+		UINT32* bp = (UINT32*)listarray_getitem(np2breakaddrs, i);
 		if(!bp)	{
 			bp_num = i;
 			return 0;
 		}
-		if(bp->addr && bp->flag & NP2BP_WRITE)	{
-			UINT8 cur_val = mem[bp->addr];
+		if(*bp && *np2break_lookup_real(*bp) & NP2BP_WRITE) {
+			UINT8 cur_val = mem[*bp];
 			if(probe[i] != cur_val)	{
 				probe[i] = cur_val;
-				return bp->addr;
+				return *bp;
 			}
 		}
 	}
@@ -220,55 +237,55 @@ static UINT32 np2break_memory_write_naive()	{
 UINT32 np2break_is_next()	{
 
 	_UNASM una;
-	BREAKPOINT* bp = NULL;
-	UINT32 ret = 0;
-	UINT8 type;
+	UINT32 addr = 0;
+	np2break_t type = NP2BP_NONE;
 
 #ifdef DEBUG
-	ret = np2break_memory_write_naive();
-	if(ret)	{
-		viewstat_all_breakpoint(NP2BP_WRITE, ret);
-		return ret;
+	addr = np2break_memory_write_naive();
+	if(addr) {
+		viewstat_all_breakpoint(NP2BP_WRITE, addr);
+		return addr;
 	}
 #endif
-	if(!listarray_getitems(np2breakpoints))	{
+	if(!listarray_getitems(np2breakaddrs)) {
 		return 0;
 	}
 
 	unasm_next(&una);
 	if(stricmp(una.mnemonic, "lea") && stricmp(una.mnemonic, "les"))	{
 		if(is_mem_type(&una.meminf[MI_READ]))	{
-			bp = np2break_is_read(una.meminf[MI_READ].seg, una.meminf[MI_READ].off);
-			type = NP2BP_READ;
+			type |= np2break_is_read(
+				&addr, una.meminf[MI_READ].seg, una.meminf[MI_READ].off
+			);
 #ifndef DEBUG
 		} else if(is_mem_type(&una.meminf[MI_WRITE]))	{
-			bp = np2break_is_write(una.meminf[MI_WRITE].seg, una.meminf[MI_WRITE].off);
-			type = NP2BP_WRITE;
+			type |= np2break_is_write(
+				&addr, una.meminf[MI_WRITE].seg, una.meminf[MI_WRITE].off
+			);
 #endif
 		}
 	}
-	if(!bp)	{
-		bp = np2break_is_exec(CPU_CS, CPU_EIP);
-		type = NP2BP_EXECUTE;
+	if(type == NP2BP_NONE)	{
+		type |= np2break_is_exec(&addr, CPU_CS, CPU_EIP);
 	}
-	if(bp)	{
-		ret = bp->addr;
-		if(bp->flag & NP2BP_ONESHOT)	{
-			bp->addr = 0;
+	if(type |= NP2BP_NONE)	{
+		if(type & NP2BP_ONESHOT)	{
+			np2break_toggle_real(addr, 0);
 		}
-		viewstat_all_breakpoint(type, ret);
+		viewstat_all_breakpoint(type, addr);
 	}
-	return ret;
+	return addr;
 }
 
 void np2break_reset()
 {
-	listarray_clr(np2breakpoints);
+	memset(np2breakflags, 0, sizeof(np2breakflags));
+	listarray_clr(np2breakaddrs);
 }
 
 void np2break_destroy()
 {
-	listarray_destroy(np2breakpoints);
+	listarray_destroy(np2breakaddrs);
 }
 /// -----------
 

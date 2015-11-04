@@ -11,8 +11,8 @@ extern "C" {
 
 void viewstat_memory_edit(NP2VIEW_T *view, EDITDATA *ed);
 
-void viewstat_breakpoint(NP2VIEW_T *view, UINT8 type, UINT32 addr);
-void viewstat_all_breakpoint(UINT8 type, UINT32 addr);
+void viewstat_breakpoint(NP2VIEW_T *view, np2break_t type, UINT32 addr);
+void viewstat_all_breakpoint(np2break_t type, UINT32 addr);
 
 #ifdef __cplusplus
 }

@@ -37,7 +37,7 @@ COLORREF viewpaint_line_set_colors(NP2VIEW_T *view, RECT *rc, HDC hdc, DWORD y, 
 	}
 
 	// Breakpoint?
-	if(np2break_is_set(view->seg, off))	{
+	if(*np2break_lookup(NULL, view->seg, off) != NP2BP_NONE) {
 		SetBkColor(hdc, viewcfg.color_hilite);
 	}
 	else {

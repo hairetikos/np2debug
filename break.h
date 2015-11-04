@@ -12,23 +12,25 @@ enum {
 	NP2BREAK_DEBUG		= 0x02
 };
 
-enum {
+typedef enum {
+	NP2BP_NONE		= 0x00,
 	NP2BP_READ		= 0x01,
 	NP2BP_WRITE		= 0x02,
 	NP2BP_EXECUTE		= 0x04,
 	NP2BP_ONESHOT		= 0x08
-};
-
-typedef struct {
-	UINT32	addr;
-	UINT8 	flag;
-} BREAKPOINT;
+} np2break_t;
 
 /// Globals
 /// -------
 extern	UINT8	np2stopemulate;
 extern	BOOL 	np2singlestep;
-extern	LISTARRAY np2breakpoints;
+
+// Dense list of flags for every possible address, used for quickly halting
+// execution if necessary without having to traverse a linked list.
+extern	np2break_t	np2breakflags[];
+// Sparse linked list of all addresses with active breakpoints, used in the UI
+// or for more naive checks.
+extern	LISTARRAY	np2breakaddrs;
 /// -------
 
 /// Activity
@@ -43,15 +45,17 @@ void np2active_step_over();
 
 /// Breakpoints
 /// -----------
-LISTARRAY np2break_create();
+void np2break_create();
 
-BOOL np2break_toggle_real(UINT32 addr, UINT8 flag);
-BOOL np2break_toggle(UINT16 seg, UINT16 off, UINT8 flag);
-BREAKPOINT* np2break_is_set_real(UINT32 addr);
-BREAKPOINT* np2break_is_set(UINT16 seg, UINT16 off);
-BREAKPOINT* np2break_is_exec(UINT16 seg, UINT16 off);
-BREAKPOINT* np2break_is_read(UINT16 seg, UINT16 off);
-BREAKPOINT* np2break_is_write(UINT16 seg, UINT16 off);
+// These are guaranteed to return a valid, non-NULL pointer.
+np2break_t* np2break_lookup_real(UINT32 addr);
+np2break_t* np2break_lookup(UINT32 *addr_if_hit, UINT16 seg, UINT16 off);
+
+BOOL np2break_toggle_real(UINT32 addr, np2break_t flag);
+BOOL np2break_toggle(UINT16 seg, UINT16 off, np2break_t flag);
+BOOL np2break_is_exec(UINT32 *addr_if_hit, UINT16 seg, UINT16 off);
+BOOL np2break_is_read(UINT32 *addr_if_hit, UINT16 seg, UINT16 off);
+BOOL np2break_is_write(UINT32 *addr_if_hit, UINT16 seg, UINT16 off);
 
 // Returns the address of the breakpoint hit at the next instruction, or 0 for none
 UINT32 np2break_is_next();

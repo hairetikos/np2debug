@@ -1,6 +1,7 @@
 #include	"compiler.h"
 #include	"resource.h"
 #include	"np2.h"
+#include	"break.h"
 #include	"viewer.h"
 #include	"viewcmn.h"
 #include	"viewmenu.h"
@@ -10,7 +11,6 @@
 #include	"viewpaint.h"
 #include	"unasm.h"
 #include	"cpucore.h"
-#include	"break.h"
 
 static const DWORD MAX_UNASM = 256;
 

@@ -1,6 +1,7 @@
 #include	"compiler.h"
 #include	"resource.h"
 #include	"np2.h"
+#include	"break.h"
 #include	"dialogs.h"
 #include	"viewer.h"
 #include	"viewcmn.h"
@@ -10,7 +11,6 @@
 #include	"viewpaint.h"
 #include	"cpucore.h"
 #include	"dialog.h"
-#include	"break.h"
 
 const float	CHAR_SPACING = 1.5f;
 
@@ -51,7 +51,7 @@ static COLORREF viewmem_set_bkcol(NP2VIEW_T *view, UINT32 addr)	{
 
 	if(addr == view->cursor)	{
 		return viewcfg.color_cursor;
-	} else if(np2break_is_set_real(addr)) {
+	} else if(*np2break_lookup_real(addr) != NP2BP_NONE) {
 		return viewcfg.color_hilite;
 	}
 	return viewcfg.color_back;
@@ -234,7 +234,7 @@ LRESULT CALLBACK viewmem_proc(NP2VIEW_T *view, HWND hwnd, UINT msg, WPARAM wp, L
 					break;
 
 				case IDM_BREAK_TOGGLE:
-					if(np2break_toggle_real(seg4 + newcursor, NP2BP_READ | NP2BP_WRITE))	{
+					if(np2break_toggle_real(seg4 + newcursor, np2break_t(NP2BP_READ | NP2BP_WRITE))) {
 						InvalidateRect(view->clientwnd, NULL, TRUE);
 					}
 					break;

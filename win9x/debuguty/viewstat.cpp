@@ -2,10 +2,10 @@
 #include	"resource.h"
 #include	<CommCtrl.h>
 #include	"dialogs.h"
+#include	"break.h"
 #include	"viewer.h"
 #include	"viewstat.h"
 #include	"cpucore.h"
-#include	"break.h"
 
 /// -------
 /// Helpers
@@ -55,7 +55,7 @@ void viewstat_notfound(NP2VIEW_T *view, EDITDATA *fd)	{
 
 /// ----------
 /// Breakpoint
-void viewstat_breakpoint(NP2VIEW_T *view, UINT8 type, UINT32 addr)	{
+void viewstat_breakpoint(NP2VIEW_T *view, np2break_t type, UINT32 addr) {
 
 	WCHAR str_msg[MAX_EDIT_STR * 2];
 	WCHAR str_addr[32];
@@ -78,7 +78,7 @@ void viewstat_breakpoint(NP2VIEW_T *view, UINT8 type, UINT32 addr)	{
 	SendMessage(view->statwnd, SB_SETTEXT, 2, (LPARAM)str_msg);
 }
 
-void viewstat_all_breakpoint(UINT8 type, UINT32 addr) {
+void viewstat_all_breakpoint(np2break_t type, UINT32 addr) {
 
 	int			i;
 	NP2VIEW_T	*view = np2view;
