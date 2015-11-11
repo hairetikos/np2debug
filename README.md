@@ -21,7 +21,7 @@ The Win9x version of the upstream Neko Project II already comes with assembly, m
 What's still missing:
 * assembly modification by actually writing assembly mnemonics
 
-Since all these features were build on top of the previously existing Win9x code, they are currently *exclusive to the Win9x version*. After all that refactoring, it probably doesn't even build on Linux anymore…
+Since all these features were build on top of the previously existing Win9x code, they are currently *exclusive to the Win9x version*.
 
 This is, and probably ever will be, only tested against the Touhou Project games 01-05. While it is fully compatible with them, both the debugging functions and the rather outdated code base make it **noticeably laggier** (on average about 10 fps slower) than the recommended [fmgen build](http://www.shrinemaiden.org/forum/index.php?topic=11117.0). Thus, this edition is not what you're looking for if you want to actually *play* the games.
 

@@ -14,8 +14,13 @@
 #include "break.h"
 #include "unasmdef.tbl"
 #include "viewer.h"
+#ifdef WIN32
 #include "viewmenu.h"
 #include "viewstat.h"
+#else
+#define	viewmenu_all_debug_toggle(running)
+#define	viewstat_all_breakpoint(type, addr)
+#endif
 
 /// Globals
 /// =======
@@ -232,7 +237,7 @@ UINT32 np2break_is_next()	{
 	}
 
 	unasm_next(&una);
-	if(stricmp(una.mnemonic, "lea") && stricmp(una.mnemonic, "les"))	{
+	if(strcmp(una.mnemonic, "lea") && strcmp(una.mnemonic, "les"))	{
 		if(is_mem_type(&una.meminf[MI_READ]))	{
 			type |= *np2break_lookup(
 				&addr, una.meminf[MI_READ].seg, una.meminf[MI_READ].off

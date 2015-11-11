@@ -100,6 +100,9 @@ typedef	guint64		UINT64;
 
 typedef	gboolean	BOOL;
 
+#define _T(x)	x
+#define TEXT(x)	x
+
 #define PTR_TO_UINT32(p)	((UINT32)GPOINTER_TO_UINT(p))
 #define UINT32_TO_PTR(v)	GUINT_TO_POINTER((UINT32)(v))
 

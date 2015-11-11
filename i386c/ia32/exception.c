@@ -25,7 +25,11 @@
 
 #include "compiler.h"
 #include "cpu.h"
+#ifdef WIN32
 #include "mountdir.h"
+#else
+#define md_int21() 0
+#endif
 #include "ia32.mcr"
 
 const char *exception_str[EXCEPTION_NUM] = {

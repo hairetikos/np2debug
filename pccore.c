@@ -49,7 +49,13 @@
 #include	"keystat.h"
 #include	"debugsub.h"
 #include	"break.h"
+#ifdef WIN32
 #include	"mountdir.h"
+#else
+#define	md_create()
+#define	md_reset()
+#define	md_destroy()
+#endif
 
 
 const OEMCHAR np2version[] = OEMTEXT(NP2VER_CORE);
