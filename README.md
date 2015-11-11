@@ -5,9 +5,9 @@ __([Windows binaries are here](http://thpatch.net/wiki/Neko_Project_II_-_Debug_E
 
 About
 -----
-This is a fork of the PC-98 emulator [Xnp2](https://github.com/nonakap/xnp2) with extended debugging features. The aim is to achieve a level of debugging comfort high enough to thoroughly modify PC-98 binaries and add new features to them.
+This is a fork of the PC-98 emulator [Neko Project II](http://www.yui.ne.jp/np2/) with extended debugging features. The aim is to achieve a level of debugging comfort high enough to thoroughly modify PC-98 binaries and add new features to them.
 
-In addition to the assembly, memory and register viewers for emulated code already present in Xnp2, this version also includes:
+The Win9x version of the upstream Neko Project II already comes with assembly, memory and register viewers for emulated code, which, however, have to be manually enabled by putting `I286SAVE=true` into its .ini file. In addition to enabling these features by default, this fork also includes:
 
 * single-step execution
 * code breakpoints
@@ -21,7 +21,7 @@ In addition to the assembly, memory and register viewers for emulated code alrea
 What's still missing:
 * assembly modification by actually writing assembly mnemonics
 
-As Xnp2 (and, most importantly, its debugging features already present) doesn't come with a cross-platform method for GUI coding, these extended features are currently *exclusive to the Win9x build*. After all that refactoring, it probably doesn't even build on Linux anymore…
+Since all these features were build on top of the previously existing Win9x code, they are currently *exclusive to the Win9x version*. After all that refactoring, it probably doesn't even build on Linux anymore…
 
 This is, and probably ever will be, only tested against the Touhou Project games 01-05. While it is fully compatible with them, both the debugging functions and the rather outdated code base make it **noticeably laggier** (on average about 10 fps slower) than the recommended [fmgen build](http://www.shrinemaiden.org/forum/index.php?topic=11117.0). Thus, this edition is not what you're looking for if you want to actually *play* the games.
 
