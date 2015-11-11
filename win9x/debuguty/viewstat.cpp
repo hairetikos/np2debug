@@ -59,9 +59,9 @@ void viewstat_breakpoint(NP2VIEW_T *view, np2break_t type, UINT32 addr) {
 
 	WCHAR str_msg[MAX_EDIT_STR * 2];
 	WCHAR str_addr[32];
-	const WCHAR* str_type;
+	const WCHAR* str_type = L"unknown";
 
-	switch(type)	{
+	switch(type & (NP2BP_READ | NP2BP_WRITE | NP2BP_EXECUTE))	{
 		case NP2BP_READ:
 			str_type = L"memory read";
 			break;

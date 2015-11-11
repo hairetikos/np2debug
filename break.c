@@ -136,7 +136,7 @@ np2break_t* np2break_lookup(UINT32 *addr_if_hit, UINT16 seg, UINT16 off)
 	return ret;
 }
 
-BOOL np2break_toggle_real(UINT32 addr, UINT8 flag)
+BOOL np2break_toggle_real(UINT32 addr, np2break_t flag)
 {
 	// LISTARRAY doesn't support element deletion.
 	// We work around that here by zeroing out the elements that should be deleted.
@@ -169,26 +169,6 @@ BOOL np2break_toggle_real(UINT32 addr, UINT8 flag)
 BOOL np2break_toggle(UINT16 seg, UINT16 off, np2break_t flag)
 {
 	return np2break_toggle_real((seg << 4) + off, flag);
-}
-
-static BOOL np2break_is_flag(UINT32 *addr_if_hit, UINT16 seg, UINT16 off, np2break_t flag)
-{
-	return (*np2break_lookup(addr_if_hit, seg, off) & flag) != 0;
-}
-
-BOOL np2break_is_exec(UINT32 *addr_if_hit, UINT16 seg, UINT16 off)
-{
-	return np2break_is_flag(addr_if_hit, seg, off, NP2BP_EXECUTE);
-}
-
-BOOL np2break_is_read(UINT32 *addr_if_hit, UINT16 seg, UINT16 off)
-{
-	return np2break_is_flag(addr_if_hit, seg, off, NP2BP_READ);
-}
-
-BOOL np2break_is_write(UINT32 *addr_if_hit, UINT16 seg, UINT16 off)
-{
-	return np2break_is_flag(addr_if_hit, seg, off, NP2BP_WRITE);
 }
 
 static UINT8 is_mem_type(const UNASM_MEMINFO *mi)	{
@@ -254,21 +234,21 @@ UINT32 np2break_is_next()	{
 	unasm_next(&una);
 	if(stricmp(una.mnemonic, "lea") && stricmp(una.mnemonic, "les"))	{
 		if(is_mem_type(&una.meminf[MI_READ]))	{
-			type |= np2break_is_read(
+			type |= *np2break_lookup(
 				&addr, una.meminf[MI_READ].seg, una.meminf[MI_READ].off
 			);
 #ifndef DEBUG
 		} else if(is_mem_type(&una.meminf[MI_WRITE]))	{
-			type |= np2break_is_write(
+			type |= *np2break_lookup(
 				&addr, una.meminf[MI_WRITE].seg, una.meminf[MI_WRITE].off
 			);
 #endif
 		}
 	}
 	if(type == NP2BP_NONE)	{
-		type |= np2break_is_exec(&addr, CPU_CS, CPU_EIP);
+		type |= *np2break_lookup(&addr, CPU_CS, CPU_EIP);
 	}
-	if(type |= NP2BP_NONE)	{
+	if(type != NP2BP_NONE)	{
 		if(type & NP2BP_ONESHOT)	{
 			np2break_toggle_real(addr, 0);
 		}

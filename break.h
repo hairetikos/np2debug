@@ -53,9 +53,6 @@ np2break_t* np2break_lookup(UINT32 *addr_if_hit, UINT16 seg, UINT16 off);
 
 BOOL np2break_toggle_real(UINT32 addr, np2break_t flag);
 BOOL np2break_toggle(UINT16 seg, UINT16 off, np2break_t flag);
-BOOL np2break_is_exec(UINT32 *addr_if_hit, UINT16 seg, UINT16 off);
-BOOL np2break_is_read(UINT32 *addr_if_hit, UINT16 seg, UINT16 off);
-BOOL np2break_is_write(UINT32 *addr_if_hit, UINT16 seg, UINT16 off);
 
 // Returns the address of the breakpoint hit at the next instruction, or 0 for none
 UINT32 np2break_is_next();
