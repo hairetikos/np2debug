@@ -647,13 +647,13 @@ void pccore_exec(BOOL draw) {
 #if defined(TRACE)
 		resetcnt++;
 #endif
+if(!np2singlestep)
+{
 		pic_irq();
 		if (CPU_RESETREQ) {
 			CPU_RESETREQ = 0;
 			CPU_SHUT();
 		}
-if(!np2singlestep)
-{
 		if (CPU_REMCLOCK > 0) {
 			if (!(CPU_TYPE & CPUTYPE_V30)) {
 				ret = CPU_EXEC();
