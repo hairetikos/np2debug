@@ -1,16 +1,11 @@
-===============================
 Neko Project II - Debug Edition
 ===============================
 
-__([Windows binaries are here] (http://thpatch.net/wiki/Neko_Project_II_-_Debug_Edition))__
-
-
-
+__([Windows binaries are here](http://thpatch.net/wiki/Neko_Project_II_-_Debug_Edition))__
 
 About
 -----
-
-This is a fork of the PC-98 emulator [Xnp2] (https://github.com/nonakap/xnp2) with extended debugging features. The aim is to achieve a level of debugging comfort high enough to thoroughly modify PC-98 binaries and add new features to them.
+This is a fork of the PC-98 emulator [Xnp2](https://github.com/nonakap/xnp2) with extended debugging features. The aim is to achieve a level of debugging comfort high enough to thoroughly modify PC-98 binaries and add new features to them.
 
 In addition to the assembly, memory and register viewers for emulated code already present in Xnp2, this version also includes:
 
@@ -24,54 +19,44 @@ In addition to the assembly, memory and register viewers for emulated code alrea
 * real-directory-to-DOS-drive mounting (experimental)
 
 What's still missing:
-
 * assembly modification by actually writing assembly mnemonics
 
-As Xnp2 (and, most importantly, its debugging features already present) doesn't come with a cross-platform method for GUI coding, these extended features are currently _exclusive to the Win9x build_. After all that refactoring, it probably doesn't even build on Linux anymore...
+As Xnp2 (and, most importantly, its debugging features already present) doesn't come with a cross-platform method for GUI coding, these extended features are currently *exclusive to the Win9x build*. After all that refactoring, it probably doesn't even build on Linux anymore…
 
-This is, and probably ever will be, only tested against the Touhou Project games 01-05. While it is fully compatible with them, both the debugging functions and the rather outdated code base make it __noticeably laggier__ (on average about 10 fps slower) than the recommended [fmgen build] (http://www.shrinemaiden.org/forum/index.php?topic=11117.0). Thus, this edition is not what you're looking for if you want to actually _play_ the games.
-
-
+This is, and probably ever will be, only tested against the Touhou Project games 01-05. While it is fully compatible with them, both the debugging functions and the rather outdated code base make it **noticeably laggier** (on average about 10 fps slower) than the recommended [fmgen build](http://www.shrinemaiden.org/forum/index.php?topic=11117.0). Thus, this edition is not what you're looking for if you want to actually *play* the games.
 
 Building
 --------
-
 ### Windows
 Visual C++ 2010 is required for building. I don't really see a reason in maintaining project configurations for previous versions. Once you've understood property sheets, you really don't want to go back.
 
 You'll also need:
 
 * the **DirectX SDK**. Apparently, this is included in the Windows SDK now.
-Starting with the June 2010 release, the required `ddraw.lib` is no longer included. You can get it from [here] (http://thpatch.net/wiki/File:Ddraw_lib.zip). Since we're only using legacy functionality though, any old version of the SDK will do.
- 
-* **[YASM] (http://yasm.tortall.net/)** to build the assembly code.
-Get the VS2010 archive and install it globally into Visual Studio's *BuildCustomizations* directory.
- 
+Starting with the June 2010 release, the required `ddraw.lib` is no longer included. You can get it from [here](http://thpatch.net/wiki/File:Ddraw_lib.zip). Since we're only using legacy functionality though, any old version of the SDK will do.
 
- 
+* **[YASM](http://yasm.tortall.net/)** to build the assembly code.
+Get the VS2010 archive and install it globally into Visual Studio's *BuildCustomizations* directory.
+
 ### Linux
 (via http://eru-cool.blogspot.com/2012/02/emulador-pc-98-nativo-para-linux-para.html)
 
 You need the development libraries of `GTK2`, `SDL` and `SDL_mixer`, as well as `nasm` to build the assembly code. On Ubuntu, the required packages are:
 
     build-essential nasm libsdl1.2-dev libsdl-mixer1.2-dev libgtk2.0-dev libxxf86vm-dev
-	
+
 Also, the Touhou games require the build to be configured with IA-32 support. From the root directory, the build commands are:
 
     cd x11
     ./autogen.sh --enable-ia32
     make
 
-
-	
 Debugging
 ---------
 The debugging window can be accessed under `Tools → Debug utility`.
 
 ##### Unassemble
 * Current instruction is always at the top of the window
-
-
 
 Directory mounting
 ------------------
@@ -82,9 +67,7 @@ Doing something like this effectively requires a complete DOS emulation. Thus, t
 * Running programs (.EXE or .COM) from the mounted directory. The DOS EXEC syscall (`INT 21,4B`) would have to call the file opening function via `INT 21` too - which is impossible because `INT 21` is not reentrant.
 * Directory structures need to be replicated on the image. This is necessary because DOS still keeps its own directory state. When using `mkdir` or `rmdir` on the command prompt, directories are created and removed both inside the mounted directory and on the image.
 
-... Really, this is only supposed to work for the few cases we need during the creation of the Touhou PC-98 translation patches. Don't expect it to work for anything else.
-
-
+… Really, this is only supposed to work for the few cases we need during the creation of the Touhou PC-98 translation patches. Don't expect it to work for anything else.
 
 Contributing
 ------------
