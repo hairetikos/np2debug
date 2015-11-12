@@ -68,11 +68,3 @@ Doing something like this effectively requires a complete DOS emulation. Thus, t
 * Directory structures need to be replicated on the image. This is necessary because DOS still keeps its own directory state. When using `mkdir` or `rmdir` on the command prompt, directories are created and removed both inside the mounted directory and on the image.
 
 … Really, this is only supposed to work for the few cases we need during the creation of the Touhou PC-98 translation patches. Don't expect it to work for anything else.
-
-Contributing
-------------
-Don't be shy. This fork is basically a sandbox anyway, so feel free to send pull requests.
-
-I especially appreciate if someone is willing to waste the time to:
- * port the legacy DirectDraw code to Direct3D, or even
- * port the entire Win32 API code to GTK2, similar to the Linux version.
