@@ -1,7 +1,7 @@
 Neko Project II - Debug Edition
 ===============================
 
-__([Windows binaries are here](http://thpatch.net/wiki/Neko_Project_II_-_Debug_Edition))__
+__([Windows binaries are here](https://github.com/nmlgc/np2debug/releases))__
 
 About
 -----
