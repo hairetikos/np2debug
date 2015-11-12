@@ -277,10 +277,10 @@ IDR_VIEW MENU
     POPUP "&Mode"
     {
         MENUITEM "&Register", IDM_VIEWMODEREG
-        MENUITEM "&Dump segment", IDM_VIEWMODESEG
         MENUITEM "S&tack", IDM_VIEWMODESTK
-        MENUITEM "&Main memory dump", IDM_VIEWMODE1MB
-        MENUITEM "&Unassemble", IDM_VIEWMODEASM
+        MENUITEM "&Memory (segmented)", IDM_VIEWMODESEG
+        MENUITEM "&Memory (flat)", IDM_VIEWMODE1MB
+        MENUITEM "&Disassembly", IDM_VIEWMODEASM
         MENUITEM "&Sound register", IDM_VIEWMODESND
         MENUITEM SEPARATOR
         MENUITEM "&Lock", IDM_VIEWMODELOCK
