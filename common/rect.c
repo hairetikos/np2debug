@@ -1,3 +1,5 @@
+// It draws rectangles
+
 #include	"compiler.h"
 
 
