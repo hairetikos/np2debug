@@ -1,70 +1,70 @@
 
 　Neko Project II
-                                       NP2 developer team, 1999-2001,2003,2004
+                                       NP2 developer team, 1999-2001, 2003, 2004
 
 
 
-・概要
+·Overview
 
-　　PC-9801VX21をベースとして、PC-9801シリーズの主要な機能をソフトウェアで
-　　再現するエミュレータです。
+Based on the PC - 9801 VX 21, the major functions of the PC - 9801 series are implemented by software
+It is an emulator to reproduce.
 
-　　ねこープロジェクトIIが再現するのは PC-9801シリーズの標準的なハードウェアと
-　　一部のBIOSとCバスデバイスのみです。
-　　このため、MS-DOS等は動作しますが、N88-BASICやLIO等のROMを使用するものは
-　　標準で動作しません。これらを動作させるためには実機より ROMを取得する必要が
-　　あります。
-
-
-
-・最低動作環境
-
-　　486DX2以上のプロセッサ
-　　Microsoft-Windows 4.00(Windows95/NT4)
-　　DirectX2以上
-
-　　・サウンドを再生するには DirectX3以上が必要です。
-
-　　・ヘルプを使用するには IE4.01以上が必要です。
-　　　　IE4.01が利用できない場合にはこちらをご覧ください。
-　　　　　http://www.yui.ne.jp/np2/help.html
+Neko - Project II reproduces the standard hardware of the PC - 9801 series and
+Some BIOS and C bus devices are only available.
+For this reason, MS - DOS etc works, but those using ROM such as N88 - BASIC and LIO etc
+It does not work as standard. In order to operate these, it is necessary to acquire the ROM from the actual machine
+There is.
 
 
 
-・推奨動作環境
+· Minimum operating environment
 
-　　Celeron 300A以降のプロセッサ
-　　MS-Windows98 / MS-Windows2000
-　　DirectX3以上
+486 DX 2 or higher processor
+Microsoft - Windows 4.00 (Windows 95 / NT 4)
+DirectX 2 or more
+
+· DirectX 3 or higher is required to play sound.
+
+· IE 4.01 or higher is required to use help.
+Please click here if IE 4.01 is not available.
+Http://www.yui.ne.jp/np 2/help.html
 
 
 
-・使用方法
+· Recommended operating environment
 
-　　ねこープロジェクトIIを使うには フロッピーイメージが必要です。
-　　webの情報を基にイメージ化を行なって下さい。
+Celeron 300A or later processor
+MS - Windows 98 / MS - Windows 2000
+DirectX 3 and above
 
-　　その後 np2.exeを起動します。
 
-　　フロッピーベースのソフトウェアを起動するには、メニューの
-　　[FDD1 - Open], [FDD2 - Open]を選択しディスクイメージを挿入した後に
-　　リセットしてください。
 
-　　ハードディスクを使用するには [Emulate - Newdisk] より、ハードディスク
-　　イメージを作成してから [HardDisk - SASI-1 - Open]よりイメージファイルを
-　　選択したのち、リセットしてください。
-　　ハードディスクイメージの使用情報は記憶されますので、イメージファイルを
-　　変更するしない限りは この操作は必要ありません。
+·how to use
 
-　　メニューは F11キーでアクティブになります。
-　　マウス切替えは F12キー、もしくは マウス中ボタンで行ないます。
+To use Cat II - Project II, a floppy image is necessary.
+Please perform imaging based on information on web.
 
-　　CPUは 80286(リアルモードのみ)です。
-　　環境を構築する場合、プロテクトモードを扱えない事に注意して下さい。
-　　また DIP SW3-8 OFFで V30ぽい動きをするようにしています。
-　　CPUスピードは Configureで変更出来ます。
+Then start np2.exe.
 
-　　実行し、設定を変えると np2.iniファイルが作成されます。
+To start the floppy-based software,
+After selecting [FDD 1 - Open], [FDD 2 - Open] and inserting the disk image
+Please reset.
+
+To use the hard disk From [Emulate - Newdisk], a hard disk
+After creating the image, image file from [HardDisk - SASI - 1 - Open]
+Please select after resetting.
+Since the use information of the hard disk image is stored, the image file
+This operation is unnecessary unless you change it.
+
+The menu is activated with the F11 key.
+Use the F12 key or the middle mouse button to switch the mouse.
+
+The CPU is 80286 (real mode only).
+Please be aware that protected mode can not be handled when building environment.
+I also try to move like V30 with DIP SW 3-8 OFF.
+CPU speed can be changed by Configure.
+
+Execute and change the setting, the np2.ini file will be created.
 
 
 
