@@ -68,216 +68,216 @@ Execute and change the setting, the np2.ini file will be created.
 
 
 
-・メニュー
+·menu
 
-　　Emulate
-　　　Reset                     ハードウェアリセットします。
-　　　Configure                 設定を開きます。
-　　　NewDisk                   ブランクディスクイメージを作成します。
-　　　Font                      フォントファイルを選択します。
-　　　Exit                      ねこープロジェクトIIを終了します。
+Emulate
+Reset Resets the hardware.
+Open the Configure setting.
+NewDisk Creates a blank disk image.
+Font Select font file.
+Exit Neko - I will finish the project II.
 
-　　FDD1
-　　　Open                      ドライブ１のディスクイメージを選択します。
-　　　Eject                     ドライブ１のディスクイメージを取出します。
+FDD 1
+Select the disk image of Open drive 1.
+Eject Retrieve the disk image of drive 1.
 
-　　FDD2
-　　　Open                      ドライブ２のディスクイメージを選択します。
-　　　Eject                     ドライブ２のディスクイメージを取出します。
+FDD 2
+Select the disk image of Open Drive 2.
+Eject Retrieve the disk image of drive 2.
 
-　　HardDisk
-　　　SASI-1
-　　　　Open                    SASI-1のハードディスクイメージを選択します。
-　　　　Remove                  SASI-1を未設続状態に戻します。
-　　　SASI-2
-　　　　Open                    SASI-2のハードディスクイメージを選択します。
-　　　　Remove                  SASI-2を未設続状態に戻します。
+HardDisk
+SASI-I
+Select the hard disk image of Open SASI-1.
+Remove SASI-1 is returned to the unconfigured state.
+SASI-2
+Select the Open SASI-2 hard disk image.
+Remove SASI-2 is returned to the unconfigured state.
 
-　　Screen
-　　　Window                    ウィンドウモードになります。
-　　　FullScreen                フルスクリーンモードになります。
-　　　Normal                    画面を回転させません。
-　　　Left Rotated              画面を左に90度回転させます。
-　　　Right Rotated             画面を右に90度回転させます。
-　　　Disp Vsync                描画タイミング (チェックでVsync時)
-　　　Real Palettes             パレット更新タイミング (チェックでラスタごと)
-　　　No Wait                   タイミングを取りません。
-　　　Auto frame                表示タイミングを自動的に決定します。
-　　　Full frame                全てのフレームを表示します。
-　　　1/2 frame                 ２回に１度描画します。
-　　　1/3 frame                 ３回に１度描画します。
-　　　1/4 frame                 ４回に１度描画します。
-　　　Screen option             スクリーン設定を開きます。
+Screen
+Window Window mode is set.
+FullScreen The full screen mode is set.
+Normal Does not rotate the screen.
+Left Rotated Rotates the screen 90 degrees to the left.
+Right Rotated Rotates the screen 90 degrees to the right.
+Disp Vsync Drawing timing (at check Vsync)
+Real Palettes Palette update timing (for each raster by check)
+No Wait I will not take the timing.
+Auto frame The display timing is automatically determined.
+Full frame Displays all frames.
+1/2 frame Draw once every 2 times.
+1/3 frame Draw once every 3 times.
+1/4 frame Draw once every 4 times.
+Screen option Opens the screen setting.
 
-　　Device
-　　　Keyboard
-　　　　Keyboard                テンキーをキーボードとして扱います。
-　　　　JoyKey-1                テンキーをジョイスティック１に割り当てます。
-　　　　JoyKey-2                テンキーをジョイスティック２に割り当てます。
-　　　　mechanical SHIFT        ノート風メカニカルシフトにします。
-　　　　mechanical CTRL         ノート風メカニカルコントロールにします。
-　　　　mechanical GRPH         ノート風メカニカルグラフキーにします。
-　　　　F12 = Mouse             F12キーをマウス切替えにアサインします。
-　　　　F12 = Copy              F12キーをCopyキーにアサインします。
-　　　　F12 = Stop              F12キーをStopキーにアサインします。
-　　　　F12 = tenkey [=]        F12キーをテンキーの=キーにアサインします。
-　　　　F12 = tenkey [,]        F12キーをテンキーの,キーにアサインします。
-　　　Sound
-　　　　Beep off                ビープを無音にします。
-　　　　Beep low                ビープ音量を小にします。
-　　　　Beep mid                ビープ音量を中にします。
-　　　　Beep high               ビープ音量を大にします。
-　　　　Disable boards          FM音源ボードを使用しません。
-　　　　PC-9801-14              ミュージックジェネレータボードを使用します。
-　　　　PC-9801-26K             PC-9801-26Kボードを使用します。
-　　　　PC-9801-86              PC-9801-86ボードを使用します。
-　　　　PC-9801-26K + 86        PC-9801-26Kと86ボードを使用します。
-　　　　PC-9801-86 + Chibi-oto  PC-9801-86ボードとちびおとを使用します。
-　　　　PC-9801-118             PC-9801-118ボードを使用します。
-　　　　Speak board             スピークボードを使用します。
-　　　　Spark board             スパークボードを使用します。
-　　　　AMD-98                  AMD-98を使用します。
-　　　　JAST SOUND              JAST SOUNDを使用します。
-　　　　Seek Sound              ディスクシークタイミングを取ります。
-　　　Memory
-　　　　640KB                   メモリをメインメモリのみ使用します。
-　　　　1.6MB                   メインメモリと拡張メモリ1MBを使用します。
-　　　　3.6MB                   メインメモリと拡張メモリ3MBを使用します。
-　　　　7.6MB                   メインメモリと拡張メモリ7MBを使用します。
-　　　Mouse                     マウス操作を切替えます。
-　　　Serial option             シリアル設定を開きます。
-　　　MIDI option               MIDI設定を開きます。
-　　　MIDI panic                MIDIを消音します。
-　　　Sound option              サウンド設定を開きます。
+Device
+Keyboard
+Keyboard Treats the numeric keypad as a keyboard.
+JoyKey - 1 Assigns the numeric keypad to joystick 1.
+JoyKey - 2 Assign the numeric keypad to joystick 2.
+Mechanical SHIFT Make a note-style mechanical shift.
+Mechanical CTRL makes note mechanical control.
+Mechanical GRPH to make a note-style mechanical graph key.
+F12 = Mouse Assigns the F12 key to mouse switching.
+F12 = Copy Assign the F12 key to the Copy key.
+F12 = Stop Assigns the F12 key to the Stop key.
+F12 = tenkey [=] Assign the F12 key to the numeric keypad = key.
+F12 = tenkey [,] Assigns the F12 key to the keys of the numeric keypad.
+Sound
+Beep off Makes the beep silent.
+Beep low Reduce the beep volume.
+Beep mid Sets the beep volume to medium.
+Beep high Increases the beep volume.
+Disable boards FM sound board is not used.
+PC-9801-14 Use the music generator board.
+PC - 9801 - 26 K Use the PC - 9801 - 26 K board.
+PC-9801-86 PC-9801-86 board is used.
+We will use PC-9801-26K + 86 PC-9801-26K and 86 board.
+PC-9801-86 + Chibi-oto PC-9801-86 We will use board and chibi.
+PC - 9801 - 118 Use the PC - 9801 - 118 board.
+Speak board We will use the speaker board.
+Spark board We use spark board.
+AMD-98 AMD-98 is used.
+We will use JAST SOUND JAST SOUND.
+Seek Sound Take disk seek timing.
+Memory
+--  use 640 KB memory for main memory only.
+--  use 1.6MB main memory and extended memory 1MB.
+--  use 3.6MB main memory and extended memory 3MB.
+--  use 7.6 MB main memory and extended memory 7 MB.
+Mouse Switch -- mouse operation.
+Serial option -- Opens the serial setting.
+MIDI option -- Opens the MIDI setting.
+MIDI panic -- Mutes the MIDI.
+Sound option -- Opens the sound setting.
 
-　　Other
-　　　BMP Save                  エミュレーション中の画面をBMP形式で保存します。
-　　　S98 logging               S98ログを取ります。
-　　　Calendar                  カレンダ設定を開きます。
-　　　Shortcut Key
-　　　　ALT+Enter               ALT+Enterをスクリーン切替えにアサインします。
-　　　　ALT+F4                  ALT+F4をアプリケーション終了にアサインします。
-　　　Clock Disp                クロック数を表示します。
-　　　Frame Disp                フレーム数を表示します。
-　　　Joy Reverse               ジョイスティックのボタンを入れ換えます。
-　　　Joy Rapid                 ジョイスティックのボタンを連射状態にします。
-　　　Mouse Rapid               マウスのボタンを連射状態にします。
-　　　Use SSTP                  SSTPプロトコルを使用します。
-　　　Help                      ヘルプを表示します。
-　　　About                     バージョンを表示します。
-
-
-
-・設定ダイアログ
-
-　　Configue
-　　　CPU
-　　　　Base Clock              CPUのベースクロックを指定します。
-　　　　Multiple                CPUのクロック倍率を指定します。
-　　　Architecture
-　　　　PC-9801VM               V30以前のCPUを搭載したNEC仕様となります。
-　　　　PC-9801VX               i286以降のCPUを搭載したNEC仕様となります。
-　　　　PC-286                  EPSON互換機仕様となります。
-　　　Sound
-　　　　Sampling Rate           サウンドの出力周波数を指定します。
-　　　　Buffer                  サウンドのバッファサイズを指定します。
-      Disable MMX               MMX命令を使用しません。
-      Comfirm Dialog            リセット/終了時に確認ダイアログを表示します。
-      Resume                    レジューム機能を使用します。
-
-　　Screen option
-　　　Video
-　　　　LCD                     PC-98ノートの液晶モードになります。
-　　　　Reverse                 液晶表示を反転します。
-　　　　Use skipline rev        スキップラインを補正します。
-　　　　Ratio                   スキップラインの明るさを指定します。
-　　　Chip
-　　　　GDC                     GDCチップを指定します。
-　　　　GRCG                    GRCGチップを指定します。
-　　　　Enable 16color          アナログ16色カラーを有効にします。
-　　　Timing
-　　　　T-RAM                   テキストRAMアクセスウェイト値を指定します。
-　　　　V-RAM                   ヴィデオRAMアクセスウェイト値を指定します。
-　　　　GRCG                    GRCG使用時のアクセスウェイト値を指定します。
-　　　　RealPalettes Adjust     RealPalettes時のタイミングを調整します。
-
-　　Serial option
-　　　COM1                      RS-232Cのシリアルポートを指定します。
-　　　PC-9861K                  PC-9861Kのディップスイッチを設定します。
-　　　CH.1                      PC-9861Kのチャネル1のポートを指定します。
-　　　CH.2                      PC-9861Kのチャネル2のポートを指定します。
-
-　　MIDI option
-      MPU-PC98II                MPU-PC98IIのディップスイッチを設定します。
-
-　　Sound option
-　　　Mixer                     各種チップのヴォリュームを設定します。
-　　　PC-9801-14                PC-9801-14のヴォリュームを設定します。
-　　　26                        PC-9801-26Kのジャンパを設定します。
-　　　86                        PC-9801-86のディップスイッチを設定します。
-　　　SPB                       スピークボードのジャンパを設定します。
-　　　JoyPad                    ジョイパッドの設定を行います。
-
-　　Calendar
-　　　Real                      常に現実と同じ時刻になります。
-　　　Virtual Calendar          仮想カレンダーを使用します。
+Other
+BMP Save Saves the screen under emulation in BMP format.
+S 98 logging S 98 Take a log.
+Open the Calendar calendar setting.
+Shortcut Key
+ALT + Enter Assign ALT + Enter to screen switch.
+Assign ALT + F4 ALT + F4 to the end of the application.
+Clock Disp Displays the clock count.
+Frame Disp Displays the number of frames.
+Joy Reverse Swap the joystick buttons.
+Joy Rapid Places the joystick's button in a state of rapid fire.
+Mouse Rapid Puts the button of the mouse in a state of rapid fire.
+Use SSTP Use the SSTP protocol.
+Help Display help.
+About Display version.
 
 
 
-・ディスクイメージ
+· Setting dialog
 
-　　以下にイメージ対応しています。
-　　　FDD  - D88形式, XDF(ベタイメージ)形式
-　　　SASI - THD形式(T98), HDI形式(Anex86)
-　　　SCSI - HDD形式(Virtual98)
+Configue
+CPU
+Base Clock Specify the base clock of the CPU.
+Multiple Specify the clock magnification of the CPU.
+Architecture
+PC-9801VM It becomes NEC specification equipped with V30 or earlier CPU.
+PC-9801VX NEC specification with i286 or later CPU installed.
+PC-286 EPSON compatible machine specification becomes.
+Sound
+Sampling Rate Specifies the output frequency of the sound.
+Buffer Specify the buffer size of the sound.
+      Disable Does not use the MMX MMX instruction.
+      Comfirm Dialog Displays a confirmation dialog at reset / exit.
+      Resume Uses the resume function.
+
+Screen option
+Video
+LCD PC - 98 The notebook is in liquid crystal mode.
+Reverse Reverse the liquid crystal display.
+Use skipline rev Correct skip line.
+Ratio Specify the brightness of the skip line.
+Chip
+Specify the GDC GDC chip.
+GRCG Specifies the GRCG chip.
+Enable 16 color Enables analog 16 color.
+Timing
+T-RAM Specifies text RAM access wait value.
+V-RAM Specify the video RAM access wait value.
+GRCG Specifies the access wait value when using GRCG.
+RealPalettes Adjust Adjust the timing of RealPalettes.
+
+Serial option
+COM1 Specifies RS-232C serial port.
+PC-9861K Set the dip switch of PC-9861K.
+CH.1 Specify the port of channel 1 of PC - 9861K.
+CH.2 Specify the port of channel 2 of PC - 9861K.
+
+MIDI option
+      MPU - PC98II Set the dip switch of MPU - PC98II.
+
+Sound option
+Mixer Sets the volume of various chips.
+PC - 9801 - 14 Set the volume of PC - 9801 - 14.
+26 Set the jumper on PC-9801-26K.
+86 Set the dip switch of PC-9801-86.
+Set the jumper of the SPB speaker board.
+JoyPad Joypad setting.
+
+Calendar
+Real will always be at the same time as reality.
+Use Virtual Calendar virtual calendar.
 
 
 
-・キー設定について
-　　bios.romとかと同じフォルダに(機種によって異なるのでこんな書き方…)
-　　key.txtという名前でテキストファイルを作成して、キー設定を記入して下さい。
+· Disk image
 
-　　書式)
-　　　[keyname] = [key1] (key2) (key3)
-　　　[keyname] [TAB] [key1] (key2) (key3)
-　　　userkey[1-2] = [key1] (key2) (key3) ... (key15)
-　　　　フルキー 0～9 A～Z - ^ \ @ [ ] ; : , . / _
-　　　　         STOP COPY ESC TAB BS RET SPC XFER NFER
+The following image is supported.
+FDD - D88 format, XDF (solid image) format
+SASI - THD format (T 98), HDI format (Anex 86)
+SCSI - HDD format (Virtual 98)
+
+
+
+· About key setting
+In bios.rom and the same folder (depending on the model, this way of writing ...)
+Please create a text file named key.txt and fill in the key setting.
+
+Form)
+[Keyname] = [key 1] (key 2) (key 3)
+[Keyname] [TAB] [key 1] (key 2) (key 3)
+Userkey [1 - 2] = [key 1] (key 2) (key 3) ... (key 15)
+Full key 0 ~ 9 A ~ Z - ^ \ [[];;,,. / _
+STOP COPY ESC TAB BS RET SPC XFER NFER
                  INS DEL RLUP RLDN HMCL HELP
-　　　　ファンク F1～F10 VF1～VF5
-　　　　テンキー [0]～[9] [-] [/] [*] [+] [=] [,] [.]
-　　　　シフト   SHIFT CAPS KANA GRPH CTRL
+Funk F1 to F10 VF1 to VF5
+Numeric keypad [0] - [9] [-] [/] [*] [+] [=] [,] [.]
+Shift SHIFT CAPS KANA GRPH CTRL
 
-　　　通常キーは3個、userkeyは15個の同時押し設定が可能です。
-　　　[=] キーは = で区切られてしまうので TABで区切るか [EQU]として下さい。
+It is possible to set 3 keys for normal key and 15 keys for userkey at the same time.
+Because the [=] key is delimited by =, please separate it with TAB or [EQU].
 
-　　　例:
+Example:
         ----------------------- key.txt
 
-　　　　W = UP                 (ダイアモンドキーをカーソルにしてみたり…)
-　　　　S = LEFT
-　　　　D = RIGHT
-　　　　X = DOWN
-　　　　[7] = [4] [8]          (テンキー斜め同時押しにしてみたり…)
-　　　　[9] = [6] [8]
-　　　　[1] = [4] [2]
-　　　　[3] = [6] [2]
-　　　　userkey1 = CTRL XFER   (CTRL+XFER FEP切り替え)
-　　　　userkey2 = D O A Z     (D+O+A+Z 同時押し)
+W = UP (Try diamond key as a cursor ...)
+S = LEFT
+D = RIGHT
+X = DOWN
+[7] = [4] [8] (Try numeric keypad at the same time ...)
+[9] = [6] [8]
+[1] = [4] [2]
+[3] = [6] [2]
+Userkey1 = CTRL XFER (CTRL + XFER FEP switching)
+Userkey 2 = D O A Z (D + O + A + Z pressed simultaneously)
 
         -----------------------
 
 
 
-・ROMEOについて
+· About ROMEO
 
-　　ROMEOを使用するには、np2.exeと同じフォルダに pcidebug.dllと
-　　pcidbg95.vxd(Win95/98) / pcidbgnt.sys(WinNT4/2000/XP)を置いて、
-　　np2.iniのuseromeoを trueにしてください。
+To use ROMEO, pcidebug.dll is placed in the same folder as np2.exe
+Place pcidbg95.vxd (Win95 / 98) / pcidbgnt.sys (WinNT 4/2000 / XP)
+Please set useromeo of np2.ini to true.
 
-　　PC-9801-118音源のYMF288部分がROMEOから出力されます。
+PC-9801-118 The YMF 288 part of the sound source is output from ROMEO.
 
 
 
-　　　　　　　　　　　　　　　　　　email: np2@yui.ne.jp
-　　　　　　　　　　　　　　　　　　webpage: http://www.yui.ne.jp/np2/
+Email: np2@yui.ne.jp
+Webpage: http://www.yui.ne.jp/np 2/
