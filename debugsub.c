@@ -1,3 +1,6 @@
+
+// Debugger dumping functionality
+
 #include	"compiler.h"
 #include	"strres.h"
 #include	"textfile.h"
@@ -100,6 +103,8 @@ static OEMCHAR	work[128];
 	return(work);
 }
 
+// Debugger CPU dump function
+
 const OEMCHAR *debugsub_regs(void) {
 
 static OEMCHAR	work[256];
@@ -111,6 +116,8 @@ static OEMCHAR	work[256];
 	milstr_ncat(work, CRCONST, NELEMENTS(work));
 	return(work);
 }
+
+// Debugger segment memory dump function
 
 static void writeseg(const OEMCHAR *fname, UINT32 addr, UINT limit) {
 
@@ -133,6 +140,8 @@ static void writeseg(const OEMCHAR *fname, UINT32 addr, UINT limit) {
 	}
 	file_close(fh);
 }
+
+// Debugger CPU + Interrupt dump function
 
 void debugsub_status(void) {
 
