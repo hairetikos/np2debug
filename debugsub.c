@@ -40,6 +40,7 @@ static const OEMCHAR s_pe[] = OEMTEXT("PE");
 static const OEMCHAR s_nc[] = OEMTEXT("NC");
 static const OEMCHAR s_cy[] = OEMTEXT("CY");
 
+// Create a variable string which retains the CPU flag states
 static const OEMCHAR *flagstr[16][2] = {
 				{NULL, NULL},		// 0x8000
 				{NULL, NULL},		// 0x4000
@@ -65,12 +66,15 @@ static const OEMCHAR file_i286es[] = OEMTEXT("i286_es.%.3u");
 static const OEMCHAR file_i286ss[] = OEMTEXT("i286_ss.%.3u");
 static const OEMCHAR file_memorybin[] = OEMTEXT("memory.bin");
 
+// formatting for CPU registers dump
 static const OEMCHAR str_register[] =								\
 				OEMTEXT("AX=%.4x  BX=%.4x  CX=%.4x  DX=%.4x  ")		\
 				OEMTEXT("SP=%.4x  BP=%.4x  SI=%.4x  DI=%.4x")		\
 				OEMTEXT(CRLITERAL)									\
 				OEMTEXT("DS=%.4x  ES=%.4x  SS=%.4x  CS=%.4x  ")		\
 				OEMTEXT("IP=%.4x   ");
+
+// formatting for programmable interrupt controller dump
 static const OEMCHAR str_picstat[] = 								\
 				OEMTEXT(CRLITERAL)									\
 				OEMTEXT("PIC0=%.2x:%.2x:%.2x")						\
@@ -123,7 +127,7 @@ static void writeseg(const OEMCHAR *fname, UINT32 addr, UINT limit) {
 
 	FILEH	fh;
 	UINT	size;
-	UINT8	buf[0x400];								// Stack 0x1000 -> 0x400
+	UINT8	buf[0x400];							// Stack 0x1000 -> 0x400
 
 	fh = file_create_c(fname);
 	if (fh == FILEH_INVALID) {
