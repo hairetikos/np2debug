@@ -1,5 +1,8 @@
-Neko Project II - Debug Edition
+Neko Project II - Debug Edition (documented!)
 ===============================
+
+Hi all, this is a project to document Neko Project II Debug, to eventually make it useful for hacking software other than Touhou.
+
 
 __([Windows binaries are here](https://github.com/nmlgc/np2debug/releases))__
 
