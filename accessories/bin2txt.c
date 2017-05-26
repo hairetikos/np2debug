@@ -1,3 +1,6 @@
+
+// Utility to convert binary memory dump to hex
+
 #include	"compiler.h"
 #include	"dosio.h"
 #include	"textout.h"
