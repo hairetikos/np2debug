@@ -6,18 +6,13 @@
 
 ·Overview
 
-Based on the PC - 9801 VX 21, the major functions of the PC - 9801 series are implemented by software
-It is an emulator to reproduce.
+Based on the PC - 9801 VX 21, the major functions of the PC - 9801 series are implemented by software, so allowing
+the operation of PC - 98 software.
 
-Neko - Project II reproduces the standard hardware of the PC - 9801 series and
-Some BIOS and C bus devices are only available.
-For this reason, MS - DOS etc works, but those using ROM such as N88 - BASIC and LIO etc
-It does not work as standard. In order to operate these, it is necessary to acquire the ROM from the actual machine
-There is.
+Neko Project II reproduces the standard hardware of the PC - 9801 series and some BIOS and C bus devices, such as video controllers and sound cards. For this reason, programs installed from floppy disk, such as MS-DOS work, but ROM-based programs such as N88-BASIC and LIO etc. are not supported out of the box. In order to operate these, it is necessary to acquire ROM images from the actual machine.
 
 
-
-· Minimum operating environment
+· Minimum system requirements
 
 486 DX 2 or higher processor
 Microsoft - Windows 4.00 (Windows 95 / NT 4)
@@ -30,60 +25,63 @@ Please click here if IE 4.01 is not available.
 Http://www.yui.ne.jp/np 2/help.html
 
 
-
-· Recommended operating environment
+· Recommended system for 80s era games
 
 Celeron 300A or later processor
 MS - Windows 98 / MS - Windows 2000
 DirectX 3 and above
 
 
+- Recommended system for 90s era games (which require lots of speed)
+  - CPU made after 2006
 
-·how to use
 
-To use Cat II - Project II, a floppy image is necessary.
-Please perform imaging based on information on web.
 
-Then start np2.exe.
+·How to use
 
-To start the floppy-based software,
-After selecting [FDD 1 - Open], [FDD 2 - Open] and inserting the disk image
-Please reset.
+To use Neko Project II, you will need a PC-98 formatted boot floppy disk image.
 
-To use the hard disk From [Emulate - Newdisk], a hard disk
-After creating the image, image file from [HardDisk - SASI - 1 - Open]
-Please select after resetting.
-Since the use information of the hard disk image is stored, the image file
-This operation is unnecessary unless you change it.
+The following disk image formats are supported:
+  - 88 format
+  - XDF (solid image) format
 
-The menu is activated with the F11 key.
+When you have obtained a boot floppy image, start np2.exe.
+
+To start the floppy-based software, access the menu by pressing F11 on your keyboard.
+After navigating to [FDD 1 -> Open] or [FDD 2 -> Open], insert the disk image.
+Reset the machine.
+
+To use the hard disk, create one by navigating the menu [Emulate -> Newdisk].
+After creating the HDD image, connect it by navigatin to [HardDisk -> SASI -> 1 -> Open]
+Then reset.
+
 Use the F12 key or the middle mouse button to switch the mouse.
 
 The CPU is 80286 (real mode only).
 Please be aware that protected mode can not be handled when building environment.
-I also try to move like V30 with DIP SW 3-8 OFF.
+To use V30, set DIP SW 3-8 OFF.
 CPU speed can be changed by Configure.
 
-Execute and change the setting, the np2.ini file will be created.
+The emulator's settings are saved to np2.ini.
 
 
 
-·menu
+·Menu
 
 Emulate
-Reset Resets the hardware.
-Open the Configure setting.
-NewDisk Creates a blank disk image.
-Font Select font file.
-Exit Neko - I will finish the project II.
+Reset -- Resets the hardware.
+Configure -- Open the Configuration panel.
+NewDisk -- Creates a blank disk image.
+Font -- Select font file.
+Exit -- Quit Neko Project II.
 
 FDD 1
-Select the disk image of Open drive 1.
-Eject Retrieve the disk image of drive 1.
+Select -- load disk image into floppy drive 1.
+Eject -- unload disk image from floppy drive 1.
 
 FDD 2
-Select the disk image of Open Drive 2.
-Eject Retrieve the disk image of drive 2.
+Select -- load disk image into floppy drive 2.
+Eject -- unload disk image from floppy drive 2.
 
 HardDisk
 SASI-I
@@ -187,46 +185,45 @@ Buffer Specify the buffer size of the sound.
 
 Screen option
 Video
-LCD PC - 98 The notebook is in liquid crystal mode.
-Reverse Reverse the liquid crystal display.
-Use skipline rev Correct skip line.
-Ratio Specify the brightness of the skip line.
-Chip
-Specify the GDC GDC chip.
-GRCG Specifies the GRCG chip.
-Enable 16 color Enables analog 16 color.
+LCD PC - 98 -- The notebook is in liquid crystal mode.
+Reverse -- Reverse the liquid crystal display.
+Use skipline rev -- Correct skip line.
+Ratio -- Specify the brightness of the skip line.
+Chip -- Specify the GDC chip.
+GRCG --Specifies the GRCG chip.
+Enable 16 color -- Enables analog 16 color.
 Timing
-T-RAM Specifies text RAM access wait value.
-V-RAM Specify the video RAM access wait value.
-GRCG Specifies the access wait value when using GRCG.
-RealPalettes Adjust Adjust the timing of RealPalettes.
+T-RAM -- Specifies text RAM access wait value.
+V-RAM -- Specify the video RAM access wait value.
+GRCG -- Specifies the access wait value when using GRCG.
+RealPalettes Adjust -- Adjust the timing of RealPalettes.
 
 Serial option
-COM1 Specifies RS-232C serial port.
-PC-9861K Set the dip switch of PC-9861K.
-CH.1 Specify the port of channel 1 of PC - 9861K.
-CH.2 Specify the port of channel 2 of PC - 9861K.
+COM1 -- Specifies RS-232C serial port.
+PC-9861K -- Set the dip switch of PC-9861K.
+CH.1 -- Specify the port of channel 1 of PC - 9861K.
+CH.2 -- Specify the port of channel 2 of PC - 9861K.
 
 MIDI option
-      MPU - PC98II Set the dip switch of MPU - PC98II.
+      MPU - PC98II -- Set the dip switch of MPU - PC98II.
 
 Sound option
-Mixer Sets the volume of various chips.
-PC - 9801 - 14 Set the volume of PC - 9801 - 14.
-26 Set the jumper on PC-9801-26K.
-86 Set the dip switch of PC-9801-86.
+Mixer -- Sets the volume of various chips.
+PC - 9801 - 14 -- Set the volume of PC - 9801 - 14.
+26 -- Set the jumper on PC-9801-26K.
+86 -- Set the dip switch of PC-9801-86.
 Set the jumper of the SPB speaker board.
-JoyPad Joypad setting.
+JoyPad -- Joypad setting.
 
 Calendar
-Real will always be at the same time as reality.
-Use Virtual Calendar virtual calendar.
+Real -- will always be at the same time as reality.
+Use Virtual Calendar -- virtual calendar.
 
 
 
 · Disk image
 
-The following image is supported.
+The following image formats are supported.
 FDD - D88 format, XDF (solid image) format
 SASI - THD format (T 98), HDI format (Anex 86)
 SCSI - HDD format (Virtual 98)
