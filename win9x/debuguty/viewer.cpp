@@ -1,3 +1,5 @@
+// This is the main file for the debugger
+
 #include	"compiler.h"
 #include	"resource.h"
 #include	"np2.h"
