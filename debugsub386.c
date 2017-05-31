@@ -1,3 +1,6 @@
+// Debugger dumping functionality for 32-bit mode
+
+
 #include	"compiler.h"
 #include	"strres.h"
 #include	"dosio.h"
