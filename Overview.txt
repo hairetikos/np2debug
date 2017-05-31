@@ -1,0 +1,39 @@
+ROOT
+\--
+  accessories 
+	android-project - Android build accessories
+	bios - source for non-proprietary BIOS
+	cbus 	
+	codecnv 
+	common 	
+	embed 
+	fdd - floppy drive management
+	font - font interface between the OS and the emulator
+	generic 	
+	i286c - 16-bit ("protected mode") specific routines
+	i286x 
+	i386c - 32-bit ("386 enhanced mode") specific routines
+	io - I/O: Ports, keyboards, mice, etc.
+	lio 
+	mem - memory management	
+	np2tool - a set of utilities for testing the basic functionality of the emulator/similarity to a real PC-98 
+	romimage - bios routines in ASM
+	sdl2 - Simple Direct Media Layer (SDL), a cross-platform alternative to DirectX (used by Linux)
+	sound - sound emulation
+	trap - event trapping functionality for logging the emulator's internal activity
+	vram - video output emulation
+	win9x - main project folder for Windows build
+	x11 - main project folder for Linux build
+	zlib - compression suite
+  
+	break	
+	calendar 
+	common - set of common routines used throughtout the system
+	debugsub - debug dumping for real + protected mode
+	debugsub386 - debug dumping for 386 enhanced mode	
+	keystat	- keyboard reading routines
+	nevent - kernel management
+	np2ver
+	pccore - emulation core
+	statsave - State save functionality
+	timing - component processing speed regulation 
