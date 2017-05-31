@@ -1,3 +1,6 @@
+// "String resource"
+// Assign text snippets used by the emulator to string constants, minorly improving performance.
+
 #include	"compiler.h"
 #include	"strres.h"
 #include	"np2ver.h"
