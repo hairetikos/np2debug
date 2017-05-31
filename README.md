@@ -1,9 +1,34 @@
 Neko Project II - Debug Edition (documented!)
 ===============================
 
-Hi all, this is a project to document Neko Project II Debug in English, to eventually make it useful for hacking software other than Touhou.
+A project to document Neko Project II Debug in English, to eventually make it useful for hacking software other than Touhou.
 
-The build files, including the project definition, are in folder "Win9x". For a detailed overview of the project's organization, see "Overview.txt".
+The build files, including the project definition, are in folder "Win9x" (all required files are included). For a detailed overview of the project's organization, see "Overview.txt".
+
+Build instructions:
+
+Download **[YASM](http://yasm.tortall.net/)** v1.01 (1.6 and higher will not work!). Install the YASM executable, vsyasm.exe, to the main directory of your VC++ installation, probably C:\Program Files\Microsoft Visual Studio 10.0\VC\bin. Install the other YASM files to C:\Program Files\MSBuild\Microsoft.Cpp\v4.0\BuildCustomizations. Then click [Build -> Build Solution] to build.
+
+
+There are several build configurations available:
+
+
+Release - original distribution optimized for end users
+
+
+Debug - includes advanced debugger
+
+
+Trap - has break-on-IRQ functionality
+
+
+Trace - under this build, the emulator will meticulously log its activity.
+
+
+Right now the goal is to unify the Debug, Trap, and Trace versions into one super debugger/analyzer.
+
+
+The authors' original statements follow:
 
 
 __([Windows binaries are here](https://github.com/nmlgc/np2debug/releases))__
