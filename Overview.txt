@@ -1,7 +1,7 @@
 ROOT
 \--
   	accessories 
-	android-project - Android build accessories
+	android-project - main project folder for Android build
 	bios - source for non-proprietary BIOS
 	cbus 	
 	codecnv - routines for conversion between character encoding standards
