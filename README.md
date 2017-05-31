@@ -3,6 +3,8 @@ Neko Project II - Debug Edition (documented!)
 
 Hi all, this is a project to document Neko Project II Debug in English, to eventually make it useful for hacking software other than Touhou.
 
+The build files, including the project definition, are in folder "Win9x". For a detailed overview of the project's organization, see "Overview.txt".
+
 
 __([Windows binaries are here](https://github.com/nmlgc/np2debug/releases))__
 
