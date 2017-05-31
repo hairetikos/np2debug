@@ -13,16 +13,16 @@ Download **[YASM](http://yasm.tortall.net/)** v1.01 (1.6 and higher will not wor
 There are several build configurations available:
 
 
-Release - original distribution optimized for end users
+* Release - original distribution optimized for end users
 
 
-Debug - includes advanced debugger
+* Debug - includes advanced debugger
 
 
-Trap - has break-on-IRQ functionality
+* Trap - has break-on-IRQ functionality
 
 
-Trace - under this build, the emulator will meticulously log its activity.
+* Trace - under this build, the emulator will meticulously log its activity.
 
 
 Right now the goal is to unify the Debug, Trap, and Trace versions into one super debugger/analyzer.
