@@ -1,6 +1,6 @@
 /**
  * @file	profile.c
- * @brief	Implementation of the profiler
+ * @brief	Implementation of the performance profiler utility
  */
 
 #include "compiler.h"
