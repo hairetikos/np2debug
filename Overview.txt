@@ -4,7 +4,7 @@ ROOT
 	android-project - Android build accessories
 	bios - source for non-proprietary BIOS
 	cbus 	
-	codecnv 
+	codecnv - routines for conversion between character encoding standards
 	common 	
 	embed 
 	fdd - floppy drive management
