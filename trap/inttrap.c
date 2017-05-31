@@ -1,6 +1,6 @@
 /**
  * @file	inttrap.c
- * @brief	Implementation of the trap of interrupt
+ * @brief	Implementation of break-on-interrupt
  */
 
 #include "compiler.h"
@@ -11,7 +11,7 @@
 
 void CPUCALL softinttrap(UINT cs, UINT32 eip, UINT vect) {
 
-// ---- ここにトラップ条件コードを書きます
+// ---- Write a trap testing condition here - ここにトラップ条件コードを書きます
 	if (vect == 0x7f) {
 		switch(CPU_AH) {
 			case 0:
