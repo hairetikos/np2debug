@@ -1,0 +1,1 @@
+Event trapping functionality
