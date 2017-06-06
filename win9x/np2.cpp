@@ -100,6 +100,8 @@ static	int			np2quitmsg = 0;
 static	UINT8		scrnmode;
 static	WINLOCEX	smwlex;
 static	HMODULE		s_hModResource;
+		int			trace_on = 0;	// system tracing control
+		int			verbose_on = 0;  // memory tracing control
 
 static const OEMCHAR np2help[] = OEMTEXT("np2.chm");
 static const OEMCHAR np2flagext[] = OEMTEXT("S%02d");
@@ -197,7 +199,7 @@ WINLOCEX np2_winlocexallwin(HWND base) {
 			list[i] = NULL;
 		}
 	}
-	if (base != g_hWndMain) {		// hWndMainのみ全体移動
+	if (base != g_hWndMain) {		// Only move hWndMain entirely
 		base = NULL;
 	}
 	return(winlocex_create(base, list, cnt));
@@ -364,6 +366,8 @@ static int flagload(HWND hWnd, const OEMCHAR *ext, LPCTSTR title, BOOL force)
 
 static void np2popup(HWND hWnd, LPARAM lp) {
 
+	/* Popup Menu backend */
+
 	HMENU	mainmenu;
 	HMENU	hMenu;
 	POINT	pt;
@@ -383,11 +387,15 @@ static void np2popup(HWND hWnd, LPARAM lp) {
 
 static void OnCommand(HWND hWnd, WPARAM wParam)
 {
+
+	/*** BEGIN MAIN MENU BACKEND ***/
+
 	HINSTANCE	hInstance;
 	UINT		update;
 	UINT		uID;
 	BOOL		b;
 	WINLOCEX	wlex;
+	HMENU		hmenu;
 
 	hInstance = (HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE);;
 	update = 0;
@@ -911,6 +919,40 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 			winuileave();
 			break;
 
+		case IDM_TRACE_TRACE:
+			hmenu = np2class_gethmenu(g_hWndMain);
+			if (trace_on == 0) { trace_on = 1; } else { trace_on = 0; }
+			CheckMenuItem(hmenu, IDM_TRACE_TRACE,
+								(trace_on & 1)?MF_CHECKED:MF_UNCHECKED);
+			break;
+
+		case IDM_TRACE_VERBOSE:
+			hmenu = np2class_gethmenu(g_hWndMain);
+			if (verbose_on == 0) { verbose_on = 1; } else { verbose_on = 0; }
+			TRACEOUT(("Verbose"));
+			CheckMenuItem(hmenu, IDM_TRACE_VERBOSE,
+								(verbose_on & 1)?MF_CHECKED:MF_UNCHECKED);
+			break;
+/*
+		case IDM_TRACE_FILEOUT:
+			if (tracewin.tf != NULL)
+			{
+				textfile_close(tracewin.tf);
+				tracewin.tf = NULL;
+			}
+			else
+			{
+				tracewin.tf = textfile_create(OEMTEXT("traceout.txt"),
+																0x800);
+			}
+			CheckMenuItem(hMenu, IDM_TRACE_FILEOUT,
+									(tracewin.tf)?MF_CHECKED:MF_UNCHECKED);
+			break;
+*/
+		case IDM_TRACE_CLEAR:
+			//View_ClrString();
+			break;
+
 		default:
 #if defined(SUPPORT_STATSAVE)
 			if ((uID >= IDM_FLAGSAVE) &&
@@ -933,6 +975,8 @@ static void OnCommand(HWND hWnd, WPARAM wParam)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 
+/** WindProc function - interprets user input **/
+
 	PAINTSTRUCT	ps;
 	RECT		rc;
 	HDC			hdc;
@@ -940,6 +984,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	UINT		update;
 	HWND		subwin;
 	WINLOCEX	wlex;
+
+	/* * * BEGIN MESSAGE LOOP * * */ 
 
 	switch (msg) {
 		case WM_CREATE:
@@ -1269,8 +1315,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 }
 
 /**
- * 1フレーム実行
- * @param[in] bDraw 描画フラグ
+ * 1 frame execution
+ * @param[in] bDraw (Drawing flag)
  */
 static void ExecuteOneFrame(BOOL bDraw)
 {
@@ -1306,7 +1352,7 @@ static void framereset(UINT cnt) {
 	}
 }
 
-static void processwait(UINT cnt) {
+static void processwait(UINT cnt) { // throttles the CPU
 
 	if (timing_getcount() >= cnt) {
 		timing_setcount(0);
@@ -1320,6 +1366,9 @@ static void processwait(UINT cnt) {
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 										LPSTR lpszCmdLine, int nCmdShow) {
+
+/** WinMain function - starts the app **/
+
 	WNDCLASS	wc;
 	MSG			msg;
 	HWND		hWnd;
@@ -1333,15 +1382,16 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 	_MEM_INIT();
 
 	GetModuleFileName(NULL, modulefile, NELEMENTS(modulefile));
-	dosio_init();
-	file_setcd(modulefile);
-	Np2Arg::GetInstance()->Parse();
-	initload();
-	toolwin_readini();
-	kdispwin_readini();
-	skbdwin_readini();
-	mdbgwin_readini();
+	dosio_init();  // --> DOSIO.CPP
+	file_setcd(modulefile);  // --> DOSIO.CPP
+	Np2Arg::GetInstance()->Parse();// --> NP2ARG.CPP
+	initload();  // --> INI.CPP
+	toolwin_readini();  // --> TOOLWIN.CPP
+	kdispwin_readini();  // --> SUBWIND.CPP
+	skbdwin_readini();  // --> SUBWIND.CPP
+	mdbgwin_readini();  // --> SUBWIND.CPP
 
+	// Prep RNG
 	rand_setseed((unsigned)time(NULL));
 
 	szClassName[0] = (TCHAR)np2oscfg.winid[0];
@@ -1357,13 +1407,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 
 	g_hInstance = loadextinst(hInstance);
 	g_hPrevInst = hPrevInst;
-#if !defined(_WIN64)
+#if !defined(_WIN64)  // Optimization for IA-32
 	mmxflag = (havemmx())?0:MMXFLAG_NOTSUPPORT;
 	mmxflag += (np2oscfg.disablemmx)?MMXFLAG_DISABLE:0;
 #endif
-#if defined(TRACE)
+//#if defined(TRACE)
 	TRACEINIT();
-#endif
+//#endif
 
 	xrollkey = (np2oscfg.xrollkey == 0);
 	if (np2oscfg.KEYBOARD >= KEY_TYPEMAX) {
@@ -1379,11 +1429,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 			np2oscfg.KEYBOARD = KEY_KEY106;
 		}
 	}
-	winkbd_roll(xrollkey);
-	winkbd_setf12(np2oscfg.F12COPY);
-	keystat_initialize();
+	winkbd_roll(xrollkey);  // --> WINKBD.CPP
+	winkbd_setf12(np2oscfg.F12COPY);  // --> WINKBD.CPP
+	keystat_initialize();  // --> KEYSTAT.C
 
-	np2class_initialize(g_hInstance);
+	np2class_initialize(g_hInstance);  // --> NP2CLASS.CPP
+
+	// Create the main window
 	if (!hPrevInst) {
 		wc.style = CS_BYTEALIGNCLIENT | CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
 		wc.lpfnWndProc = WndProc;
@@ -1402,14 +1454,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 			return(FALSE);
 		}
 
-		toolwin_initapp(g_hInstance);
-		kdispwin_initialize(g_hInstance);
-		skbdwin_initialize(g_hInstance);
-		mdbgwin_initialize(g_hInstance);
-		viewer_init(g_hInstance);
+		toolwin_initapp(g_hInstance);  // --> TOOLWIN.CPP
+		kdispwin_initialize(g_hInstance);  // --> SUBWIND.CPP
+		skbdwin_initialize(g_hInstance);  // --> SUBWIND.CPP
+		mdbgwin_initialize(g_hInstance);  // --> SUBWIND.CPP
+		viewer_init(g_hInstance); // --> VIEWER.CPP
 	}
 
-	mousemng_initialize();
+	mousemng_initialize();  // --> MOUSEMNG.CPP
 
 	style = WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX;
 	if (np2oscfg.thickframe) {
@@ -1419,99 +1471,112 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 						np2oscfg.winx, np2oscfg.winy, 640, 400,
 						NULL, NULL, g_hInstance, NULL);
 	g_hWndMain = hWnd;
-	scrnmng_initialize();
+	scrnmng_initialize(); // --> SCRNMNG.CPP
 
-	xmenu_setroltate(0);
-	xmenu_setdispmode(np2cfg.DISPSYNC);
-	xmenu_setraster(np2cfg.RASTER);
-	xmenu_setwaitflg(np2oscfg.NOWAIT);
-	xmenu_setframe(np2oscfg.DRAW_SKIP);
+	// Main menu setup
 
-	xmenu_setkey(0);
-	xmenu_setxshift(0);
-	xmenu_setf12copy(np2oscfg.F12COPY);
-	xmenu_setbeepvol(np2cfg.BEEP_VOL);
-	xmenu_setsound(np2cfg.SOUND_SW);
-	xmenu_setjastsound(np2oscfg.jastsnd);
-	xmenu_setmotorflg(np2cfg.MOTOR);
-	xmenu_setextmem(np2cfg.EXTMEM);
-	xmenu_setmouse(np2oscfg.MOUSE_SW);
+	xmenu_setroltate(0);  // --> MENU.CPP
+	xmenu_setdispmode(np2cfg.DISPSYNC);  // --> MENU.CPP
+	xmenu_setraster(np2cfg.RASTER);  // --> MENU.CPP
+	xmenu_setwaitflg(np2oscfg.NOWAIT);  // --> MENU.CPP
+	xmenu_setframe(np2oscfg.DRAW_SKIP);  // --> MENU.CPP
 
-	xmenu_setshortcut(np2oscfg.shortcut);
-	xmenu_setdispclk(np2oscfg.DISPCLK);
-	xmenu_setbtnmode(np2cfg.BTN_MODE);
-	xmenu_setbtnrapid(np2cfg.BTN_RAPID);
-	xmenu_setmsrapid(np2cfg.MOUSERAPID);
+	xmenu_setkey(0);  // --> MENU.CPP
+	xmenu_setxshift(0);  // --> MENU.CPP
+	xmenu_setf12copy(np2oscfg.F12COPY);  // --> MENU.CPP
+	xmenu_setbeepvol(np2cfg.BEEP_VOL);  // --> MENU.CPP
+	xmenu_setsound(np2cfg.SOUND_SW);  // --> MENU.CPP
+	xmenu_setjastsound(np2oscfg.jastsnd);  // --> MENU.CPP
+	xmenu_setmotorflg(np2cfg.MOTOR);  // --> MENU.CPP
+	xmenu_setextmem(np2cfg.EXTMEM);  // --> MENU.CPP
+	xmenu_setmouse(np2oscfg.MOUSE_SW);  // --> MENU.CPP
+
+	xmenu_setshortcut(np2oscfg.shortcut);  // --> MENU.CPP
+	xmenu_setdispclk(np2oscfg.DISPCLK);  // --> MENU.CPP
+	xmenu_setbtnmode(np2cfg.BTN_MODE);  // --> MENU.CPP
+	xmenu_setbtnrapid(np2cfg.BTN_RAPID);  // --> MENU.CPP
+	xmenu_setmsrapid(np2cfg.MOUSERAPID);  // --> MENU.CPP
 
 	ShowWindow(hWnd, nCmdShow);
 	UpdateWindow(hWnd);
 
 #ifdef OPENING_WAIT
-	tick = GetTickCount();
+	tick = GetTickCount();  // Windows GUI time is measured in "ticks"
 #endif
 
-	xmenu_initialize();
+	xmenu_initialize();  // -- MENU.CPP
 	DrawMenuBar(hWnd);
 
+	// Add help option if available
+	// Check to see if the help file exists
 	if (file_attr_c(np2help) == (short)-1) {						// ver0.30
 		EnableMenuItem(GetMenu(hWnd), IDM_HELP, MF_GRAYED);
 	}
 
-	xmenu_settoolwin(np2oscfg.toolwin);
-	xmenu_setkeydisp(np2oscfg.keydisp);
-	xmenu_setwinsnap(np2oscfg.WINSNAP);
-	xmenu_setbackground(np2oscfg.background);
-	xmenu_setbgsound(np2oscfg.background);
-	xmenu_setscrnmul(8);
+	xmenu_settoolwin(np2oscfg.toolwin);  // --> MENU.CPP
+	xmenu_setkeydisp(np2oscfg.keydisp);  // --> MENU.CPP
+	xmenu_setwinsnap(np2oscfg.WINSNAP);  // --> MENU.CPP
+	xmenu_setbackground(np2oscfg.background);  // --> MENU.CPP
+	xmenu_setbgsound(np2oscfg.background);  // --> MENU.CPP
+	xmenu_setscrnmul(8);  // --> MENU.CPP
 
 	scrnmode = 0;
-	if (Np2Arg::GetInstance()->fullscreen())
+	if (Np2Arg::GetInstance()->fullscreen())  // --> NP2ARG.CPP
 	{
 		scrnmode |= SCRNMODE_FULLSCREEN;
 	}
 	if (np2cfg.RASTER) {
 		scrnmode |= SCRNMODE_HIGHCOLOR;
 	}
-	if (scrnmng_create(scrnmode) != SUCCESS) {
+
+	// Quit if user's hardware isn't up to task
+	if (scrnmng_create(scrnmode) != SUCCESS) {  // --> SCRNMNG.CPP
 		scrnmode ^= SCRNMODE_FULLSCREEN;
-		if (scrnmng_create(scrnmode) != SUCCESS) {
+		if (scrnmng_create(scrnmode) != SUCCESS) {  // --> SCRNMNG.CPP
 			messagebox(hWnd, MAKEINTRESOURCE(IDS_ERROR_DIRECTDRAW), MB_OK | MB_ICONSTOP);
 			unloadextinst();
-			TRACETERM();
-			dosio_term();
+			TRACETERM();  // --> TRACE.CPP
+			dosio_term();  // --> DOSIO.CPP
 			return(FALSE);
 		}
 	}
 
-	if (soundmng_initialize() == SUCCESS) {
-		soundmng_pcmload(SOUND_PCMSEEK, TEXT("SEEKWAV"));
-		soundmng_pcmload(SOUND_PCMSEEK1, TEXT("SEEK1WAV"));
-		soundmng_pcmvolume(SOUND_PCMSEEK, np2cfg.MOTORVOL);
-		soundmng_pcmvolume(SOUND_PCMSEEK1, np2cfg.MOTORVOL);
+	// Got sound
+	if (soundmng_initialize() == SUCCESS) {  // --> SOUNDMNG.CPP
+		soundmng_pcmload(SOUND_PCMSEEK, TEXT("SEEKWAV"));  // --> SOUNDMNG.CPP
+		soundmng_pcmload(SOUND_PCMSEEK1, TEXT("SEEK1WAV"));  // --> SOUNDMNG.CPP
+		soundmng_pcmvolume(SOUND_PCMSEEK, np2cfg.MOTORVOL);  // --> SOUNDMNG.CPP
+		soundmng_pcmvolume(SOUND_PCMSEEK1, np2cfg.MOTORVOL);  // --> SOUNDMNG.CPP
 	}
 
+	// Got mouse?
 	if (np2oscfg.MOUSE_SW) {										// ver0.30
-		mousemng_enable(MOUSEPROC_SYSTEM);
+		mousemng_enable(MOUSEPROC_SYSTEM);  // --> MOUSEMNG.CPP
 	}
 
-	commng_initialize();
-	sysmng_initialize();
-
-	joymng_initialize();
-	pccore_init();
-	S98_init();
+	// Init ports
+	commng_initialize();  // --> COMMNG.CPP
+	// Handy macros
+	sysmng_initialize();  // --> SYSMNG.H
+	// Init joystick
+	joymng_initialize();  // --> JOYMNG.CPP
+	// VM setup - phase 1
+	pccore_init();  // --> PCCORE.C
+	// Setup the virtual sound system
+	S98_init();  // --> S98.C
 
 #ifdef OPENING_WAIT
 	while((GetTickCount() - tick) < OPENING_WAIT);
 #endif
 
-	scrndraw_redraw();
-
-	pccore_reset();
+	// Setup Screen
+	scrndraw_redraw();  // --> SCRNDRAW.C 
+	// VM setup - phase 2
+	pccore_reset();  // --> PCCORE.C
 
 	np2opening = 0;
 
-	// れじうむ
+	// Resume
 #if defined(SUPPORT_RESUME)
 	if (np2oscfg.resume) {
 		int		id;
@@ -1537,13 +1602,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 	}
 #endif
 
-//	リセットしてから… コマンドラインのディスク挿入。
+	//	Was a disk image specified via command line?
 	for (i = 0; i < MAX_FDDFILE; i++)
 	{
 		LPCTSTR lpDisk = Np2Arg::GetInstance()->disk(i);
 		if (lpDisk)
 		{
-			diskdrv_readyfdd((REG8)i, lpDisk, 0);
+			diskdrv_readyfdd((REG8)i, lpDisk, 0); // --> DISKDRV.C, alias for diskdrv_readyfddex
 		}
 	}
 
@@ -1551,13 +1616,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 		if (np2oscfg.toolwin) {
 			toolwin_create(g_hInstance);
 		}
+		// show music keyboard?
 		if (np2oscfg.keydisp) {
-			kdispwin_create(g_hInstance);
+			kdispwin_create(g_hInstance);  // --> SUBWIND.CPP
 		}
 	}
 
+	/* * * BEGIN PROGRAM LOOP * * */
+
 	while(1) {
 		if (!np2stopemulate) {
+
 			if (PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE)) {
 				if (!GetMessage(&msg, NULL, 0, 0)) {
 					break;
@@ -1569,9 +1638,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 				}
 				DispatchMessage(&msg);
 			}
+
+			// The emulator operates on frames. It does 1/60th of a second's worth of processing in terms of the
+			// emulated machine and then checks to see how long it actually took. If longer than 1/60th of a second,
+			// it either draws the frame (and slows everything down), or skips a frame if a frameskip is specified.
+
 			else {
 				if (np2oscfg.NOWAIT) {
-					ExecuteOneFrame(framecnt == 0);
+					ExecuteOneFrame(framecnt == 0); 
 					if (np2oscfg.DRAW_SKIP) {		// nowait frame skip
 						framecnt++;
 						if (framecnt >= np2oscfg.DRAW_SKIP) {
@@ -1580,7 +1654,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 					}
 					else {							// nowait auto skip
 						framecnt = 1;
-						if (timing_getcount()) {
+						if (timing_getcount()) {  // --> TIMING.C
 							processwait(0);
 						}
 					}
@@ -1599,7 +1673,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 						UINT cnt;
 						ExecuteOneFrame(framecnt == 0);
 						framecnt++;
-						cnt = timing_getcount();
+						cnt = timing_getcount();  // --> TIMING.C
 						if (framecnt > cnt) {
 							waitcnt = framecnt;
 							if (framemax > 1) {
@@ -1611,10 +1685,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 								framemax++;
 							}
 							if (cnt >= 12) {
-								timing_reset();
+								timing_reset();  // --> TIMING.C
 							}
 							else {
-								timing_setcount(cnt - framecnt);
+								timing_setcount(cnt - framecnt);   // --> TIMING.C
 							}
 							framereset(0);
 						}
@@ -1627,7 +1701,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 			}
 			if(np2singlestep)
 			{
-				viewer_allreload(TRUE);
+				viewer_allreload(TRUE);  // --> VIEWER.CPP
 				np2singlestep = FALSE;
 				np2active_set(FALSE);
 			}
@@ -1641,6 +1715,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 			DispatchMessage(&msg);
 		}
 	}
+
+	/* * * END PROGRAM LOOP * * */
+
 	toolwin_destroy();
 	kdispwin_destroy();
 	skbdwin_destroy();
@@ -1678,7 +1755,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst,
 	unloadextinst();
 
 	TRACETERM();
-	_MEM_USED(TEXT("report.txt"));
+	_MEM_USED("report.txt");
 	dosio_term();
 
 	viewer_term();													// ver0.30
