@@ -134,14 +134,15 @@ static int messagebox(HWND hWnd, LPCTSTR lpcszText, UINT uType)
 
 // ----
 
-static HINSTANCE loadextinst(HINSTANCE hInstance)
+static HINSTANCE loadextinst(HINSTANCE hInstance)  // open DLL
 {
 	OEMCHAR	szPath[MAX_PATH];
 	OEMCHAR	szDllName[32];
 	HMODULE hMod;
 
-	file_cpyname(szPath, modulefile, NELEMENTS(szPath));
-	file_cutname(szPath);
+	file_cpyname(szPath, modulefile, NELEMENTS(szPath)); // --> MILSTR.C, alias of milsjis_ncpy
+	// get filename from the path
+	file_cutname(szPath);  // --> DOSIO.CPP
 	OEMSPRINTF(szDllName, szNp2ResDll, GetOEMCP());
 	file_catname(szPath, szDllName, NELEMENTS(szPath));
 	hMod = LoadLibrary(szPath);
@@ -153,7 +154,7 @@ static HINSTANCE loadextinst(HINSTANCE hInstance)
 	return(hInstance);
 }
 
-static void unloadextinst(void)
+static void unloadextinst(void)  // close DLL
 {
 	HMODULE hMod;
 
