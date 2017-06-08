@@ -1,36 +1,36 @@
 /**
  *	@file	dosio.cpp
- *	@brief	ファイル アクセス関数群の動作の定義を行います
+ *	@brief	define file access behavior
  */
 
 #include "compiler.h"
 #include "dosio.h"
 
-//! カレント パス バッファ
+//! Current path buffer
 static OEMCHAR curpath[MAX_PATH];
 
-//! ファイル名ポインタ
+//! File name pointer
 static OEMCHAR *curfilep = curpath;
 
-/**
- * 初期化
- */
+/ **
+ * Initialization
+ * /
 void dosio_init(void)
 {
 }
 
-/**
- * 解放
- */
+/ **
+ * Release
+ * /
 void dosio_term(void)
 {
 }
 
-/**
- * ファイルを開きます
- * @param[in] lpPathName ファイル名
- * @return ファイル ハンドル
- */
+/ **
+ * Open the file
+ * @ Param [in] lpPathName file name
+ * @return filehandle
+ * /
 FILEH DOSIOCALL file_open(const OEMCHAR* lpPathName)
 {
 	FILEH hFile = ::CreateFile(lpPathName, GENERIC_READ | GENERIC_WRITE, 0, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
@@ -41,45 +41,45 @@ FILEH DOSIOCALL file_open(const OEMCHAR* lpPathName)
 	return hFile;
 }
 
-/**
- * リード オンリーでファイルを開きます
- * @param[in] lpPathName ファイル名
- * @return ファイル ハンドル
- */
+/ **
+ * Open the file with read-only
+ * @ Param [in] lpPathName file name
+ * @return filehandle
+ * /
 FILEH DOSIOCALL file_open_rb(const OEMCHAR* lpPathName)
 {
 	return ::CreateFile(lpPathName, GENERIC_READ, FILE_SHARE_READ, 0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
 }
 
-/**
- * ファイルを作成します
- * @param[in] lpPathName ファイル名
- * @return ファイル ハンドル
- */
+/ **
+ * Create a file
+ * @ Param [in] lpPathName file name
+ * @return filehandle
+ * /
 FILEH DOSIOCALL file_create(const OEMCHAR* lpPathName)
 {
 	return ::CreateFile(lpPathName, GENERIC_READ | GENERIC_WRITE, 0, 0, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 }
 
-/**
- * ファイルのシーク
- * @param[in] hFile ファイル ハンドル
- * @param[in] pointer 移動すべきバイト数
- * @param[in] method 開始点
- * @return ファイルの位置
- */
+/ **
+ * Seek file
+ * @ Param [in] hFile File handle
+ * @ Param [in] pointer Number of bytes to move
+ * @ Param [in] method starting point
+ * @return file location
+ * /
 long DOSIOCALL file_seek(FILEH hFile, long pointer, int method)
 {
 	return static_cast<long>(::SetFilePointer(hFile, pointer, 0, method));
 }
 
-/**
- * ファイル読み込み
- * @param[in] hFile ファイル ハンドル
- * @param[out] lpBuffer バッファ
- * @param[in] cbBuffer バッファ サイズ
- * @return 読み込みサイズ
- */
+/ **
+ * File reading
+ * @ Param [in] hFile File handle
+ * @ Param [out] lpBuffer buffer
+ * @ Param [in] cbBuffer buffer size
+ * @return read size
+ * /
 UINT DOSIOCALL file_read(FILEH hFile, void* lpBuffer, UINT cbBuffer)
 {
 	DWORD dwReadSize;
@@ -90,13 +90,13 @@ UINT DOSIOCALL file_read(FILEH hFile, void* lpBuffer, UINT cbBuffer)
 	return 0;
 }
 
-/**
- * ファイル書き込み
- * @param[in] hFile ファイル ハンドル
- * @param[in] lpBuffer バッファ
- * @param[in] cbBuffer バッファ サイズ
- * @return 書き込みサイズ
- */
+/ **
+ * Write file
+ * @ Param [in] hFile File handle
+ * @ Param [in] lpBuffer buffer
+ * @ Param [in] cbBuffer buffer size
+ * @return write size
+ * /
 UINT DOSIOCALL file_write(FILEH hFile, const void* lpBuffer, UINT cbBuffer)
 {
 	if (cbBuffer != 0)
@@ -114,35 +114,35 @@ UINT DOSIOCALL file_write(FILEH hFile, const void* lpBuffer, UINT cbBuffer)
 	return 0;
 }
 
-/**
- * ファイル ハンドルを閉じる
- * @param[in] hFile ファイル ハンドル
- * @retval 0 成功
- */
+/ **
+ * Close the file handle
+ * @ Param [in] hFile File handle
+ * @retval 0 Success
+ * /
 short DOSIOCALL file_close(FILEH hFile)
 {
 	::CloseHandle(hFile);
 	return 0;
 }
 
-/**
- * ファイル サイズを得る
- * @param[in] hFile ファイル ハンドル
- * @return ファイル サイズ
- */
+/ **
+ * Get file size
+ * @ Param [in] hFile File handle
+ * @return file size
+ * /
 UINT DOSIOCALL file_getsize(FILEH hFile)
 {
 	return ::GetFileSize(hFile, NULL);
 }
 
-/**
- * FILETIME を DOSDATE/DOSTIME に変換
- * @param[in] ft ファイル タイム
- * @param[out] dosdate DOSDATE
- * @param[out] dostime DOSTIME
- * @retval true 成功
- * @retval false 失敗
- */
+/ **
+ * Convert FILETIME to DOSDATE / DOSTIME
+ * @ Param [in] ft file time
+ * @ Param [out] dosdate DOSDATE
+ * @ Param [out] dostime DOSTIME
+ * @retval true success
+ * @retval false Failure
+ * /
 static bool convertDateTime(const FILETIME& ft, DOSDATE* dosdate, DOSTIME* dostime)
 {
 	FILETIME ftLocalTime;
@@ -171,15 +171,13 @@ static bool convertDateTime(const FILETIME& ft, DOSDATE* dosdate, DOSTIME* dosti
 	}
 	return true;
 }
-
-/**
- * ファイルのタイム スタンプを得る
- * @param[in] hFile ファイル ハンドル
- * @param[out] dosdate DOSDATE
- * @param[out] dostime DOSTIME
- * @retval 0 成功
- * @retval -1 失敗
- */
+* Obtain timestamp of file
+ * @ Param [in] hFile File handle
+ * @ Param [out] dosdate DOSDATE
+ * @ Param [out] dostime DOSTIME
+ * @retval 0 Success
+ * @retval -1 Failure
+ * /
 short DOSIOCALL file_getdatetime(FILEH hFile, DOSDATE* dosdate, DOSTIME* dostime)
 {
 	FILETIME ft;
@@ -190,33 +188,33 @@ short DOSIOCALL file_getdatetime(FILEH hFile, DOSDATE* dosdate, DOSTIME* dostime
 	return (convertDateTime(ft, dosdate, dostime)) ? 0 : -1;
 }
 
-/**
- * ファイルの削除
- * @param[in] lpPathName ファイル名
- * @retval 0 成功
- * @retval -1 失敗
- */
+/ **
+ * Delete files
+ * @ Param [in] lpPathName file name
+ * @retval 0 Success
+ * @retval -1 Failure
+ * /
 short DOSIOCALL file_delete(const OEMCHAR* lpPathName)
 {
 	return (::DeleteFile(lpPathName)) ? 0 : -1;
 }
 
-/**
- * ファイルの属性を得る
- * @param[in] lpPathName ファイル名
- * @return ファイル属性
- */
+/ **
+ * Get attribute of file
+ * @ Param [in] lpPathName file name
+ * @return file attribute
+ * /
 short DOSIOCALL file_attr(const OEMCHAR* lpPathName)
 {
 	return static_cast<short>(::GetFileAttributes(lpPathName));
 }
 
-/**
- * ディレクトリ作成
- * @param[in] lpPathName パス
- * @retval 0 成功
- * @retval -1 失敗
- */
+/ **
+ * Directory creation
+ * @ Param [in] lpPathName path
+ * @retval 0 Success
+ * @retval -1 Failure
+ * /
 short DOSIOCALL file_dircreate(const OEMCHAR* lpPathName)
 {
 	return (::CreateDirectory(lpPathName, NULL)) ? 0 : -1;
@@ -224,77 +222,77 @@ short DOSIOCALL file_dircreate(const OEMCHAR* lpPathName)
 
 
 
-// ---- カレントファイル操作
+// ---- Current file operation
 
-/**
- * カレント パス設定
- * @param[in] lpPathName カレント ファイル名
- */
-void DOSIOCALL file_setcd(const OEMCHAR* lpPathName)
-{
+/ **
+ * Current path setting
+ * @ Param [in] lpPathName Current file name
+ * /
+void DOSIOCALL file_setcd(const OEMCHAR* lpPathName) {
+
 	file_cpyname(curpath, lpPathName, NELEMENTS(curpath));
 	curfilep = file_getname(curpath);
 	*curfilep = '\0';
 }
 
-/**
- * カレント パス取得
- * @param[in] lpFilename ファイル名
- * @return パス
- */
+/ **
+ * Acquire the current path
+ * @ Param [in] lpFilename file name
+ * @return pass
+ * /
 OEMCHAR* DOSIOCALL file_getcd(const OEMCHAR* lpFilename)
 {
 	file_cpyname(curfilep, lpFilename, NELEMENTS(curpath) - (int)(curfilep - curpath));
 	return curpath;
 }
 
-/**
- * カレント ファイルを開きます
- * @param[in] lpFilename ファイル名
- * @return ファイル ハンドル
- */
+/ **
+ * Open the current file
+ * @ Param [in] lpFilename file name
+ * @return filehandle
+ * /
 FILEH DOSIOCALL file_open_c(const OEMCHAR* lpFilename)
 {
 	return file_open(file_getcd(lpFilename));
 }
 
-/**
- * リード オンリーでカレント ファイルを開きます
- * @param[in] lpFilename ファイル名
- * @return ファイル ハンドル
- */
+/ **
+ * Open the current file with read only
+ * @ Param [in] lpFilename file name
+ * @return filehandle
+ * /
 
 FILEH DOSIOCALL file_open_rb_c(const OEMCHAR* lpFilename)
 {
 	return file_open_rb(file_getcd(lpFilename));
 }
 
-/**
- * カレント ファイルを作成します
- * @param[in] lpFilename ファイル名
- * @return ファイル ハンドル
- */
+/ **
+ * Create the current file
+ * @ Param [in] lpFilename file name
+ * @return filehandle
+ * /
 FILEH DOSIOCALL file_create_c(const OEMCHAR* lpFilename)
 {
 	return file_create(file_getcd(lpFilename));
 }
 
-/**
- * カレント ファイルの削除
- * @param[in] lpFilename ファイル名
- * @retval 0 成功
- * @retval -1 失敗
- */
+ **
+ * Delete the current file
+ * @ Param [in] lpFilename file name
+ * @retval 0 Success
+ * @retval -1 Failure
+ * /
 short DOSIOCALL file_delete_c(const OEMCHAR* lpFilename)
 {
 	return file_delete(file_getcd(lpFilename));
 }
 
-/**
- * カレント ファイルの属性を得る
- * @param[in] lpFilename ファイル名
- * @return ファイル属性
- */
+/ **
+ * Get the attributes of the current file
+ * @ Param [in] lpFilename file name
+ * @return file attribute
+ * /
 short DOSIOCALL file_attr_c(const OEMCHAR* lpFilename)
 {
 	return file_attr(file_getcd(lpFilename));
@@ -302,15 +300,15 @@ short DOSIOCALL file_attr_c(const OEMCHAR* lpFilename)
 
 
 
-// ---- ファイル検索
+// ---- File search
 
-/**
- * WIN32_FIND_DATA を FLINFO に変換
- * @param[in] w32fd WIN32_FIND_DATA
- * @param[out] fli FLINFO
- * @retval true 成功
- * @retval false 失敗
- */
+/ **
+ * Convert WIN32_FIND_DATA to FLINFO
+ * @ Param [in] w32fd WIN32_FIND_DATA
+ * @ Param [out] fli FLINFO
+ * @retval true success
+ * @retval false Failure
+ * /
 static bool DOSIOCALL setFLInfo(const WIN32_FIND_DATA& w32fd, FLINFO *fli)
 {
 #if !defined(_WIN32_WCE)
@@ -331,12 +329,12 @@ static bool DOSIOCALL setFLInfo(const WIN32_FIND_DATA& w32fd, FLINFO *fli)
 	return true;
 }
 
-/**
- * ファイルの検索
- * @param[in] lpPathName パス
- * @param[out] fli 検索結果
- * @return ファイル検索ハンドル
- */
+/ **
+ * Search for files
+ * @ Param [in] lpPathName path
+ * @ Param [out] fli Search result
+ * @return file search handle
+ * /
 FLISTH DOSIOCALL file_list1st(const OEMCHAR* lpPathName, FLINFO* fli)
 {
 	static const OEMCHAR s_szWildCard[] = OEMTEXT("*.*");
@@ -362,13 +360,13 @@ FLISTH DOSIOCALL file_list1st(const OEMCHAR* lpPathName, FLINFO* fli)
 	return FLISTH_INVALID;
 }
 
-/**
- * ファイルの検索
- * @param[in] hList ファイル検索ハンドル
- * @param[out] fli 検索結果
- * @retval SUCCESS 成功
- * @retval FAILURE 失敗
- */
+/ **
+ * Search for files
+ * @ Param [in] hList file search handle
+ * @ Param [out] fli Search result
+ * @retval SUCCESS success
+ * @retval FAILURE failure
+ * /
 BRESULT DOSIOCALL file_listnext(FLISTH hList, FLINFO* fli)
 {
 	WIN32_FIND_DATA w32fd;
@@ -382,10 +380,10 @@ BRESULT DOSIOCALL file_listnext(FLISTH hList, FLINFO* fli)
 	return FAILURE;
 }
 
-/**
- * ファイル検索ハンドルを閉じる
- * @param[in] hList ファイル検索ハンドル
- */
+/ **
+ * Close the file search handle
+ * @ Param [in] hList file search handle
+ * /
 void DOSIOCALL file_listclose(FLISTH hList)
 {
 	::FindClose(hList);
@@ -393,13 +391,13 @@ void DOSIOCALL file_listclose(FLISTH hList)
 
 
 
-// ---- ファイル名操作
+// ---- File name operation
 
-/**
- * ファイル名のポインタを得る
- * @param[in] lpPathName パス
- * @return ポインタ
- */
+/ **
+ * Get pointer to file name
+ * @ Param [in] lpPathName path
+ * @return pointer
+ * /
 OEMCHAR* DOSIOCALL file_getname(const OEMCHAR* lpPathName)
 {
 	const OEMCHAR* ret = lpPathName;
@@ -419,21 +417,21 @@ OEMCHAR* DOSIOCALL file_getname(const OEMCHAR* lpPathName)
 	return const_cast<OEMCHAR*>(ret);
 }
 
-/**
- * ファイル名を削除
- * @param[in,out] lpPathName パス
- */
+/ **
+ * Delete file name
+ * @ Param [in, out] lpPathName path
+ * /
 void DOSIOCALL file_cutname(OEMCHAR* lpPathName)
 {
 	OEMCHAR* p = file_getname(lpPathName);
 	p[0] = '\0';
 }
 
-/**
- * 拡張子のポインタを得る
- * @param[in] lpPathName パス
- * @return ポインタ
- */
+/ **
+ * Get pointer to extension
+ * @ Param [in] lpPathName path
+ * @return pointer
+ * /
 OEMCHAR* DOSIOCALL file_getext(const OEMCHAR* lpPathName)
 {
 	const OEMCHAR* p = file_getname(lpPathName);
@@ -458,10 +456,10 @@ OEMCHAR* DOSIOCALL file_getext(const OEMCHAR* lpPathName)
 	return const_cast<OEMCHAR*>(q);
 }
 
-/**
- * 拡張子を削除
- * @param[in,out] lpPathName パス
- */
+/ **
+ * Remove extension
+ * @ Param [in, out] lpPathName path
+ * /
 void DOSIOCALL file_cutext(OEMCHAR* lpPathName)
 {
 	OEMCHAR* p = file_getname(lpPathName);
@@ -485,15 +483,15 @@ void DOSIOCALL file_cutext(OEMCHAR* lpPathName)
 	}
 }
 
-/**
- * パス セパレータを削除
- * @param[in,out] lpPathName パス
- */
+/ **
+ * Remove path separator
+ * @ Param [in, out] lpPathName path
+ * /
 void DOSIOCALL file_cutseparator(OEMCHAR* lpPathName)
 {
 	const int pos = OEMSTRLEN(lpPathName) - 1;
-	if ((pos > 0) &&								// 2文字以上でー
-		(lpPathName[pos] == '\\') &&				// ケツが \ でー
+	if ((pos > 0) &&								// It must be two characters or more.
+		(lpPathName[pos] == '\\') &&				// ケツが \ でー 漢字の2バイト目ぢゃなくてー
 		(!milstr_kanji2nd(lpPathName, pos)) &&		// 漢字の2バイト目ぢゃなくてー
 		((pos != 1) || (lpPathName[0] != '\\')) &&	// '\\' ではなくてー
 		((pos != 2) || (lpPathName[1] != ':')))		// '?:\' ではなかったら
@@ -502,11 +500,11 @@ void DOSIOCALL file_cutseparator(OEMCHAR* lpPathName)
 	}
 }
 
-/**
- * パス セパレータを追加
- * @param[in,out] lpPathName パス
- * @param[in] cchPathName バッファ長
- */
+/ **
+ * Add path separator
+ * @ Param [in, out] lpPathName path
+ * @ Param [in] cchPathName buffer length
+ * /
 void DOSIOCALL file_setseparator(OEMCHAR* lpPathName, int cchPathName)
 {
 	const int pos = OEMSTRLEN(lpPathName) - 1;
