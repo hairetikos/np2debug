@@ -6,7 +6,7 @@ A project to document Neko Project II Debug in English, to eventually make it us
 The build files, including the project definition, are in folder `win9x` (all required files are included). For a detailed overview of the project's organization, see `Overview.txt`.
 
 If you just want binaries, get font.rom and np21trace.exe, and you're good to go. The current build has some added features,
-including register editing, variable speed stepping (use numkeys 1-9 to change, only in ASM view), and system activity
+including register editing, variable speed stepping (use numkeys 1-9 to change, only in ASM view), system activity
 dumping/tracing, and breaking on pretty much anything you can think of. Everything you need to reverse-engineer any PC-98 
 program should be here (on top of the plethora of available tools that existed in the 90s). Be careful though: DOS memory 
 addressing is complicated and it's easy to lose your way in the code.
