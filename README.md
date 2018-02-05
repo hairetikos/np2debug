@@ -27,11 +27,15 @@ There are several build configurations available:
 
 Right now the goal is to unify the Debug, Trap, and Trace versions into one super debugger/analyzer.
 
+If you just want binaries, get font.rom and np21trace.exe, and you're good to go. The current build has some added features,
+including register editing, variable speed stepping (use numkeys 1-9 to change, only in ASM view), and system activity
+dumping/tracing, and breaking on pretty much anything you can think of. Everything you need to reverse-engineer any PC-98 
+program should be here (on top of the plethora of available tools that existed in the 90s). Be careful though: DOS memory 
+addressing is complicated and it's easy to lose your way in the code.
 
-The authors' original statements follow:
 
 
-__([Windows binaries are here](https://github.com/nmlgc/np2debug/releases))__
+(The emulator is a fork of nmglc's work. His original statements follow.)
 
 About
 -----
