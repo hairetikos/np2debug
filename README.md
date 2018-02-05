@@ -9,7 +9,7 @@ If you just want binaries, get font.rom and np21trace.exe, and you're good to go
 including register editing, variable speed stepping (use numkeys 1-9 to change, only in ASM view), system activity
 dumping/tracing, and breaking on pretty much anything you can think of. Everything you need to reverse-engineer any PC-98 
 program should be here (on top of the plethora of available tools that existed in the 90s). Be careful though: DOS memory 
-addressing is complicated and it's easy to lose your way in the code. Also, this version of NP2 DOES NOT have CD-ROM support, so which could be a problem for some games.
+addressing is complicated and it's easy to lose your way in the code. Also, this version of NP2 DOES NOT have CD-ROM support, which could be a problem for some games.
 
 
 Build instructions:
