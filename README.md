@@ -79,7 +79,7 @@ Get the VS2010 archive and install it globally into Visual Studio's *BuildCustom
 
 You need the development libraries of `GTK2`, `SDL` and `SDL_mixer`, as well as `nasm` to build the assembly code. On Ubuntu, the required packages are:
 
-    build-essential nasm libsdl1.2-dev libsdl-mixer1.2-dev libgtk2.0-dev libxxf86vm-dev
+    build-essential nasm libsdl1.2-dev libsdl2-dev libsdl-mixer1.2-dev libgtk2.0-dev libxxf86vm-dev
 
 Also, the Touhou games require the build to be configured with IA-32 support. From the root directory, the build commands are:
 
